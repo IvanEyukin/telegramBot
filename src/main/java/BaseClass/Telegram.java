@@ -17,24 +17,9 @@ import java.util.List;
 
 public class Telegram extends AbilityBot {
 
-    private static final String GREETING = """
-            Здравствуй %s,
-            я твой персональный финансовый ассистент.
-            Надеюсь, я смогу помочь тебе тратить меньше денег
-            Не забывай, что ты моя сладкая булочка
-            """;
-    private static final String ERROR_MESSAGE = "Я еще только учусь, в будущем смогу помогать тебе лучше!";
-    private static final String CATEGORY = "Пожалуйста, выбери категорию расходов";
-    private static final String FINANCE_MESSAGE = "Пожалуйста, введи сумму, я запишу ее в категорию ";
-    private static final String NEGATIVE_NUMBER_MESSAGE = "Итоговая сумма отрицательная.\nВведите сумму заново";
-    private static final String ZERO_NUMBER_MESSAGE = "Итоговая сумма равно 0.\nВведите сумму заново";
-    private static final String SAVE_MESSAGE = "Записал %s, что-то еще?";
-    private static final String KEYBOARD_KeyboardMarkup = "KeyboardMarkup";
-    private static final String KEYBOARD_InlineKeyboard = "InlineKeyboard";
-    private static final String DELETE_MESSAGE = "Удалил ";
-    private static final String ADD_MESSAGE = "Хорошо, введи сумму, которую нужно добавить";
-
     Bot bot = new Bot();
+    BotMessage botMessage = new BotMessage();
+    KeyboardMessage keyboardMessage = new KeyboardMessage();
 
     public Telegram(Bot bot) {
         super(bot.getToken(), bot.getName());
@@ -48,14 +33,7 @@ public class Telegram extends AbilityBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        List<String> categoryList = new ArrayList<String>();
-        categoryList.add("Еда");
-        categoryList.add("Алкоголь");
-        categoryList.add("Транспорт");
-        categoryList.add("Жилье");
-        categoryList.add("Депозит");
-        categoryList.add("Прочее");
-
+        List<String> categoryList = keyboardMessage.classicButton;
         BigDecimal number;
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -64,31 +42,31 @@ public class Telegram extends AbilityBot {
             
             if (messageText.equals("Привет") || messageText.equals("/start")) {
 
-                sendMessage(message, String.format(GREETING, update.getMessage().getChat().getFirstName()));
-                sendMessageAndKeyboard(message, CATEGORY, KEYBOARD_KeyboardMarkup);
+                sendMessage(message, String.format(botMessage.greeting, update.getMessage().getChat().getFirstName()));
+                sendMessageAndKeyboard(message, botMessage.category, keyboardMessage.keyboardType.classic);
 
             } else if (categoryList.contains(messageText)) {
-                sendMessage(message, FINANCE_MESSAGE.concat(messageText));
+                sendMessage(message, botMessage.finance.concat(messageText));
             } else if (messageText.matches("((-|\\+)?[0-9]+(\\,[0-9]+)?)+")
                     || messageText.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
 
                 number = Parser.parseIntToString(messageText);
                 switch (number.compareTo(new BigDecimal("0"))) {
                     case (-1):
-                        sendMessage(message, NEGATIVE_NUMBER_MESSAGE);
+                        sendMessage(message, botMessage.negativeNumber);
                         break;
                     case (0):
-                        sendMessage(message, ZERO_NUMBER_MESSAGE);
+                        sendMessage(message, botMessage.zeroNumber);
                         break;
                     case (1):
                         message.setText(number.toEngineeringString());
                         bot.setLastMessage(message);
-                        sendMessageAndKeyboard(message, String.format(SAVE_MESSAGE, number), KEYBOARD_InlineKeyboard);
+                        sendMessageAndKeyboard(message, String.format(botMessage.save, number), keyboardMessage.keyboardType.inLine);
                         break;
                 }
 
             } else {
-                sendMessageAndKeyboard(message, ERROR_MESSAGE, KEYBOARD_KeyboardMarkup);
+                sendMessageAndKeyboard(message, botMessage.error, keyboardMessage.keyboardType.classic);
             }
         }
 
@@ -98,10 +76,10 @@ public class Telegram extends AbilityBot {
             String callBack = update.getCallbackQuery().getData();
             Message message = update.getCallbackQuery().getMessage();
             
-            if (callBack.equals("Delite")) {
-                sendMessage(message, DELETE_MESSAGE.concat(bot.getLastMessage().getText()));
-            } else if (callBack.equals("Add")) {
-                sendMessage(message, ADD_MESSAGE);
+            if (callBack.equals(keyboardMessage.deleteButton.callBack)) {
+                sendMessage(message, botMessage.delete.concat(bot.getLastMessage().getText()));
+            } else if (callBack.equals(keyboardMessage.addButton.callBack)) {
+                sendMessage(message, botMessage.add);
             }
 
             updateMessage(message);
@@ -132,7 +110,6 @@ public class Telegram extends AbilityBot {
         try {
             execute(updateMesasge);
         } catch (TelegramApiException e) {
-            System.out.println("\n" + "Ошибка обновления сообщения" + "\n");
             e.printStackTrace();
         }
 
@@ -144,16 +121,15 @@ public class Telegram extends AbilityBot {
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(textToSend);
 
-        if (keyboardType.equals(KEYBOARD_KeyboardMarkup)) {
-            sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
-        } else if (keyboardType.equals(KEYBOARD_InlineKeyboard)) {
-            sendMessage.setReplyMarkup(keyboard.getInlineMessageButtons());
+        if (keyboardType.equals(keyboardMessage.keyboardType.classic)) {
+            sendMessage.setReplyMarkup(Keyboard.getKeyboardMarkup());
+        } else if (keyboardType.equals(keyboardMessage.keyboardType.inLine)) {
+            sendMessage.setReplyMarkup(Keyboard.getInlineMessageButtons());
         } 
 
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            System.out.println("\n" + "Ошибка отправки сообщения" + "\n");
             e.printStackTrace();
         }
 
@@ -167,7 +143,6 @@ public class Telegram extends AbilityBot {
         try {
             execute(answerCallback);
         } catch (TelegramApiException e) {
-            System.out.println("\n" + "Ошибка при отправки ответа на Вызов" + "\n");
             e.printStackTrace();
         }
 
