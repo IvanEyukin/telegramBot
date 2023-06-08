@@ -1,17 +1,11 @@
-package test.demo;
+package test.telegramBot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileReader;
-
-// import org.json.simple.JSONArray;
-// import org.json.simple.JSONObject;
-// import org.json.simple.parser.JSONParser;
-// import org.json.simple.parser.ParseException;
 
 @SpringBootTest
-class DemoApplicationTests {
+class telegramBotApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -8,21 +8,25 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 
-public class keyboard {
+public class Keyboard {
 
     private static List<KeyboardRow> keyboardCategory() {
 
+        KeyboardMessage message = new KeyboardMessage();
         List<KeyboardRow> keyboard = new ArrayList<>();
-
+        List<String> button = message.classicButton;
+        
+        List<String> firstButton = button.subList(0, (button.size() + 1) / 2);
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add("Еда");
-        keyboardFirstRow.add("Алкоголь");
-        keyboardFirstRow.add("Транспорт");
+        for (String first : firstButton) {
+            keyboardFirstRow.add(first);
+        }
 
+        List<String> secondButton = button.subList((button.size() + 1) / 2, button.size());
         KeyboardRow keyboardSecondRow = new KeyboardRow();
-        keyboardSecondRow.add("Жилье");
-        keyboardSecondRow.add("Депозит");
-        keyboardSecondRow.add("Прочее");
+        for (String second : secondButton) {
+            keyboardSecondRow.add(second);
+        }
 
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
@@ -53,11 +57,12 @@ public class keyboard {
     }
 
     public static InlineKeyboardMarkup getInlineMessageButtons() {
+        KeyboardMessage message = new KeyboardMessage();
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
 
-        rowList.add(getButton("Удалить", "Delite"));
-        rowList.add(getButton("Добавить", "Add"));
-
+        rowList.add(getButton(message.deleteButton.name, message.deleteButton.callBack));
+        rowList.add(getButton(message.addButton.name, message.addButton.callBack));
+        
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
