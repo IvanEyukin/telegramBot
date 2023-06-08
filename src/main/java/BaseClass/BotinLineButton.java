@@ -13,14 +13,6 @@ public class BotinLineButton {
         this.callBack = callBack;
     }
 
-    private String getName() {
-        return name;
-    }
-
-    private String getCallBack() {
-        return callBack;
-    }
-
     public static BotinLineButton setInLineButton(String name, String callBack) {
 
         BotinLineButton inLineButton = new BotinLineButton();
