@@ -1,5 +1,9 @@
-package BaseClass;
-
+import LibBaseDto.DtoBaseBot.Bot;
+import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoBaseKeyboard.Keyboard;
+import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
+import LibBaseDto.DtoBaseUser.UserCommand;
+import LibBaseDto.DtoBaseUser.UserMassage;
 import Utils.Parser;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -9,7 +13,6 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageRe
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,6 +22,8 @@ public class Telegram extends AbilityBot {
     Bot bot = new Bot();
     BotMessage botMessage = new BotMessage();
     KeyboardMessage keyboardMessage = new KeyboardMessage();
+    UserCommand userCommand = new UserCommand();
+    UserMassage userMassage = new UserMassage();
 
     public Telegram(Bot bot) {
         super(bot.getToken(), bot.getName());
@@ -32,17 +37,18 @@ public class Telegram extends AbilityBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        List<String> categoryList = keyboardMessage.classicButton;
+        List<String> categoryList = keyboardMessage.getClassicButton();
         BigDecimal number;
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             Message message = update.getMessage();
             
-            if (messageText.equals("Привет") || messageText.equals("/start")) {
+            if (messageText.equals(userMassage.start) || messageText.equals(userCommand.start)) {
 
                 sendMessage(message, String.format(botMessage.greeting, update.getMessage().getChat().getFirstName()));
-                sendMessageAndKeyboard(message, botMessage.category, keyboardMessage.keyboardType.classic);
+                sendMessageAndKeyboard(message, botMessage.category, keyboardMessage.getKeyboardType().classic);
+
 
             } else if (categoryList.contains(messageText)) {
                 sendMessage(message, botMessage.finance.concat(messageText));
@@ -60,12 +66,12 @@ public class Telegram extends AbilityBot {
                     case (1):
                         message.setText(number.toEngineeringString());
                         bot.setLastMessage(message);
-                        sendMessageAndKeyboard(message, String.format(botMessage.save, number), keyboardMessage.keyboardType.inLine);
+                        sendMessageAndKeyboard(message, String.format(botMessage.save, number), keyboardMessage.getKeyboardType().inLine);
                         break;
                 }
 
             } else {
-                sendMessageAndKeyboard(message, botMessage.error, keyboardMessage.keyboardType.classic);
+                sendMessageAndKeyboard(message, botMessage.error, keyboardMessage.getKeyboardType().classic);
             }
         }
 
@@ -75,9 +81,9 @@ public class Telegram extends AbilityBot {
             String callBack = update.getCallbackQuery().getData();
             Message message = update.getCallbackQuery().getMessage();
             
-            if (callBack.equals(keyboardMessage.deleteButton.callBack)) {
+            if (callBack.equals(keyboardMessage.getDeleteButton().getCallBack())) {
                 sendMessage(message, botMessage.delete.concat(bot.getLastMessage().getText()));
-            } else if (callBack.equals(keyboardMessage.addButton.callBack)) {
+            } else if (callBack.equals(keyboardMessage.getAddButton().getCallBack())) {
                 sendMessage(message, botMessage.add);
             }
 
@@ -120,9 +126,9 @@ public class Telegram extends AbilityBot {
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(textToSend);
 
-        if (keyboardType.equals(keyboardMessage.keyboardType.classic)) {
+        if (keyboardType.equals(keyboardMessage.getKeyboardType().classic)) {
             sendMessage.setReplyMarkup(Keyboard.getKeyboardMarkup());
-        } else if (keyboardType.equals(keyboardMessage.keyboardType.inLine)) {
+        } else if (keyboardType.equals(keyboardMessage.getKeyboardType().inLine)) {
             sendMessage.setReplyMarkup(Keyboard.getInlineMessageButtons());
         } 
 

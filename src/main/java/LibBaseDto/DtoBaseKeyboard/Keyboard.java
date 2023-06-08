@@ -1,4 +1,4 @@
-package BaseClass;
+package LibBaseDto.DtoBaseKeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +44,7 @@ public class Keyboard {
         replyKeyboardMarkup.setOneTimeKeyboard(true);
 
         return replyKeyboardMarkup;
+
     }
 
     private static List<InlineKeyboardButton> getButton(String buttonName, String buttonCallBackData) {
@@ -54,6 +55,7 @@ public class Keyboard {
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
         keyboardButtonsRow.add(button);
         return keyboardButtonsRow;
+
     }
 
     public static InlineKeyboardMarkup getInlineMessageButtons() {
@@ -66,6 +68,7 @@ public class Keyboard {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
+
     }
     
 }

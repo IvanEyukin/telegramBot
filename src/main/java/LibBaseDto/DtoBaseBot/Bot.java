@@ -1,4 +1,4 @@
-package BaseClass;
+package LibBaseDto.DtoBaseBot;
 
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.Message;
