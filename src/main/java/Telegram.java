@@ -1,20 +1,17 @@
+import route.RouteCallback;
+import route.RouteMessage;
 import LibBaseDto.DtoBaseBot.Bot;
 import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseKeyboard.Keyboard;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import LibBaseDto.DtoBaseUser.UserMassage;
-import Utils.Parser;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.math.BigDecimal;
-import java.util.List;
 
 
 public class Telegram extends AbilityBot {
@@ -25,6 +22,9 @@ public class Telegram extends AbilityBot {
     UserCommand userCommand = new UserCommand();
     UserMassage userMassage = new UserMassage();
 
+    RouteMessage routeMessage = new RouteMessage();
+    RouteCallback routeCallback = new RouteCallback();
+
     public Telegram(Bot bot) {
         super(bot.getToken(), bot.getName());
     }
@@ -34,106 +34,20 @@ public class Telegram extends AbilityBot {
         return bot.getCreatorId();
     }
 
-    @Override
-    public void onUpdateReceived(Update update) {
-
-        List<String> categoryList = keyboardMessage.getClassicButton();
-        BigDecimal number;
-
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            Message message = update.getMessage();
-            
-            if (messageText.equals(userMassage.start) || messageText.equals(userCommand.start)) {
-
-                sendMessage(message, String.format(botMessage.greeting, update.getMessage().getChat().getFirstName()));
-                sendMessageAndKeyboard(message, botMessage.category, keyboardMessage.getKeyboardType().classic);
-
-
-            } else if (categoryList.contains(messageText)) {
-                sendMessage(message, botMessage.finance.concat(messageText));
-            } else if (messageText.matches("((-|\\+)?[0-9]+(\\,[0-9]+)?)+")
-                    || messageText.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
-
-                number = Parser.parseIntToString(messageText);
-                switch (number.compareTo(new BigDecimal("0"))) {
-                    case (-1):
-                        sendMessage(message, botMessage.negativeNumber);
-                        break;
-                    case (0):
-                        sendMessage(message, botMessage.zeroNumber);
-                        break;
-                    case (1):
-                        message.setText(number.toEngineeringString());
-                        bot.setLastMessage(message);
-                        sendMessageAndKeyboard(message, String.format(botMessage.save, number), keyboardMessage.getKeyboardType().inLine);
-                        break;
-                }
-
-            } else {
-                sendMessageAndKeyboard(message, botMessage.error, keyboardMessage.getKeyboardType().classic);
-            }
-        }
-
-        if (update.hasCallbackQuery()) {
-
-            answerCallback(update.getCallbackQuery().getId());
-            String callBack = update.getCallbackQuery().getData();
-            Message message = update.getCallbackQuery().getMessage();
-            
-            if (callBack.equals(keyboardMessage.getDeleteButton().getCallBack())) {
-                sendMessage(message, botMessage.delete.concat(bot.getLastMessage().getText()));
-            } else if (callBack.equals(keyboardMessage.getAddButton().getCallBack())) {
-                sendMessage(message, botMessage.add);
-            }
-
-            updateMessage(message);
-
-        }
-    }
-
-    private void sendMessage(Message message, String textToSend) {
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText(textToSend);
+    private void sendMessage(SendMessage message) {
 
         try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-        }
-
-    }
-
-    private void updateMessage(Message message) {
-
-        EditMessageReplyMarkup updateMesasge = new EditMessageReplyMarkup();
-        updateMesasge.setChatId(message.getChatId());
-        updateMesasge.setMessageId(message.getMessageId());
-        updateMesasge.setReplyMarkup(null);
-
-        try {
-            execute(updateMesasge);
+            execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void sendMessageAndKeyboard(Message message, String textToSend, String keyboardType) {
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setText(textToSend);
-
-        if (keyboardType.equals(keyboardMessage.getKeyboardType().classic)) {
-            sendMessage.setReplyMarkup(Keyboard.getKeyboardMarkup());
-        } else if (keyboardType.equals(keyboardMessage.getKeyboardType().inLine)) {
-            sendMessage.setReplyMarkup(Keyboard.getInlineMessageButtons());
-        } 
+    private void sendMessage(EditMessageReplyMarkup message) {
 
         try {
-            execute(sendMessage);
+            execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -151,6 +65,34 @@ public class Telegram extends AbilityBot {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+
+        if (update.hasMessage() && update.getMessage().hasText()) {
+
+            botMessage = routeMessage.routeMessageProcessor(update.getMessage());
+            for (SendMessage message : botMessage.getMessages()) {
+                sendMessage(message);
+            }
+
+        }
+
+        if (update.hasCallbackQuery()) {
+
+            botMessage.setLastMessageCallback(update.getCallbackQuery());
+            answerCallback(botMessage.getLastMessageCallback().getId());
+
+            botMessage = routeCallback.routeCallbacProcessor(botMessage);
+            for (SendMessage message : botMessage.getMessages()) {
+                sendMessage(message);
+            }
+
+            sendMessage(routeMessage.updateMessage(update.getCallbackQuery().getMessage()));
+
+        }
+        
     }
 
 }

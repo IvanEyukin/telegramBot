@@ -1,14 +1,14 @@
 package LibBaseDto.DtoBaseBot;
 
 import org.json.JSONObject;
-import org.telegram.telegrambots.meta.api.objects.Message;
+
 
 public class Bot {
 
     String name;
     String token;
     int creatorId;
-    Message lastMessage;
+    
 
     public String getName() {
         return name;
@@ -32,14 +32,6 @@ public class Bot {
 
     public void setCreatorId(int creatorId) {
         this.creatorId = creatorId;
-    }
-
-    public Message getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(Message lastMessage) {
-        this.lastMessage = lastMessage;
     }
 
     public static Bot setBotInJson (JSONObject setting) throws Exception {
