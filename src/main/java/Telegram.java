@@ -30,7 +30,7 @@ public class Telegram extends AbilityBot {
     private void sendMessage(SendMessage message) {
 
         try {
-            botMessage.setLastBotMessageId(execute(message).getMessageId());
+            botMessage.setPreviousBotMessageId(execute(message).getMessageId());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -66,7 +66,7 @@ public class Telegram extends AbilityBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
 
             if (botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null) {
-                sendMessage(routeMessage.updateMessage(update.getMessage().getChatId(), botMessage.getLastBotMessageId()));
+                sendMessage(routeMessage.updateMessage(update.getMessage().getChatId(), botMessage.getPreviousBotMessageId()));
             }
 
             botMessage.setMessage(update.getMessage());
@@ -79,8 +79,8 @@ public class Telegram extends AbilityBot {
 
         if (update.hasCallbackQuery()) {
 
-            botMessage.setLastMessageCallback(update.getCallbackQuery());
-            answerCallback(botMessage.getLastMessageCallback().getId());
+            botMessage.setPreviousMessageCallback(update.getCallbackQuery());
+            answerCallback(botMessage.getPreviousMessageCallback().getId());
 
             botMessage = routeCallback.routeCallbacProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {

@@ -27,12 +27,12 @@ public final class BotMessage {
 
     List<SendMessage> messages;
     Message message;
-    Message lastMessage;
-    CallbackQuery lastMessageCallback;
+    Message previousMessage;
+    CallbackQuery previousMessageCallback;
     BigDecimal financeSum;
     String financeCategory;
-    String lastFinanceCategory;
-    Integer lastBotMessageId;
+    String previousFinanceCategory;
+    Integer previousBotMessageId;
 
     public Message getMessage() {
         return message;
@@ -50,20 +50,20 @@ public final class BotMessage {
         this.messages = messages;
     }
 
-    public Message getLastMessage() {
-        return lastMessage;
+    public Message getPreviousMessage() {
+        return previousMessage;
     }
 
-    public void setLastMessage(Message lastMessage) {
-        this.lastMessage = lastMessage;
+    public void setPreviousMessage(Message previousMessage) {
+        this.previousMessage = previousMessage;
     }
 
-    public CallbackQuery getLastMessageCallback() {
-        return lastMessageCallback;
+    public CallbackQuery getPreviousMessageCallback() {
+        return previousMessageCallback;
     }
 
-    public void setLastMessageCallback(CallbackQuery lastMessageCallback) {
-        this.lastMessageCallback = lastMessageCallback;
+    public void setPreviousMessageCallback(CallbackQuery previousMessageCallback) {
+        this.previousMessageCallback = previousMessageCallback;
     }
 
     public BigDecimal getFinanceSum() {
@@ -82,20 +82,20 @@ public final class BotMessage {
         this.financeCategory = financeCategory;
     }
 
-    public String getLastFinanceCategory() {
-        return lastFinanceCategory;
+    public String getPreviousFinanceCategory() {
+        return previousFinanceCategory;
     }
 
-    public void setLastFinanceCategory(String lastFinanceCategory) {
-        this.lastFinanceCategory = lastFinanceCategory;
+    public void setPreviousFinanceCategory(String previousFinanceCategory) {
+        this.previousFinanceCategory = previousFinanceCategory;
     }
 
-    public Integer getLastBotMessageId() {
-        return lastBotMessageId;
+    public Integer getPreviousBotMessageId() {
+        return previousBotMessageId;
     }
 
-    public void setLastBotMessageId(Integer lastBotMessageId) {
-        this.lastBotMessageId = lastBotMessageId;
+    public void setPreviousBotMessageId(Integer previousBotMessageId) {
+        this.previousBotMessageId = previousBotMessageId;
     }
 
 }

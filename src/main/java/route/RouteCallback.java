@@ -17,8 +17,8 @@ public class RouteCallback {
     public BotMessage routeCallbacProcessor(BotMessage botMessage) {
 
         List<SendMessage> messages = new ArrayList<SendMessage>();
-        String callBackData = botMessage.getLastMessageCallback().getData();
-        Message message = botMessage.getLastMessageCallback().getMessage();
+        String callBackData = botMessage.getPreviousMessageCallback().getData();
+        Message message = botMessage.getPreviousMessageCallback().getMessage();
 
         if (callBackData.equals(keyboardMessage.getDeleteButton().getCallBack())) {
             messages.add(routeMessage.sendMessage(message, botMessage.delete.concat(botMessage.getFinanceSum().toEngineeringString())));
