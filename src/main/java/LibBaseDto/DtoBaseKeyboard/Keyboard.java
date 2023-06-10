@@ -63,7 +63,7 @@ public class Keyboard {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
 
         rowList.add(getButton(message.deleteButton.name, message.deleteButton.callBack));
-        rowList.add(getButton(message.addButton.name, message.addButton.callBack));
+        rowList.add(getButton(message.saveButton.name, message.saveButton.callBack));
         
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
