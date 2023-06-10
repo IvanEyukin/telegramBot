@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 
 public class Parser {
 
+    public static final String regNumberValid = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+    public static final String regNumberNoValid = "((-|\\+)?[0-9]+(\\,[0-9]+)?)+";
+
     private static BigDecimal splitStringPlus(String integer) {
 
         BigDecimal result = new BigDecimal("0");

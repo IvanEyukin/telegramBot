@@ -56,43 +56,77 @@ public class RouteMessage {
 
     }
 
-    public BotMessage routeMessageProcessor(Message message) {
+    public EditMessageReplyMarkup updateMessage(Long chatId, Integer messageId) {
+
+        EditMessageReplyMarkup updateMesasge = new EditMessageReplyMarkup();
+        updateMesasge.setChatId(chatId);
+        updateMesasge.setMessageId(messageId);
+        updateMesasge.setReplyMarkup(null);
+
+        return updateMesasge;
+
+    }
+
+    public BotMessage routeMessageProcessor(BotMessage botMessage) {
 
         UserMassage userMassage = new UserMassage();
         UserCommand userCommand = new UserCommand();
-        BotMessage botMessage = new BotMessage();
 
         List<SendMessage> messages = new ArrayList<>();
-        String messageText = message.getText();
+        String messageText = botMessage.getMessage().getText();
         BigDecimal number;
 
         if (messageText.equals(userMassage.start) || messageText.equals(userCommand.start)) {
 
-            messages.add(sendMessage(message, String.format(botMessage.greeting, message.getChat().getFirstName())));
-            messages.add(sendMessageAndKeyboard(message, botMessage.category, keyboardMessage.getKeyboardType().classic));
+            messages.add(sendMessage(botMessage.getMessage(), String.format(botMessage.greeting, botMessage.getMessage().getChat().getFirstName())));
+            messages.add(sendMessageAndKeyboard(botMessage.getMessage(), botMessage.category, keyboardMessage.getKeyboardType().classic));
 
         } else if (keyboardMessage.getClassicButton().contains(messageText)) {
-            messages.add(sendMessage(message, botMessage.finance.concat(messageText)));
-        } else if (messageText.matches("((-|\\+)?[0-9]+(\\,[0-9]+)?)+")
-                || messageText.matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
 
-            number = Parser.parseIntToString(messageText);
-            switch (number.compareTo(new BigDecimal("0"))) {
-                case (-1):
-                    messages.add(sendMessage(message, botMessage.negativeNumber));
-                    break;
-                case (0):
-                    messages.add(sendMessage(message, botMessage.zeroNumber));
-                    break;
-                case (1):
-                    message.setText(number.toEngineeringString());
-                    botMessage.setLastMessage(message);
-                    messages.add(sendMessageAndKeyboard(message, String.format(botMessage.save, number), keyboardMessage.getKeyboardType().inLine));
-                    break;
+            messages.add(sendMessage(botMessage.getMessage(), botMessage.finance.concat(messageText)));
+            botMessage.setFinanceCategory(messageText);
+
+        } else if (messageText.matches(Parser.regNumberValid) || messageText.matches(Parser.regNumberNoValid)) {
+                    
+            if (botMessage.getFinanceCategory() != null) {       
+
+                number = Parser.parseIntToString(messageText);
+                switch (number.compareTo(new BigDecimal("0"))) {
+                    case (-1):
+                        messages.add(sendMessage(botMessage.getMessage(), botMessage.negativeNumber));
+                        break;
+                    case (0):
+                        messages.add(sendMessage(botMessage.getMessage(), botMessage.zeroNumber));
+                        break;
+                    case (1):
+
+                        if (botMessage.getFinanceSum() == null || !botMessage.getFinanceCategory().equals(botMessage.getLastFinanceCategory())) {
+
+                            botMessage.setFinanceSum(number);
+                            botMessage.setLastFinanceCategory(botMessage.getFinanceCategory());
+                            
+                        } else {
+                            botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));
+                        }
+
+                        botMessage.setLastMessage(botMessage.getMessage());
+                        messages.add(sendMessageAndKeyboard(botMessage.getMessage(), String.format(botMessage.saveQuestion, botMessage.getFinanceSum()), keyboardMessage.getKeyboardType().inLine));
+
+                        System.out.print("\n" + botMessage.getFinanceCategory() + "\n");
+                        System.out.print(botMessage.getLastFinanceCategory() + "\n");
+                        System.out.print(botMessage.getFinanceSum() + "\n");
+                        System.out.print(botMessage.getLastMessageCallback() + "\n");
+
+                        break;
+
+                }
+
+            } else {
+                messages.add(sendMessageAndKeyboard(botMessage.getMessage(), botMessage.categoryError, keyboardMessage.getKeyboardType().classic));
             }
 
         } else {
-            messages.add(sendMessageAndKeyboard(message, botMessage.error, keyboardMessage.getKeyboardType().classic));
+            messages.add(sendMessageAndKeyboard(botMessage.getMessage(), botMessage.error, keyboardMessage.getKeyboardType().classic));
         }
 
         botMessage.setMessages(messages);

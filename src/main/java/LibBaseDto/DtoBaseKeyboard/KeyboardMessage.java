@@ -5,8 +5,8 @@ import java.util.List;
 public class KeyboardMessage {
 
     List<String> classicButton = List.of("Еда", "Алкоголь", "Транспорт", "Жилье", "Депозит", "Прочее");
-    KeyboardInLineButton addButton = KeyboardInLineButton.setInLineButton("Добавить", "Add");
     KeyboardInLineButton deleteButton = KeyboardInLineButton.setInLineButton("Удалить", "Delete");
+    KeyboardInLineButton saveButton = KeyboardInLineButton.setInLineButton("Сохранить", "Save");
     KeyboardType keyboardType = new KeyboardType();
 
     public class KeyboardType {
@@ -18,12 +18,12 @@ public class KeyboardMessage {
         return classicButton;
     }
 
-    public KeyboardInLineButton getAddButton() {
-        return addButton;
-    }
-
     public KeyboardInLineButton getDeleteButton() {
         return deleteButton;
+    }
+
+    public KeyboardInLineButton getSaveButton() {
+        return saveButton;
     }
 
     public KeyboardType getKeyboardType() {

@@ -21,11 +21,15 @@ public class RouteCallback {
         Message message = botMessage.getLastMessageCallback().getMessage();
 
         if (callBackData.equals(keyboardMessage.getDeleteButton().getCallBack())) {
-            messages.add(routeMessage.sendMessage(message, botMessage.delete.concat(botMessage.getLastMessage().getText())));
-        } else if (callBackData.equals(keyboardMessage.getAddButton().getCallBack())) {
-            messages.add(routeMessage.sendMessage(message, botMessage.add));
-        }
+            messages.add(routeMessage.sendMessage(message, botMessage.delete.concat(botMessage.getFinanceSum().toEngineeringString())));
+        } else if (callBackData.equals(keyboardMessage.getSaveButton().getCallBack())) {
 
+            messages.add(routeMessage.sendMessageAndKeyboard(message, String.format(botMessage.save, botMessage.getFinanceSum()), keyboardMessage.getKeyboardType().classic));
+            botMessage.setFinanceCategory(null);
+
+        }
+        
+        botMessage.setFinanceSum(null);
         botMessage.setMessages(messages);
 
         return botMessage;

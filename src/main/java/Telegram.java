@@ -2,9 +2,6 @@ import route.RouteCallback;
 import route.RouteMessage;
 import LibBaseDto.DtoBaseBot.Bot;
 import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
-import LibBaseDto.DtoBaseUser.UserCommand;
-import LibBaseDto.DtoBaseUser.UserMassage;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -18,10 +15,6 @@ public class Telegram extends AbilityBot {
 
     Bot bot = new Bot();
     BotMessage botMessage = new BotMessage();
-    KeyboardMessage keyboardMessage = new KeyboardMessage();
-    UserCommand userCommand = new UserCommand();
-    UserMassage userMassage = new UserMassage();
-
     RouteMessage routeMessage = new RouteMessage();
     RouteCallback routeCallback = new RouteCallback();
 
@@ -37,7 +30,7 @@ public class Telegram extends AbilityBot {
     private void sendMessage(SendMessage message) {
 
         try {
-            execute(message);
+            botMessage.setLastBotMessageId(execute(message).getMessageId());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -72,7 +65,12 @@ public class Telegram extends AbilityBot {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
 
-            botMessage = routeMessage.routeMessageProcessor(update.getMessage());
+            if (botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null) {
+                sendMessage(routeMessage.updateMessage(update.getMessage().getChatId(), botMessage.getLastBotMessageId()));
+            }
+
+            botMessage.setMessage(update.getMessage());
+            botMessage = routeMessage.routeMessageProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {
                 sendMessage(message);
             }
