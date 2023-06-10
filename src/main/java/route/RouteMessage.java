@@ -100,22 +100,17 @@ public class RouteMessage {
                         break;
                     case (1):
 
-                        if (botMessage.getFinanceSum() == null || !botMessage.getFinanceCategory().equals(botMessage.getLastFinanceCategory())) {
+                        if (botMessage.getFinanceSum() == null || !botMessage.getFinanceCategory().equals(botMessage.getPreviousFinanceCategory())) {
 
                             botMessage.setFinanceSum(number);
-                            botMessage.setLastFinanceCategory(botMessage.getFinanceCategory());
+                            botMessage.setPreviousFinanceCategory(botMessage.getFinanceCategory());
                             
                         } else {
                             botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));
                         }
 
-                        botMessage.setLastMessage(botMessage.getMessage());
+                        botMessage.setPreviousMessage(botMessage.getMessage());
                         messages.add(sendMessageAndKeyboard(botMessage.getMessage(), String.format(botMessage.saveQuestion, botMessage.getFinanceSum()), keyboardMessage.getKeyboardType().inLine));
-
-                        System.out.print("\n" + botMessage.getFinanceCategory() + "\n");
-                        System.out.print(botMessage.getLastFinanceCategory() + "\n");
-                        System.out.print(botMessage.getFinanceSum() + "\n");
-                        System.out.print(botMessage.getLastMessageCallback() + "\n");
 
                         break;
 
