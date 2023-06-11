@@ -38,6 +38,7 @@ public final class BotMessage {
     String financeSubCategory;
     String previousFinanceSubCategory;
     Integer previousBotMessageId;
+    String comment;
 
     public Message getMessage() {
         return message;
@@ -117,6 +118,14 @@ public final class BotMessage {
 
     public void setPreviousBotMessageId(Integer previousBotMessageId) {
         this.previousBotMessageId = previousBotMessageId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }
