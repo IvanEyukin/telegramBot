@@ -12,10 +12,12 @@ public final class BotMessage {
     public final String greeting = """
         Здравствуй %s,
         я твой персональный финансовый ассистент.
-        Надеюсь, я смогу помочь тебе тратить меньше денег
-        Не забывай, что ты моя сладкая булочка
+        Надеюсь, я смогу помочь тебе тратить меньше денег.
+        Не забывай, что ты моя сладкая булочка!
         """;
-    public final String category = "Выбери категорию расходов";
+    public final String mainMenuQuestion = "Что тебя интересует?";
+    public final String expensesCategoryQuestion = "Выбери категорию расходов";
+    public final String incomeCategoryQuestion = "Выбери категорию доходов";
     public final String categoryError = "Не могу понять в какую категорию записать.\nВыбери категорию";
     public final String finance = "Введи сумму, я запишу ее в категорию ";
     public final String negativeNumber = "Итоговая сумма отрицательная.\nВведи сумму заново";
@@ -24,6 +26,7 @@ public final class BotMessage {
     public final String save = "Записал %s, что-то еще?";
     public final String delete = "Удалил ";
     public final String error = "Я еще только учусь, в будущем смогу помогать тебе лучше!";
+    public final String develop = "Извини, данный функционал еще в разработке, я не могу им пользоваться.";
 
     List<SendMessage> messages;
     Message message;
@@ -32,6 +35,8 @@ public final class BotMessage {
     BigDecimal financeSum;
     String financeCategory;
     String previousFinanceCategory;
+    String financeSubCategory;
+    String previousFinanceSubCategory;
     Integer previousBotMessageId;
 
     public Message getMessage() {
@@ -88,6 +93,22 @@ public final class BotMessage {
 
     public void setPreviousFinanceCategory(String previousFinanceCategory) {
         this.previousFinanceCategory = previousFinanceCategory;
+    }
+
+    public String getFinanceSubCategory() {
+        return financeSubCategory;
+    }
+
+    public void setFinanceSubCategory(String financeSubCategory) {
+        this.financeSubCategory = financeSubCategory;
+    }
+
+    public String getPreviousFinanceSubCategory() {
+        return previousFinanceSubCategory;
+    }
+
+    public void setPreviousFinanceSubCategory(String previousFinanceSubCategory) {
+        this.previousFinanceSubCategory = previousFinanceSubCategory;
     }
 
     public Integer getPreviousBotMessageId() {

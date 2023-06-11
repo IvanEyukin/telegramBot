@@ -10,35 +10,46 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 public class Keyboard {
 
-    private static List<KeyboardRow> keyboardCategory() {
+    private static List<KeyboardRow> keyboardCategory(List<String> buttons) {
 
-        KeyboardMessage message = new KeyboardMessage();
         List<KeyboardRow> keyboard = new ArrayList<>();
-        List<String> button = message.classicButton;
+
+        if (buttons.size() > 3) {
         
-        List<String> firstButton = button.subList(0, (button.size() + 1) / 2);
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        for (String first : firstButton) {
-            keyboardFirstRow.add(first);
-        }
+            List<String> firstButton = buttons.subList(0, (buttons.size() + 1) / 2);
+            KeyboardRow keyboardFirstRow = new KeyboardRow();
+            for (String first : firstButton) {
+                keyboardFirstRow.add(first);
+            }
 
-        List<String> secondButton = button.subList((button.size() + 1) / 2, button.size());
-        KeyboardRow keyboardSecondRow = new KeyboardRow();
-        for (String second : secondButton) {
-            keyboardSecondRow.add(second);
-        }
+            List<String> secondButton = buttons.subList((buttons.size() + 1) / 2, buttons.size());
+            KeyboardRow keyboardSecondRow = new KeyboardRow();
+            for (String second : secondButton) {
+                keyboardSecondRow.add(second);
+            }
 
-        keyboard.add(keyboardFirstRow);
-        keyboard.add(keyboardSecondRow);
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+
+        } else {
+
+            KeyboardRow keyboardRow = new KeyboardRow();
+            for (String button : buttons) {
+                keyboardRow.add(button);
+            }
+            
+            keyboard.add(keyboardRow);
+
+        }
 
         return keyboard;
         
     }
 
-    public static ReplyKeyboardMarkup getKeyboardMarkup() {
+    public static ReplyKeyboardMarkup getKeyboardMarkup(List<String> buttons) {
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setKeyboard(keyboardCategory());
+        replyKeyboardMarkup.setKeyboard(keyboardCategory(buttons));
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(true);
