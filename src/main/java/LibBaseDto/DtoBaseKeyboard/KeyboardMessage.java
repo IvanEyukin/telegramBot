@@ -2,13 +2,9 @@ package LibBaseDto.DtoBaseKeyboard;
 
 import java.util.List;
 
-import LibBaseDto.DtoBaseUser.UserMassage;
 
 public class KeyboardMessage {
 
-    UserMassage userMassage = new UserMassage();
-
-    List<String> mainMenuButton = List.of(userMassage.expenses, userMassage.income, userMassage.reports);
     List<String> expensesMenuButton = List.of("Еда", "Алкоголь", "Транспорт", "Жилье", "Депозит", "Прочее");
     List<String> incomeMenuButton = List.of("Зарплата", "Подарки", "Снятие с депозита", "Прочее");
     KeyboardInLineButton deleteButton = KeyboardInLineButton.setInLineButton("Удалить", "Delete");
@@ -18,10 +14,6 @@ public class KeyboardMessage {
     public class KeyboardType {
         public final String classic = "KeyboardMarkup";
         public final String inLine = "InlineKeyboard";
-    }
-
-    public List<String> getMainMenuButton() {
-        return mainMenuButton;
     }
 
     public List<String> getExpensesMenuButton() {

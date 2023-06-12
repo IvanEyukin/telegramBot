@@ -65,11 +65,7 @@ public class Telegram extends AbilityBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        
-
         if (update.hasMessage() && update.getMessage().hasText()) {
-
-            System.out.print("\n" + update.getMessage().getChat().getId() +  "\n" );
 
             if (botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null && botMessage.getFinanceSubCategory() != null) {
                 sendMessage(sendMessage.updateMessage(update.getMessage().getChatId(), botMessage.getPreviousBotMessageId()));
