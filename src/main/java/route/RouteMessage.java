@@ -37,7 +37,7 @@ public class RouteMessage {
             if (botMessage.getFinanceCategory() == null || (!botMessage.getFinanceCategory().equals(botMessage.getPreviousFinanceCategory()) && UserCommand.UserComand.containsKey(messageText))) {
                 botMessage.setFinanceCategory(UserCommand.UserComand.get(messageText));
             }
-
+            
             switch (botMessage.getFinanceCategory()) {
                 case (UserCommand.expenses) :
             

@@ -54,6 +54,7 @@ public class RouteCallback {
         }
         
         botMessage.setFinanceSum(null);
+        botMessage.setComment(null);
         botMessage.setMessages(messages);
 
         return botMessage;
