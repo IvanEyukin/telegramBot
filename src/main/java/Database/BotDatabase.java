@@ -2,6 +2,8 @@ package Database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoReport.BaseReport;
+import LibBaseDto.DtoReport.BaseReportResult;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,12 +11,38 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 public class BotDatabase {
 
+    public final String tableIncome = "Income";
+    public final String tableExpenses = "Expenses";
+    public final Map<String, String> tableMap = Map.of("Доходы", tableIncome, "Расходы", tableExpenses);
+    private final String dbPath = "jdbc:sqlite:";
+    private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui WHERE ui.UserId = ";
+    private final String sqlIncertUserInfo = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
+    private final String sqlIncertFinance = "INSERT INTO %s (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
+    private final String sqlSelectReport = """
+        SELECT 
+            UserId   AS UserId,
+            Category AS Category,
+            SUM(Sum) AS Sum
+        FROM 
+            %s
+        WHERE
+            UserId = %s
+            AND Date >= strftime('%%s','%s')
+            AND Date < strftime('%%s','%s')
+        GROUP BY 
+            UserId,
+            Category
+    """;
+
     private Connection connect() {
 
-        String url = "jdbc:sqlite:db/BotDatabase.db";
+        String url = dbPath.concat("db/BotDatabase.db");
         Connection conn = null;
 
         try {
@@ -29,8 +57,7 @@ public class BotDatabase {
 
     public boolean searchUser(UserInfo userInfo) {
 
-        String sql = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui WHERE ui.UserId = "
-                .concat(Long.toString(userInfo.getId()));
+        String sql = sqlSelectSearchUser.concat(Long.toString(userInfo.getId()));
         boolean result = false;
 
         try (Connection conn = connect();
@@ -48,10 +75,8 @@ public class BotDatabase {
 
     public void insertUser(UserInfo userInfo) {
 
-        String sql = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
-        
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sqlIncertUserInfo)) {
                 pstmt.setLong(1, userInfo.getId());
                 pstmt.setString(2, userInfo.getName());
                 pstmt.setString(3, userInfo.getFirstName());
@@ -64,9 +89,9 @@ public class BotDatabase {
 
     }
 
-    public void insertExpenses(BotMessage botMessage) {
+    public void insertFinance(BotMessage botMessage, String tableName) {
 
-        String sql = "INSERT INTO Expenses (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
+        String sql = String.format(sqlIncertFinance, tableName);
         
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -83,22 +108,29 @@ public class BotDatabase {
 
     }
 
-    public void insertIncome(BotMessage botMessage) {
+    public List<BaseReportResult> selectFinance(BaseReport report) {
 
-        String sql = "INSERT INTO Income (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
-        
+        List<BaseReportResult> result = new ArrayList<BaseReportResult>();
+        String sql = String.format(sqlSelectReport, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo());
+
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setLong(1, botMessage.getMessage().getDate());
-                pstmt.setLong(2, botMessage.getMessage().getChat().getId());
-                pstmt.setString(3, botMessage.getFinanceSubCategory());
-                pstmt.setBigDecimal(4, botMessage.getFinanceSum());
-                pstmt.setString(5, botMessage.getComment());
-                pstmt.executeUpdate();
-                conn.close();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+                    while (rs.next()) {
+
+                        BaseReportResult reportResult = new BaseReportResult();
+                        reportResult.setUserId(rs.getLong("UserId"));
+                        reportResult.setCategory(rs.getString("Category"));
+                        reportResult.setSum(rs.getBigDecimal("Sum"));
+                        result.add(reportResult);
+
+                    }
+                    conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return result;
 
     }
     

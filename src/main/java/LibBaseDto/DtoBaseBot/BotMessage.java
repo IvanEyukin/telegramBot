@@ -29,6 +29,12 @@ public final class BotMessage {
     public final String error = "Я еще только учусь, в будущем смогу помогать тебе лучше!";
     public final String develop = "Извини, данный функционал еще в разработке, я не могу им пользоваться.";
 
+    public final String reportCategoryQuestion = "По какой категории построить отчет?";
+    public final String reportPeriodQuestion = "Выбери, за какой период построить отчет:";
+    public final String reportResultMessage = "Твои %s за период с %s по %s составили %s";
+    public final String reportResultMessageDetail = "Из них:\n";
+    public final String reportResultMessageCategory = "%s : %s\n";
+
     List<SendMessage> messages;
     Message message;
     Message previousMessage;

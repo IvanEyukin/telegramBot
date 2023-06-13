@@ -8,6 +8,7 @@ public class Bot {
     String name;
     String token;
     int creatorId;
+    String botDbPath;
     
 
     public String getName() {
@@ -34,6 +35,14 @@ public class Bot {
         this.creatorId = creatorId;
     }
 
+    public String getBotDbPath() {
+        return botDbPath;
+    }
+
+    public void setBotDbPath(String botDbPath) {
+        this.botDbPath = botDbPath;
+    }
+
     public static Bot setBotInJson (JSONObject setting) throws Exception {
 
         Bot bot = new Bot();
@@ -52,6 +61,12 @@ public class Bot {
             bot.setToken(setting.get("botToken").toString());
         } else {
             throw new Exception("Bot token not specified");
+        }
+
+        if (setting.get("botDbPath") != null) {
+            bot.setBotDbPath(setting.get("botDbPath").toString());
+        } else {
+            throw new Exception("Bot database path not specified");
         }
 
         return bot;

@@ -69,13 +69,13 @@ public class Keyboard {
 
     }
 
-    public static InlineKeyboardMarkup getInlineMessageButtons() {
-        KeyboardMessage message = new KeyboardMessage();
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+    public static InlineKeyboardMarkup getInlineMessageButtons(List<KeyboardInLineButton> buttons) {
 
-        rowList.add(getButton(message.deleteButton.name, message.deleteButton.callBack));
-        rowList.add(getButton(message.saveButton.name, message.saveButton.callBack));
-        
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        for (KeyboardInLineButton button : buttons) {
+            rowList.add(getButton(button.name, button.callBack));
+        }
+
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

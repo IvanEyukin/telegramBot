@@ -44,11 +44,11 @@ public class IncomeProcessor {
                 messages = botMessage.getMessages();
 
             } else {
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.categoryError, keyboardMessage.getKeyboardType().classic, keyboardMessage.getIncomeMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.categoryError, keyboardMessage.getIncomeMenuButton()));
             }
         
         } else if (botMessage.getFinanceSubCategory() == null) {
-            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.incomeCategoryQuestion, keyboardMessage.getKeyboardType().classic, keyboardMessage.getIncomeMenuButton()));
+            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.incomeCategoryQuestion, keyboardMessage.getIncomeMenuButton()));
         }
 
         botMessage.setMessages(messages);

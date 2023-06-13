@@ -44,11 +44,11 @@ public class ExpensesProcessor {
                 messages = botMessage.getMessages();
 
             } else {
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.categoryError, keyboardMessage.getKeyboardType().classic, keyboardMessage.getExpensesMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.categoryError, keyboardMessage.getExpensesMenuButton()));
             }
         
         } else if (botMessage.getFinanceSubCategory() == null) {
-            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.expensesCategoryQuestion, keyboardMessage.getKeyboardType().classic, keyboardMessage.getExpensesMenuButton()));
+            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.expensesCategoryQuestion, keyboardMessage.getExpensesMenuButton()));
         }
 
         botMessage.setMessages(messages);
