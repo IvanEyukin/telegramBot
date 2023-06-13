@@ -2,6 +2,7 @@ package route;
 
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
+import LibBaseDto.DtoBaseUser.UserCommand;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import Utils.BotSendMessage;
 import Database.BotDatabase;
@@ -39,7 +40,7 @@ public class RouteCallback {
                 database.insertUser(userInfo);
             }
 
-            if (botMessage.getFinanceCategory().equals("Расходы")) {
+            if (botMessage.getFinanceCategory().equals(UserCommand.expenses)) {
                 keyboard = keyboardMessage.getExpensesMenuButton();
                 database.insertExpenses(botMessage);
             } else {
@@ -53,6 +54,7 @@ public class RouteCallback {
         }
         
         botMessage.setFinanceSum(null);
+        botMessage.setComment(null);
         botMessage.setMessages(messages);
 
         return botMessage;

@@ -23,8 +23,18 @@ public class ExpensesProcessor {
       
         if (keyboardMessage.getExpensesMenuButton().contains(messageText)) {
 
-            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.finance.concat(messageText)));
             botMessage.setFinanceSubCategory(messageText);
+
+            if (botMessage.getFinanceSubCategory().equals("Прочее")) {
+                messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.saveOther));
+            } else {
+                messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.finance.concat(messageText)));
+            }
+
+        } else if (botMessage.getFinanceSubCategory() != null && botMessage.getFinanceSum() == null && botMessage.getComment() == null && botMessage.getFinanceSubCategory().equals("Прочее")) {
+
+            botMessage.setComment(messageText);
+            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.finance.concat(botMessage.getFinanceSubCategory()))); 
 
         } else if (messageText.matches(Parser.regNumberValid) || messageText.matches(Parser.regNumberNoValid)) {
 

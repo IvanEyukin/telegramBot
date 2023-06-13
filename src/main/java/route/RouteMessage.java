@@ -22,40 +22,44 @@ public class RouteMessage {
         BotSendMessage sendMessage = new BotSendMessage();
         ExpensesProcessor expenses = new ExpensesProcessor();
         IncomeProcessor income = new IncomeProcessor();
-        UserMassage userMassage = new UserMassage();
-        UserCommand userCommand = new UserCommand();
 
         List<SendMessage> messages = new ArrayList<>();
         String messageText = botMessage.getMessage().getText();
 
-        if (messageText.equals(userMassage.start) || messageText.equals(userCommand.start)) {
+        if (messageText.equals(UserMassage.start) || messageText.equals(UserCommand.start)) {
 
             messages.add(sendMessage.sendMessage(botMessage.getMessage(), String.format(botMessage.greeting, botMessage.getMessage().getChat().getFirstName())));
-            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.mainMenuQuestion, keyboardMessage.getKeyboardType().classic, keyboardMessage.getMainMenuButton()));
+            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.mainMenuQuestion));
             botMessage.setFinanceCategory(null);
 
-        } else if (keyboardMessage.getMainMenuButton().contains(messageText) || botMessage.getFinanceCategory() != null) {
+        } else if (UserCommand.UserComand.containsKey(messageText) || botMessage.getFinanceCategory() != null) {
 
-            if (botMessage.getFinanceCategory() == null || (!botMessage.getFinanceCategory().equals(botMessage.getPreviousFinanceCategory()) && keyboardMessage.getMainMenuButton().contains(messageText))) {
-                botMessage.setFinanceCategory(messageText);
+            if (botMessage.getFinanceCategory() == null || (!botMessage.getFinanceCategory().equals(botMessage.getPreviousFinanceCategory()) && UserCommand.UserComand.containsKey(messageText))) {
+                botMessage.setFinanceCategory(UserCommand.UserComand.get(messageText));
             }
-
+            
             switch (botMessage.getFinanceCategory()) {
-                case ("Расходы") :
+                case (UserCommand.expenses) :
             
                     botMessage = expenses.getExpenses(botMessage);
                     messages = botMessage.getMessages();
                     break;
 
-                case ("Доходы") :
+                case (UserCommand.income) :
 
                     botMessage = income.getIncome(botMessage);
                     messages = botMessage.getMessages();
                     break;
 
-                case ("Отчеты") :
+                case (UserCommand.report) :
 
-                    messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.develop, keyboardMessage.getKeyboardType().classic, keyboardMessage.getMainMenuButton()));
+                    messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.develop));
+                    botMessage.setFinanceCategory(null);
+                    break;
+
+                case (UserCommand.help) :
+
+                    messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.develop));
                     botMessage.setFinanceCategory(null);
                     break;
 
@@ -64,7 +68,7 @@ public class RouteMessage {
             botMessage.setPreviousFinanceCategory(botMessage.getPreviousFinanceCategory());
 
         } else {
-            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.error, keyboardMessage.getKeyboardType().classic, keyboardMessage.getMainMenuButton()));
+            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.error));
         }
 
         botMessage.setMessages(messages);

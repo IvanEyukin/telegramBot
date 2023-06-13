@@ -24,6 +24,7 @@ public final class BotMessage {
     public final String zeroNumber = "Итоговая сумма равно 0.\nВведи сумму заново";
     public final String saveQuestion = "Мне записать %s?";
     public final String save = "Записал %s, что-то еще?";
+    public final String saveOther = "Для категории Прочее необходимо указать комментарий";
     public final String delete = "Удалил ";
     public final String error = "Я еще только учусь, в будущем смогу помогать тебе лучше!";
     public final String develop = "Извини, данный функционал еще в разработке, я не могу им пользоваться.";
