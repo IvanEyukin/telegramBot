@@ -1,6 +1,7 @@
 package Utils;
 
 import LibBaseDto.DtoBaseKeyboard.Keyboard;
+import LibBaseDto.DtoBaseKeyboard.KeyboardInLineButton;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -24,17 +25,23 @@ public class BotSendMessage {
 
     }
 
-    public SendMessage sendMessageAndKeyboard(Message message, String textToSend, String keyboardType, List<String> keyboardButton) {
+    public SendMessage sendMessageAndKeyboard(Message message, String textToSend, List<String> keyboardButton) {
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(message.getChatId());
         sendMessage.setText(textToSend);
+        sendMessage.setReplyMarkup(Keyboard.getKeyboardMarkup(keyboardButton));
 
-        if (keyboardType.equals(keyboardMessage.getKeyboardType().classic)) {
-            sendMessage.setReplyMarkup(Keyboard.getKeyboardMarkup(keyboardButton));
-        } else if (keyboardType.equals(keyboardMessage.getKeyboardType().inLine)) {
-            sendMessage.setReplyMarkup(Keyboard.getInlineMessageButtons());
-        }
+        return sendMessage;
+
+    }
+
+    public SendMessage sendMessageAndInline(Message message, String textToSend, List<KeyboardInLineButton> keyboardButton) {
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(message.getChatId());
+        sendMessage.setText(textToSend);
+        sendMessage.setReplyMarkup(Keyboard.getInlineMessageButtons(keyboardButton));
 
         return sendMessage;
 

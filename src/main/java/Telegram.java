@@ -3,6 +3,7 @@ import route.RouteMessage;
 import Utils.BotSendMessage;
 import LibBaseDto.DtoBaseBot.Bot;
 import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoBaseUser.UserCommand;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -67,7 +68,8 @@ public class Telegram extends AbilityBot {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
 
-            if (botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null && botMessage.getFinanceSubCategory() != null) {
+            if ((botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null && botMessage.getFinanceSubCategory() != null) 
+            || (botMessage.getFinanceCategory() != null && botMessage.getFinanceCategory().equals(UserCommand.report))) {
                 sendMessage(sendMessage.updateMessage(update.getMessage().getChatId(), botMessage.getPreviousBotMessageId()));
             }
 

@@ -41,14 +41,7 @@ public class FinancialCalculationProcessor {
                 }
 
                 botMessage.setPreviousMessage(botMessage.getMessage());
-                messages.add(
-                    sendMessage.sendMessageAndKeyboard(
-                        botMessage.getMessage(), 
-                        String.format(botMessage.saveQuestion, botMessage.getFinanceSum()), 
-                        keyboardMessage.getKeyboardType().inLine,
-                        null
-                        )
-                    );
+                messages.add(sendMessage.sendMessageAndInline(botMessage.getMessage(), String.format(botMessage.saveQuestion, botMessage.getFinanceSum()), keyboardMessage.getResulButtons()));
 
                 break;
         }

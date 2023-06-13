@@ -6,6 +6,7 @@ import LibBaseDto.DtoBaseUser.UserMassage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import processor.ExpensesProcessor;
 import processor.IncomeProcessor;
+import processor.ReportProcessor;
 import Utils.BotSendMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,6 +23,7 @@ public class RouteMessage {
         BotSendMessage sendMessage = new BotSendMessage();
         ExpensesProcessor expenses = new ExpensesProcessor();
         IncomeProcessor income = new IncomeProcessor();
+        ReportProcessor report = new ReportProcessor();
 
         List<SendMessage> messages = new ArrayList<>();
         String messageText = botMessage.getMessage().getText();
@@ -53,8 +55,10 @@ public class RouteMessage {
 
                 case (UserCommand.report) :
 
-                    messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.develop));
-                    botMessage.setFinanceCategory(null);
+                    botMessage = report.getReport(botMessage);
+                    messages = botMessage.getMessages();
+                    // messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.develop));
+                    // botMessage.setFinanceCategory(null);
                     break;
 
                 case (UserCommand.help) :
