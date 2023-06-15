@@ -35,4 +35,4 @@ build/
 /BotSetting.json
 
 ### Database ###
-db/BotDatabase.db
+db/

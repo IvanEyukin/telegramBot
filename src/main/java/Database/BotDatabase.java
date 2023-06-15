@@ -41,7 +41,7 @@ public class BotDatabase {
     """;
 
     private Connection connect() {
-
+        
         String url = dbPath.concat("db/BotDatabase.db");
         Connection conn = null;
 

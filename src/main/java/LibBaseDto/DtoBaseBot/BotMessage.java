@@ -1,11 +1,12 @@
 package LibBaseDto.DtoBaseBot;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 
 public final class BotMessage {
 
