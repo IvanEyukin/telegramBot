@@ -1,11 +1,5 @@
 package Utils;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import org.json.JSONArray;
-import org.json.JSONException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
 
 
@@ -43,22 +37,6 @@ public class Parser {
         }
 
         return result;
-
-    }
-
-    public static JSONObject parseJsonFile(String fileName) throws JSONException, IOException {
-
-        JSONTokener jsonToken = new JSONTokener(new FileReader(fileName));
-        JSONObject jsonFile = new JSONObject(jsonToken);
-
-        return jsonFile;
-
-    }
-
-    public static JSONArray parseJsonArray(JSONObject jsonArray, String key) throws JSONException {
-
-        JSONArray resultList = jsonArray.getJSONArray(key);
-        return resultList;
 
     }
 

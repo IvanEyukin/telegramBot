@@ -1,9 +1,9 @@
+import LibBaseDto.DtoBaseBot.BotSetting;
+import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoBaseUser.UserCommand;
 import route.RouteCallback;
 import route.RouteMessage;
 import Utils.BotSendMessage;
-import LibBaseDto.DtoBaseBot.Bot;
-import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseUser.UserCommand;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -15,19 +15,19 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Telegram extends AbilityBot {
 
-    Bot bot = new Bot();
+    BotSetting botSetting = new BotSetting();
     BotSendMessage sendMessage = new BotSendMessage();
     BotMessage botMessage = new BotMessage();
     RouteMessage routeMessage = new RouteMessage();
     RouteCallback routeCallback = new RouteCallback();
 
-    public Telegram(Bot bot) {
-        super(bot.getToken(), bot.getName());
+    public Telegram(BotSetting botSetting) {
+        super(botSetting.getToken(), botSetting.getName());
     }
 
     @Override
     public long creatorId() {
-        return bot.getCreatorId();
+        return botSetting.getCreatorId();
     }
 
     private void sendMessage(SendMessage message) {
@@ -69,7 +69,7 @@ public class Telegram extends AbilityBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
 
             if ((botMessage.getFinanceSum() != null && botMessage.getFinanceCategory() != null && botMessage.getFinanceSubCategory() != null) 
-            || (botMessage.getFinanceCategory() != null && botMessage.getFinanceCategory().equals(UserCommand.report))) {
+                || (botMessage.getFinanceCategory() != null && botMessage.getFinanceCategory().equals(UserCommand.report))) {
                 sendMessage(sendMessage.updateMessage(update.getMessage().getChatId(), botMessage.getPreviousBotMessageId()));
             }
 
