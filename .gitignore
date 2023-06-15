@@ -36,3 +36,6 @@ build/
 
 ### Database ###
 db/
+
+### Docker ###
+Dockerfile
