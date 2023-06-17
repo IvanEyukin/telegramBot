@@ -18,9 +18,13 @@ public class ReportProcessor {
         BotSendMessage sendMessage = new BotSendMessage();
         String messageText = botMessage.getMessage().getText();
 
-        if (keyboardMessage.getReportMenuButton().contains(messageText)) {
+        if (keyboardMessage.getReportMenuButton().contains(messageText) && !messageText.equals("Бюджет")) {
             botMessage.setFinanceSubCategory(messageText);
             messages.add(sendMessage.sendMessageAndInline(botMessage.getMessage(), botMessage.reportPeriodQuestion, keyboardMessage.getReportButtons()));
+        } else if (keyboardMessage.getReportMenuButton().contains(messageText) && messageText.equals("Бюджет")) {
+            botMessage.setFinanceSubCategory(messageText);
+            messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.develop, keyboardMessage.getReportMenuButton()));
+            botMessage.setFinanceSubCategory(null);
         } else {
             messages.add(sendMessage.sendMessageAndKeyboard(botMessage.getMessage(), botMessage.reportCategoryQuestion, keyboardMessage.getReportMenuButton()));
         }

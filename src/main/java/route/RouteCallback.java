@@ -1,6 +1,7 @@
 package route;
 
 import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import LibBaseDto.DtoBaseUser.UserInfo;
@@ -21,20 +22,21 @@ public class RouteCallback {
 
     KeyboardMessage keyboardMessage = new KeyboardMessage();
     BotSendMessage sendMessage = new BotSendMessage();
-    BotDatabase database = new BotDatabase();
     UserInfo userInfo = new UserInfo();
     BaseReport report = new BaseReport();
     ReportMessageProcessor reportMessage = new ReportMessageProcessor();
 
-    public BotMessage routeCallbacProcessor(BotMessage botMessage) {
+    public BotMessage routeCallbacProcessor(BotMessage botMessage, BotSetting botSetting) {
 
+        BotDatabase database = new BotDatabase(botSetting);
         List<SendMessage> messages = new ArrayList<SendMessage>();
         String callBackData = botMessage.getPreviousMessageCallback().getData();
         Message message = botMessage.getPreviousMessageCallback().getMessage();
         LocalDate date = LocalDate.now();
 
         if (callBackData.equals(keyboardMessage.getDeleteButton().getCallBack())) {
-            messages.add(sendMessage.sendMessage(message, botMessage.delete.concat(botMessage.getFinanceSum().toEngineeringString())));
+            messages.add(sendMessage.sendMessage(message, String.format(botMessage.delete, botMessage.getFinanceSum().toEngineeringString())));
+            botMessage.setFinanceSum(null);
         } else if (callBackData.equals(keyboardMessage.getSaveButton().getCallBack())) {
 
             List<String> keyboard;
@@ -58,6 +60,17 @@ public class RouteCallback {
             messages.add(sendMessage.sendMessageAndKeyboard(message, String.format(botMessage.save, botMessage.getFinanceSum()), keyboard));
             botMessage.setFinanceSubCategory(null);
 
+        } else if (callBackData.equals(keyboardMessage.getToDayButton().getCallBack())) {
+
+            report.setUserId(botMessage.getMessage().getChat().getId());
+            report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
+            report.setDateFrom(date);
+            report.setDateTo(date.plusDays(1));
+
+            botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
+            messages = botMessage.getMessages();
+            botMessage.setFinanceSubCategory(null);
+
         } else if (callBackData.equals(keyboardMessage.getLastDayButton().getCallBack())) {
 
             report.setUserId(botMessage.getMessage().getChat().getId());
@@ -65,7 +78,7 @@ public class RouteCallback {
             report.setDateFrom(date.minusDays(1));
             report.setDateTo(date);
 
-            botMessage = reportMessage.getReportMessage(report, database.selectFinance(report), botMessage);
+            botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
             
@@ -76,7 +89,7 @@ public class RouteCallback {
             report.setDateFrom(date.minusWeeks(1));
             report.setDateTo(date);
 
-            botMessage = reportMessage.getReportMessage(report, database.selectFinance(report), botMessage);
+            botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 
@@ -87,7 +100,7 @@ public class RouteCallback {
             report.setDateFrom(date.minusWeeks(2));
             report.setDateTo(date);
 
-            botMessage = reportMessage.getReportMessage(report, database.selectFinance(report), botMessage);
+            botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 
@@ -98,7 +111,7 @@ public class RouteCallback {
             report.setDateFrom(date.minusMonths(1));
             report.setDateTo(date);
 
-            botMessage = reportMessage.getReportMessage(report, database.selectFinance(report), botMessage);
+            botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 

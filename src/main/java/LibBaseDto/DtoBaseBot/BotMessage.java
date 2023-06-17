@@ -26,7 +26,7 @@ public final class BotMessage {
     public final String saveQuestion = "Мне записать %s?";
     public final String save = "Записал %s, что-то еще?";
     public final String saveOther = "Для категории Прочее необходимо указать комментарий";
-    public final String delete = "Удалил ";
+    public final String delete = "Удалил %s. Введи новую сумму";
     public final String error = "Я еще только учусь, в будущем смогу помогать тебе лучше!";
     public final String develop = "Извини, данный функционал еще в разработке, я не могу им пользоваться.";
 
@@ -35,6 +35,7 @@ public final class BotMessage {
     public final String reportResultMessage = "Твои %s за период с %s по %s составили %s";
     public final String reportResultMessageDetail = "Из них:\n";
     public final String reportResultMessageCategory = "%s : %s\n";
+    public final String reportResultMessageError = "Извини, но я не нашел твоих данных в базе";
 
     List<SendMessage> messages;
     Message message;

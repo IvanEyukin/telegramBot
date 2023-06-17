@@ -32,7 +32,9 @@ public class RouteMessage {
 
             messages.add(sendMessage.sendMessage(botMessage.getMessage(), String.format(botMessage.greeting, botMessage.getMessage().getChat().getFirstName())));
             messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.mainMenuQuestion));
+            botMessage.setFinanceSum(null);
             botMessage.setFinanceCategory(null);
+            botMessage.setFinanceSubCategory(null);
 
         } else if (UserCommand.UserComand.containsKey(messageText) || botMessage.getFinanceCategory() != null) {
 
@@ -57,8 +59,6 @@ public class RouteMessage {
 
                     botMessage = report.getReport(botMessage);
                     messages = botMessage.getMessages();
-                    // messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.develop));
-                    // botMessage.setFinanceCategory(null);
                     break;
 
                 case (UserCommand.help) :

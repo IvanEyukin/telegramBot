@@ -7,17 +7,18 @@ public class KeyboardMessage {
 
     List<String> expensesMenuButton = List.of("Еда", "Алкоголь", "Транспорт", "Жилье", "Депозит", "Прочее");
     List<String> incomeMenuButton = List.of("Зарплата", "Подарки", "Снятие с депозита", "Прочее");
-    List<String> reportMenuButton = List.of("Доходы", "Расходы");
+    List<String> reportMenuButton = List.of("Доходы", "Расходы", "Бюджет");
 
     KeyboardInLineButton deleteButton = KeyboardInLineButton.setInLineButton("Удалить", "Delete");
     KeyboardInLineButton saveButton = KeyboardInLineButton.setInLineButton("Сохранить", "Save");
+    KeyboardInLineButton toDayButton = KeyboardInLineButton.setInLineButton("Сегодня", "ToDay");
     KeyboardInLineButton lastDayButton = KeyboardInLineButton.setInLineButton("Вчера", "LastDay");
     KeyboardInLineButton lastWeekButton = KeyboardInLineButton.setInLineButton("Неделя", "LastWeek");
     KeyboardInLineButton lastTwoWeekButton = KeyboardInLineButton.setInLineButton("Две недели", "LastTwoWeek");
     KeyboardInLineButton lastMonthButton = KeyboardInLineButton.setInLineButton("Месяц", "LastMonth");
 
     List<KeyboardInLineButton> resulButtons = List.of(deleteButton, saveButton);
-    List<KeyboardInLineButton> reportButtons = List.of(lastDayButton, lastWeekButton, lastTwoWeekButton, lastMonthButton);
+    List<KeyboardInLineButton> reportButtons = List.of(toDayButton, lastDayButton, lastWeekButton, lastTwoWeekButton, lastMonthButton);
 
     public List<String> getExpensesMenuButton() {
         return expensesMenuButton;
@@ -37,6 +38,10 @@ public class KeyboardMessage {
 
     public KeyboardInLineButton getSaveButton() {
         return saveButton;
+    }
+
+    public KeyboardInLineButton getToDayButton() {
+        return toDayButton;
     }
 
     public KeyboardInLineButton getLastDayButton() {
