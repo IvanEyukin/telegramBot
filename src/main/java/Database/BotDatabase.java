@@ -2,8 +2,8 @@ package Database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
+import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoReport.BaseReport;
-import LibBaseDto.DtoReport.BaseReportResult;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +22,7 @@ public class BotDatabase {
     public final Map<String, String> tableMap = Map.of("Доходы", tableIncome, "Расходы", tableExpenses);
     private final String dbPath = "jdbc:sqlite:";
     private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui WHERE ui.UserId = ";
+    private final String sqlSelectBudget = "SELECT b.Budget FROM Budget b WHERE b.UserId = ";
     private final String sqlIncertUserInfo = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
     private final String sqlIncertFinance = "INSERT INTO %s (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
     private final String sqlSelectReport = """
@@ -40,9 +41,15 @@ public class BotDatabase {
             Category
     """;
 
+    BotSetting botSetting;
+
+    public BotDatabase (BotSetting botSetting) {
+        this.botSetting = botSetting;
+    }
+
     private Connection connect() {
         
-        String url = dbPath.concat("db/BotDatabase.db");
+        String url = dbPath.concat(botSetting.getDbPath());
         Connection conn = null;
 
         try {
@@ -108,9 +115,9 @@ public class BotDatabase {
 
     }
 
-    public List<BaseReportResult> selectFinance(BaseReport report) {
+    public BaseReport selectFinance(BaseReport report) {
 
-        List<BaseReportResult> result = new ArrayList<BaseReportResult>();
+        List<BaseReport> result = new ArrayList<BaseReport>();
         String sql = String.format(sqlSelectReport, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo());
 
         try (Connection conn = connect();
@@ -118,7 +125,7 @@ public class BotDatabase {
                 ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
 
-                        BaseReportResult reportResult = new BaseReportResult();
+                        BaseReport reportResult = new BaseReport();
                         reportResult.setUserId(rs.getLong("UserId"));
                         reportResult.setCategory(rs.getString("Category"));
                         reportResult.setSum(rs.getBigDecimal("Sum"));
@@ -130,8 +137,29 @@ public class BotDatabase {
             System.out.println(e.getMessage());
         }
 
-        return result;
+        report.setBaseReportsList(result);
+
+        return report;
 
     }
-    
+
+    public BaseReport selectBudget(BaseReport report) {
+
+        String sql = sqlSelectBudget.concat(report.getUserId().toString());
+
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+                    while (rs.next()) {
+                        report.setSum(rs.getBigDecimal("Budget"));
+                    }
+                    conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return report;
+
+    }
+   
 }

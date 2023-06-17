@@ -8,27 +8,33 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoReport.BaseReport;
-import LibBaseDto.DtoReport.BaseReportResult;
 import Utils.BotSendMessage;
 
 public class ReportMessageProcessor {
 
-    public BotMessage getReportMessage(BaseReport report, List<BaseReportResult> reportResult, BotMessage botMessage) {
+    public BotMessage getReportMessage(BaseReport report, BotMessage botMessage) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         BigDecimal sum = new BigDecimal("0");
         List<SendMessage> messages = new ArrayList<>();
         String categoryMessage = "";
 
-        for (BaseReportResult result : reportResult) {
-            sum = sum.add(result.getSum());
-            categoryMessage = categoryMessage.concat(String.format(botMessage.reportResultMessageCategory, result.getCategory(), result.getSum()));
-        }
+        if (report.getBaseReportsList() != null) {
 
-        String message = String.format(botMessage.reportResultMessage, botMessage.getFinanceSubCategory(), report.getDateFrom(), report.getDateTo(), sum); 
-        messages.add(sendMessage.sendMessage(botMessage.getMessage(), message));
-        if (sum.compareTo(new BigDecimal("0")) == 1) {
-            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.reportResultMessageDetail.concat(categoryMessage)));
+            for (BaseReport result : report.getBaseReportsList()) {
+                sum = sum.add(result.getSum());
+                categoryMessage = categoryMessage.concat(String.format(botMessage.reportResultMessageCategory, result.getCategory(), result.getSum()));
+            }
+
+            String message = String.format(botMessage.reportResultMessage, botMessage.getFinanceSubCategory(), report.getDateFrom(), report.getDateTo(), sum); 
+            messages.add(sendMessage.sendMessage(botMessage.getMessage(), message));
+            if (sum.compareTo(new BigDecimal("0")) == 1) {
+                messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.reportResultMessageDetail.concat(categoryMessage)));
+            }
+
+        } else {
+            messages.add(sendMessage.sendMessage(botMessage.getMessage(), botMessage.reportResultMessageError));
+            botMessage.setFinanceSubCategory(null);
         }
         
         botMessage.setMessages(messages);

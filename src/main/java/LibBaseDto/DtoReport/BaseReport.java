@@ -1,6 +1,8 @@
 package LibBaseDto.DtoReport;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class BaseReport {
 
@@ -8,6 +10,9 @@ public class BaseReport {
     Long userId;
     LocalDate dateFrom;
     LocalDate dateTo;
+    String category;
+    BigDecimal sum;
+    List<BaseReport> baseReportsList;
 
     public String getTableName() {
         return tableName;
@@ -39,6 +44,30 @@ public class BaseReport {
 
     public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public BigDecimal getSum() {
+        return sum;
+    }
+
+    public void setSum(BigDecimal sum) {
+        this.sum = sum;
+    }
+
+    public List<BaseReport> getBaseReportsList() {
+        return baseReportsList;
+    }
+
+    public void setBaseReportsList(List<BaseReport> baseReportsList) {
+        this.baseReportsList = baseReportsList;
     }
     
 }
