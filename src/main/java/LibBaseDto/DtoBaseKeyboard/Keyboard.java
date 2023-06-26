@@ -16,7 +16,6 @@ public class Keyboard {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         if (buttons.size() > 3) {
-        
             List<String> firstButton = buttons.subList(0, (buttons.size() + 1) / 2);
             KeyboardRow keyboardFirstRow = new KeyboardRow();
             for (String first : firstButton) {
@@ -31,16 +30,13 @@ public class Keyboard {
 
             keyboard.add(keyboardFirstRow);
             keyboard.add(keyboardSecondRow);
-
         } else {
-
             KeyboardRow keyboardRow = new KeyboardRow();
             for (String button : buttons) {
                 keyboardRow.add(button);
             }
             
             keyboard.add(keyboardRow);
-
         }
 
         return keyboard;
@@ -67,6 +63,7 @@ public class Keyboard {
 
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
         keyboardButtonsRow.add(button);
+
         return keyboardButtonsRow;
 
     }
@@ -80,6 +77,7 @@ public class Keyboard {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
+
         return inlineKeyboardMarkup;
 
     }

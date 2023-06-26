@@ -6,6 +6,7 @@ public class UserInfo {
     String name;
     String firstName;
     String lastName;
+    Integer dateMessage;
 
     public Long getId() {
         return id;
@@ -38,5 +39,25 @@ public class UserInfo {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
+    public Integer getDateMessage() {
+        return dateMessage;
+    }
+
+    public void setDateMessage(Integer dateMessage) {
+        this.dateMessage = dateMessage;
+    }
+
+    public String getUser() {
+
+        if (getFirstName() != null) {
+            return getFirstName();
+        } else if (getFirstName() == null && getName() != null) {
+            return getName();
+        } else {
+            return "Друг";
+        }
+
+    }
+
 }
