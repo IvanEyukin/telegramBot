@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
-public class BotDatabase {
+public class ReportDatabase {
 
     public final String tableIncome = "Income";
     public final String tableExpenses = "Expenses";
@@ -41,15 +41,9 @@ public class BotDatabase {
             Category
     """;
 
-    BotSetting botSetting;
-
-    public BotDatabase (BotSetting botSetting) {
-        this.botSetting = botSetting;
-    }
-
     private Connection connect() {
         
-        String url = dbPath.concat(botSetting.getDbPath());
+        String url = dbPath.concat(BotSetting.dbReportPath);
         Connection conn = null;
 
         try {
@@ -99,11 +93,11 @@ public class BotDatabase {
     public void insertFinance(BotMessage botMessage, String tableName) {
 
         String sql = String.format(sqlIncertFinance, tableName);
-        
+
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setLong(1, botMessage.getMessage().getDate());
-                pstmt.setLong(2, botMessage.getMessage().getChat().getId());
+                pstmt.setLong(1, botMessage.getUserInfo().getDateMessage());
+                pstmt.setLong(2, botMessage.getUserInfo().getId());
                 pstmt.setString(3, botMessage.getFinanceSubCategory());
                 pstmt.setBigDecimal(4, botMessage.getFinanceSum());
                 pstmt.setString(5, botMessage.getComment());
@@ -124,13 +118,11 @@ public class BotDatabase {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
-
                         BaseReport reportResult = new BaseReport();
                         reportResult.setUserId(rs.getLong("UserId"));
                         reportResult.setCategory(rs.getString("Category"));
                         reportResult.setSum(rs.getBigDecimal("Sum"));
                         result.add(reportResult);
-
                     }
                     conn.close();
         } catch (SQLException e) {

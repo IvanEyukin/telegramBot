@@ -1,9 +1,9 @@
 package LibBaseDto.DtoBaseBot;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import BotFSM.BotState;
+import LibBaseDto.DtoBaseUser.UserInfo;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -21,6 +21,7 @@ public final class BotMessage {
     public final String incomeCategoryQuestion = "Выбери категорию доходов";
     public final String categoryError = "Не могу понять в какую категорию записать.\nВыбери категорию";
     public final String finance = "Введи сумму, я запишу ее в категорию ";
+    public final String financeError = "Мне кажется, что ты ввел не сумму. Пожалуйста, введи Сумму";
     public final String negativeNumber = "Итоговая сумма отрицательная.\nВведи сумму заново";
     public final String zeroNumber = "Итоговая сумма равно 0.\nВведи сумму заново";
     public final String saveQuestion = "Мне записать %s?";
@@ -31,30 +32,64 @@ public final class BotMessage {
     public final String develop = "Извини, данный функционал еще в разработке, я не могу им пользоваться.";
 
     public final String reportCategoryQuestion = "По какой категории построить отчет?";
+    public final String reportCategoryError = "Извини, но я не понял, по какой категории построить отчет?";
     public final String reportPeriodQuestion = "Выбери, за какой период построить отчет:";
     public final String reportResultMessage = "Твои %s за период с %s по %s составили %s";
     public final String reportResultMessageDetail = "Из них:\n";
     public final String reportResultMessageCategory = "%s : %s\n";
     public final String reportResultMessageError = "Извини, но я не нашел твоих данных в базе";
 
-    List<SendMessage> messages;
-    Message message;
-    Message previousMessage;
-    CallbackQuery previousMessageCallback;
+    UserInfo userInfo;
+    BotState botState;
+    BotState previousBotState;
+    String userMessageText;
+    String callbackData;
     BigDecimal financeSum;
     String financeCategory;
-    String previousFinanceCategory;
     String financeSubCategory;
-    String previousFinanceSubCategory;
-    Integer previousBotMessageId;
     String comment;
+    Integer previousBotMessageId;
+    Boolean messageHasInLineKeyboaard = false;
+    List<SendMessage> messages;
 
-    public Message getMessage() {
-        return message;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public BotState getBotState() {
+        return botState;
+    }
+
+    public void setBotState(BotState botState) {
+        this.botState = botState;
+    }
+
+    public BotState getPreviousBotState() {
+        return previousBotState;
+    }
+
+    public void setPreviousBotState(BotState previousBotState) {
+        this.previousBotState = previousBotState;
+    }
+
+    public String getUserMessageText() {
+        return userMessageText;
+    }
+
+    public void setUserMessageText(String userMessageText) {
+        this.userMessageText = userMessageText;
+    }
+
+    public String getCallbackData() {
+        return callbackData;
+    }
+
+    public void setCallbackData(String callbackData) {
+        this.callbackData = callbackData;
     }
 
     public List<SendMessage> getMessages() {
@@ -63,22 +98,6 @@ public final class BotMessage {
 
     public void setMessages(List<SendMessage> messages) {
         this.messages = messages;
-    }
-
-    public Message getPreviousMessage() {
-        return previousMessage;
-    }
-
-    public void setPreviousMessage(Message previousMessage) {
-        this.previousMessage = previousMessage;
-    }
-
-    public CallbackQuery getPreviousMessageCallback() {
-        return previousMessageCallback;
-    }
-
-    public void setPreviousMessageCallback(CallbackQuery previousMessageCallback) {
-        this.previousMessageCallback = previousMessageCallback;
     }
 
     public BigDecimal getFinanceSum() {
@@ -97,28 +116,12 @@ public final class BotMessage {
         this.financeCategory = financeCategory;
     }
 
-    public String getPreviousFinanceCategory() {
-        return previousFinanceCategory;
-    }
-
-    public void setPreviousFinanceCategory(String previousFinanceCategory) {
-        this.previousFinanceCategory = previousFinanceCategory;
-    }
-
     public String getFinanceSubCategory() {
         return financeSubCategory;
     }
 
     public void setFinanceSubCategory(String financeSubCategory) {
         this.financeSubCategory = financeSubCategory;
-    }
-
-    public String getPreviousFinanceSubCategory() {
-        return previousFinanceSubCategory;
-    }
-
-    public void setPreviousFinanceSubCategory(String previousFinanceSubCategory) {
-        this.previousFinanceSubCategory = previousFinanceSubCategory;
     }
 
     public Integer getPreviousBotMessageId() {
@@ -135,6 +138,19 @@ public final class BotMessage {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Boolean getMessageHasInLineKeyboaard() {
+        return messageHasInLineKeyboaard;
+    }
+
+    public void setMessageHasInLineKeyboaard(Boolean messageHasInLineKeyboaard) {
+        this.messageHasInLineKeyboaard = messageHasInLineKeyboaard;
+    }
+
+    public void updateBotState(BotState botState) {
+        this.previousBotState = getBotState();
+        this.botState = botState;
     }
 
 }
