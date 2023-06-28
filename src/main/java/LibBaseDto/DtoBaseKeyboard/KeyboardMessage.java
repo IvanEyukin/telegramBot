@@ -9,6 +9,7 @@ public class KeyboardMessage {
     List<String> incomeMenuButton = List.of("Зарплата", "Подарки", "Снятие с депозита", "Прочее");
     List<String> reportMenuButton = List.of("Доходы", "Расходы", "Бюджет");
     List<String> helpMenuButton = List.of("О боте", "Как бот работает с информацией");
+    List<String> adminMenuButton = List.of("Сообщение пользователям");
 
     KeyboardInLineButton deleteButton = KeyboardInLineButton.setInLineButton("Удалить", "Delete");
     KeyboardInLineButton saveButton = KeyboardInLineButton.setInLineButton("Сохранить", "Save");
@@ -42,6 +43,10 @@ public class KeyboardMessage {
 
     public List<String> getHelpMenuButton() {
         return helpMenuButton;
+    }
+
+    public List<String> getAdminMenuButton() {
+        return adminMenuButton;
     }
     
     public KeyboardInLineButton getDeleteButton() {

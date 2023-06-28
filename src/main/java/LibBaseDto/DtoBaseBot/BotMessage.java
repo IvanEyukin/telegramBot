@@ -1,7 +1,9 @@
 package LibBaseDto.DtoBaseBot;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -91,6 +93,11 @@ public final class BotMessage {
             Таким образом я умею только складывать, даже если ты напишешь -100.
             """;
 
+    public final String adminQuestion = "Босс, что нужно сделать?";
+    public final String adminNotification = "Напиши, какое сообщение необходимо разослать пользователям";
+    public final String adminNotificationStart = "Приступаю к рассылке";
+    public final String adminNotificationStop = "Рассылка завершена";
+
     UserInfo userInfo;
     BotState botState;
     BotState previousBotState;
@@ -103,6 +110,7 @@ public final class BotMessage {
     Integer previousBotMessageId;
     Boolean messageHasInLineKeyboaard = false;
     List<SendMessage> messages;
+    Map<Long, String> adminNotificationMessages;
 
     public UserInfo getUserInfo() {
         return userInfo;
@@ -203,6 +211,14 @@ public final class BotMessage {
     public void updateBotState(BotState botState) {
         this.previousBotState = getBotState();
         this.botState = botState;
+    }
+
+    public Map<Long, String> getAdminNotificationMessages() {
+        return adminNotificationMessages;
+    }
+
+    public void setAdminNotificationMessages(Map<Long, String> adminNotificationMessages) {
+        this.adminNotificationMessages = adminNotificationMessages;
     }
 
 }

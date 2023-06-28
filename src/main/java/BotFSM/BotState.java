@@ -15,6 +15,8 @@ public enum BotState {
     HelpMenu,
     WaitCallbackFinance,
     WaitCallbackReport,
-    WaitCallbackHelp;
+    WaitCallbackHelp,
+    AdminMenu,
+    AdminCommandNotification;
 
 }

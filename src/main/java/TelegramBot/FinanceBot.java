@@ -73,6 +73,13 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
                 responceMessage.sendMessage(botMessage, message);
             }
 
+            if (botMessage.getAdminNotificationMessages() != null && !botMessage.getAdminNotificationMessages().isEmpty()) {
+                for (Map.Entry<Long, String> adminMessage : botMessage.getAdminNotificationMessages().entrySet()) {
+                    responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
+                    System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
+                }
+            }
+
         }
 
         if (update.hasCallbackQuery()) {
