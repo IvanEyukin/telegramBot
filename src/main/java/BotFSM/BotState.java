@@ -11,8 +11,12 @@ public enum BotState {
     EnterTypeReport,
     EnterComment,
     EnterSum,
+    Help,
+    HelpMenu,
     WaitCallbackFinance,
     WaitCallbackReport,
-    Help;
+    WaitCallbackHelp,
+    AdminMenu,
+    AdminCommandNotification;
 
 }

@@ -77,4 +77,12 @@ public class Parser {
 
     }
 
+    public static Integer parseTimetoInteger (String time, int number) {
+
+        Integer timeElement = Integer.parseInt(time.split(" ")[number]);
+
+        return timeElement;
+
+    }
+
 }

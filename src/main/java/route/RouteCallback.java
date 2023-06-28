@@ -3,14 +3,13 @@ package Route;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
+import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
 import TelegramBot.BotSendMessage;
 import Database.ReportDatabase;
-
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 import BotFSM.BotState;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class RouteCallback {
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase database = new ReportDatabase();
         ReportProcessorRequest requestReport = new ReportProcessorRequest();
+        HelpProcessorRequest requestHelp = new HelpProcessorRequest();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
         switch (botMessage.getBotState()) {
@@ -55,6 +55,11 @@ public class RouteCallback {
             case WaitCallbackReport -> {
                 botMessage = requestReport.getReportRequest(botMessage);
                 messages = botMessage.getMessages();
+            }
+            case WaitCallbackHelp -> {
+                botMessage = requestHelp.getHelpInfo(botMessage);
+                messages = botMessage.getMessages();
+                botMessage.updateBotState(botMessage.getPreviousBotState());
             }
             default -> {
             }
