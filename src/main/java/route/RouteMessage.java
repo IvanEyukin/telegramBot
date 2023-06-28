@@ -5,6 +5,7 @@ import LibBaseDto.DtoBaseUser.UserMassage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import TelegramBot.BotSendMessage;
 import Processors.ExpensesProcessor;
+import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
 import BotFSM.BotState;
@@ -22,6 +23,7 @@ public class RouteMessage {
         ExpensesProcessor expenses = new ExpensesProcessor();
         IncomeProcessor income = new IncomeProcessor();
         ReportProcessor report = new ReportProcessor();
+        HelpProcessor help = new HelpProcessor();
         List<SendMessage> messages = new ArrayList<>();
 
         if (botMessage.getUserMessageText().equals(UserMassage.start) || botMessage.getUserMessageText().equals(UserCommand.start)) {
@@ -60,8 +62,8 @@ public class RouteMessage {
                     messages = botMessage.getMessages();
                 }
                 case (UserCommand.help) -> {
-                    messages.add(sendMessage.sendMessage(botMessage.develop));
-                    botMessage.setFinanceCategory(null);
+                    botMessage = help.getHelp(botMessage);
+                    messages = botMessage.getMessages();
                 }
             }
         } else {
