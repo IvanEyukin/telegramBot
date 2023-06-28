@@ -22,6 +22,7 @@ public class ReportDatabase {
     public final Map<String, String> tableMap = Map.of("Доходы", tableIncome, "Расходы", tableExpenses);
     private final String dbPath = "jdbc:sqlite:";
     private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui WHERE ui.UserId = ";
+    private final String sqlSelectSearchUsers  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui";
     private final String sqlSelectBudget = "SELECT b.Budget FROM Budget b WHERE b.UserId = ";
     private final String sqlIncertUserInfo = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
     private final String sqlIncertFinance = "INSERT INTO %s (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
@@ -71,6 +72,30 @@ public class ReportDatabase {
         }
 
         return result;
+
+    }
+
+    public List<UserInfo> searchUsers() {
+
+        List<UserInfo> users = new ArrayList<UserInfo>();
+
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlSelectSearchUsers)) {
+                    while (rs.next()) {
+                        UserInfo user = new UserInfo();
+                        user.setId(rs.getLong("UserId"));
+                        user.setName(rs.getString("UserName"));
+                        user.setFirstName(rs.getString("UserFirstName"));
+                        user.setLastName(rs.getString("UserLastName"));
+                        users.add(user);
+                    }
+                    conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return users;
 
     }
 

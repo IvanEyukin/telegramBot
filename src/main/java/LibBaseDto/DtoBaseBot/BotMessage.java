@@ -1,11 +1,12 @@
 package LibBaseDto.DtoBaseBot;
 
-import BotFSM.BotState;
-import LibBaseDto.DtoBaseUser.UserInfo;
-
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
 import java.util.List;
+
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
+import BotFSM.BotState;
+import LibBaseDto.DtoBaseUser.UserInfo;
 
 
 public final class BotMessage {
@@ -38,6 +39,8 @@ public final class BotMessage {
     public final String reportResultMessageDetail = "Из них:\n";
     public final String reportResultMessageCategory = "%s : %s\n";
     public final String reportResultMessageError = "Извини, но я не нашел твоих данных в базе";
+
+    public final static String schedulerBotReminder = "Привет %s! Ты ведь не забыл записать расходы и доходы за сегодня?";
 
     UserInfo userInfo;
     BotState botState;
