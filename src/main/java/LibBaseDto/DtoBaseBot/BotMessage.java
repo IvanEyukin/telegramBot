@@ -1,14 +1,12 @@
 package LibBaseDto.DtoBaseBot;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 import BotFSM.BotState;
 import LibBaseDto.DtoBaseUser.UserInfo;
+
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 
 public final class BotMessage {

@@ -38,7 +38,7 @@ public class ReportProcessorRequest {
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
             report.setDateFrom(date.minusDays(1));
-            report.setDateTo(date);
+            report.setDateTo(date.plusDays(1));
 
             botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
@@ -49,7 +49,7 @@ public class ReportProcessorRequest {
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
             report.setDateFrom(date.minusWeeks(1));
-            report.setDateTo(date);
+            report.setDateTo(date.plusDays(1));
 
             botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
@@ -60,7 +60,7 @@ public class ReportProcessorRequest {
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
             report.setDateFrom(date.minusWeeks(2));
-            report.setDateTo(date);
+            report.setDateTo(date.plusDays(1));
 
             botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();
@@ -71,7 +71,7 @@ public class ReportProcessorRequest {
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
             report.setDateFrom(date.minusMonths(1));
-            report.setDateTo(date);
+            report.setDateTo(date.plusDays(1));
 
             botMessage = reportMessage.getReportMessage(database.selectFinance(report), botMessage);
             messages = botMessage.getMessages();

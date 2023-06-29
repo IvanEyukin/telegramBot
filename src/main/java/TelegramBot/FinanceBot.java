@@ -32,7 +32,6 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
 
     public FinanceBot() {
         this(BotSetting.token, BotSetting.name) ;
-        
     }
 
     @Override
@@ -78,6 +77,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
                     System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
                 }
+                responceMessage.sendMessage((long) BotSetting.creatorId, botMessage.adminNotificationStop);
             }
 
         }
