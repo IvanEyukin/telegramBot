@@ -51,15 +51,16 @@ public class RouteCallback {
                     messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.save, botMessage.getFinanceSum()), keyboard));
                     botMessage.setFinanceSubCategory(null);
                 }
+                botMessage.setMessageHasInLineKeyboaard(false);
             }
             case WaitCallbackReport -> {
                 botMessage = requestReport.getReportRequest(botMessage);
                 messages = botMessage.getMessages();
+                botMessage.setMessageHasInLineKeyboaard(false);
             }
             case WaitCallbackHelp -> {
                 botMessage = requestHelp.getHelpInfo(botMessage);
                 messages = botMessage.getMessages();
-                botMessage.updateBotState(botMessage.getPreviousBotState());
             }
             default -> {
             }

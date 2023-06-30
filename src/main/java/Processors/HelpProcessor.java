@@ -22,9 +22,10 @@ public class HelpProcessor {
             case HelpMenu -> {
                 if (keyboardMessage.getHelpMenuButton().contains(botMessage.getUserMessageText())) {
                     if (botMessage.getUserMessageText().contains("О боте")) {
-                        messages.add(sendMessage.sendMessage(botMessage.helpBotInfo));
+                        messages.add(sendMessage.sendMessageAndKeyboard(botMessage.helpBotInfo, keyboardMessage.getHelpMenuButton()));
                     } else if (botMessage.getUserMessageText().contains("Как бот работает с информацией")) {
                         messages.add(sendMessage.sendMessageAndInline(botMessage.helpInfoQuestion, keyboardMessage.getHelpButtons()));
+                        botMessage.setMessageHasInLineKeyboaard(true);
                         botMessage.updateBotState(BotState.WaitCallbackHelp);
                     }
                 } else {
@@ -32,7 +33,7 @@ public class HelpProcessor {
                 }
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.helpStart, botMessage.getUserInfo().getUser()) , keyboardMessage.getHelpMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.helpStart, botMessage.getUserInfo().getUser()), keyboardMessage.getHelpMenuButton()));
                 botMessage.updateBotState(BotState.HelpMenu);
             }
         }

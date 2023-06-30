@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.math.RoundingMode;
+
 
 public class ReportDatabase {
 
@@ -146,7 +148,7 @@ public class ReportDatabase {
                         BaseReport reportResult = new BaseReport();
                         reportResult.setUserId(rs.getLong("UserId"));
                         reportResult.setCategory(rs.getString("Category"));
-                        reportResult.setSum(rs.getBigDecimal("Sum"));
+                        reportResult.setSum(rs.getBigDecimal("Sum").setScale(2, RoundingMode.HALF_DOWN));
                         result.add(reportResult);
                     }
                     conn.close();
@@ -168,7 +170,7 @@ public class ReportDatabase {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
                     while (rs.next()) {
-                        report.setSum(rs.getBigDecimal("Budget"));
+                        report.setSum(rs.getBigDecimal("Budget").setScale(2, RoundingMode.HALF_DOWN));
                     }
                     conn.close();
         } catch (SQLException e) {

@@ -18,13 +18,17 @@ public class HelpProcessorRequest {
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
         if (botMessage.getCallbackData().equals(keyboardMessage.getPrivatInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessage(botMessage.helpInfoSave));
+            messages.add(sendMessage.sendMessageAndInline(botMessage.helpInfoSave, keyboardMessage.getHelpButtons()));
+            botMessage.setMessageHasInLineKeyboaard(true);
         } else if (botMessage.getCallbackData().equals(keyboardMessage.getSaveInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessage(botMessage.helpSaveQuestion));
+            messages.add(sendMessage.sendMessageAndInline(botMessage.helpSaveQuestion, keyboardMessage.getHelpButtons()));
+            botMessage.setMessageHasInLineKeyboaard(true);
         } else if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessage(botMessage.helpDeleteInfo));
+            messages.add(sendMessage.sendMessageAndInline(botMessage.helpDeleteInfo, keyboardMessage.getHelpButtons()));
+            botMessage.setMessageHasInLineKeyboaard(true);
         } else if (botMessage.getCallbackData().equals(keyboardMessage.getWritInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessage(botMessage.helpWitingQuestion));
+            messages.add(sendMessage.sendMessageAndInline(botMessage.helpWitingQuestion, keyboardMessage.getHelpButtons()));
+            botMessage.setMessageHasInLineKeyboaard(true);
         }
 
         botMessage.setMessages(messages);

@@ -1,6 +1,7 @@
 package Processors;
 
 import Database.ReportDatabase;
+import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseUser.UserInfo;
 
@@ -19,7 +20,7 @@ public class NotificationProcessor {
 
         for (UserInfo user : users) {
             if (user.getId() != BotSetting.creatorId) {
-                usersMessage.put(user.getId(), message);
+                usersMessage.put(user.getId(), String.format(BotMessage.notificationGreeting, user.getUser()).concat(message));
             }
         }
 

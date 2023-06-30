@@ -16,7 +16,7 @@ ARG dbSessionPort=Порт базы Redis
 ENV dbSessionPort="${dbSessionPort}"
 ARG sessionTimeToLive=Время жизни сессий в базе Redis
 ENV sessionTimeToLive="${sessionTimeToLive}"
-ARG schedulerTime=Время запуска задачи (В формате "Часы Минуты Секунды". Перемер: "14 5 30" будет выполнена в 14:05:30)
+ARG schedulerTime=Время запуска задачи (В формате "Часы Минуты Секунды". Перемер: "14 5 0" будет выполнена в 14:05:00)
 ENV schedulerTime="${schedulerTime}"
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","app.jar"] 

@@ -76,8 +76,6 @@ public class RouteMessage {
             messages.add(sendMessage.sendMessage(botMessage.error));
         }
 
-
-
         botMessage.setMessages(messages);
 
         return botMessage;
