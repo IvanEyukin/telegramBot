@@ -59,7 +59,7 @@ public class RouteCallback {
             case WaitCallbackHelp -> {
                 botMessage = requestHelp.getHelpInfo(botMessage);
                 messages = botMessage.getMessages();
-                botMessage.updateBotState(botMessage.getPreviousBotState());
+                // botMessage.updateBotState(botMessage.getPreviousBotState());
             }
             default -> {
             }

@@ -17,7 +17,7 @@ public final class BotMessage {
             Надеюсь, я смогу помочь тебе тратить меньше денег.
             Не забывай, что ты моя сладкая булочка!
             """;
-    public final String mainMenuQuestion = "Что тебя интересует?";
+    public final String mainMenuQuestion = "Нажми на кнопку Меню и выбери, что тебя интересует";
     public final String expensesCategoryQuestion = "Выбери категорию расходов";
     public final String incomeCategoryQuestion = "Выбери категорию доходов";
     public final String categoryError = "Не могу понять в какую категорию записать.\nВыбери категорию";
