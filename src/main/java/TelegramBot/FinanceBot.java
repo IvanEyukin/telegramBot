@@ -91,13 +91,11 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             botMessage.setCallbackData(update.getCallbackQuery().getData());
 
             botMessage = botStateCash.getBotState(botMessage);
-            
             botMessage = routeCallback.routeCallbacProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {
                 responceMessage.sendMessage(botMessage, message);
             }
 
-            botMessage.setMessageHasInLineKeyboaard(false);
             responceMessage.sendMessage(botMessage, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
             
         }

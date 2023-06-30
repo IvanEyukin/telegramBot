@@ -41,6 +41,7 @@ public final class BotMessage {
     public final String reportResultMessageError = "Извини, но я не нашел твоих данных в базе";
 
     public final static String schedulerBotReminder = "Привет %s! Ты ведь не забыл записать расходы и доходы за сегодня?";
+    public final static String notificationGreeting = "Привет %s! ";
 
     public final String helpStart = "%s, давай я немного расскажу о себе, выбери, что тебе интересно:";
     public final String helpInfoQuestion = "Это очень сложный вопрос, уточни, что конкретно тебя интересует?";
