@@ -9,6 +9,7 @@ public class KeyboardMessage {
     List<String> incomeMenuButton = List.of("Зарплата", "Подарки", "Снятие с депозита", "Прочее");
     List<String> reportMenuButton = List.of("Доходы", "Расходы", "Бюджет");
     List<String> helpMenuButton = List.of("О боте", "Как бот работает с информацией");
+    List<String> settingMenuButton = List.of("Настройка напоминаний");
     List<String> adminMenuButton = List.of("Сообщение пользователям");
 
     KeyboardInLineButton deleteButton = KeyboardInLineButton.setInLineButton("Удалить", "Delete");
@@ -25,9 +26,14 @@ public class KeyboardMessage {
     KeyboardInLineButton deleteInfoButton = KeyboardInLineButton.setInLineButton("Можно ли удалить сохраненные данные?", "HelpDelete");
     KeyboardInLineButton writInfoButton = KeyboardInLineButton.setInLineButton("Как записывать расходы/доходы?", "HelpWrit");
 
+    KeyboardInLineButton notificationAllButton = KeyboardInLineButton.setInLineButton("Напоминать всегда", "NotificationAll");
+    KeyboardInLineButton notificationActiveButton = KeyboardInLineButton.setInLineButton("Напоминать, если сегодня не было общения с ботом", "NotificationActive");
+    KeyboardInLineButton notificationFalseButton = KeyboardInLineButton.setInLineButton("Не напоминать", "NotificationDisabled");
+
     List<KeyboardInLineButton> resulButtons = List.of(deleteButton, saveButton);
     List<KeyboardInLineButton> reportButtons = List.of(toDayButton, lastDayButton, lastWeekButton, lastTwoWeekButton, lastMonthButton);
     List<KeyboardInLineButton> helpButtons = List.of(privatInfoButton, saveInfoButton, deleteInfoButton, writInfoButton);
+    List<KeyboardInLineButton> notificationButtons = List.of(notificationAllButton, notificationActiveButton, notificationFalseButton);
 
     public List<String> getExpensesMenuButton() {
         return expensesMenuButton;
@@ -43,6 +49,10 @@ public class KeyboardMessage {
 
     public List<String> getHelpMenuButton() {
         return helpMenuButton;
+    }
+
+    public List<String> getSettingMenuButton() {
+        return settingMenuButton;
     }
 
     public List<String> getAdminMenuButton() {
@@ -93,6 +103,18 @@ public class KeyboardMessage {
         return writInfoButton;
     }
 
+    public KeyboardInLineButton getNotificationAllButton() {
+        return notificationAllButton;
+    }
+
+    public KeyboardInLineButton getNotificationActiveButton() {
+        return notificationActiveButton;
+    }
+
+    public KeyboardInLineButton getNotificationFalseButton() {
+        return notificationFalseButton;
+    }
+
     public List<KeyboardInLineButton> getResulButtons() {
         return resulButtons;
     }
@@ -103,6 +125,10 @@ public class KeyboardMessage {
 
     public List<KeyboardInLineButton> getHelpButtons() {
         return helpButtons;
+    }
+
+    public List<KeyboardInLineButton> getNotificationButtons() {
+        return notificationButtons;
     }
 
 }

@@ -5,6 +5,7 @@ import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
+import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
 import Database.ReportDatabase;
 import BotFSM.BotState;
@@ -23,6 +24,7 @@ public class RouteCallback {
         ReportDatabase database = new ReportDatabase();
         ReportProcessorRequest requestReport = new ReportProcessorRequest();
         HelpProcessorRequest requestHelp = new HelpProcessorRequest();
+        SettingProcessorRequest requestSetting = new SettingProcessorRequest();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
         switch (botMessage.getBotState()) {
@@ -61,6 +63,12 @@ public class RouteCallback {
             case WaitCallbackHelp -> {
                 botMessage = requestHelp.getHelpInfo(botMessage);
                 messages = botMessage.getMessages();
+            }
+            case WaitCallbacSetting -> {
+                botMessage = requestSetting.setSettingRequest(botMessage);
+                messages = botMessage.getMessages();
+                botMessage.setMessageHasInLineKeyboaard(false);
+                botMessage.updateBotState(BotState.Start);
             }
             default -> {
             }

@@ -23,8 +23,8 @@ public class ReportDatabase {
     public final String tableExpenses = "Expenses";
     public final Map<String, String> tableMap = Map.of("Доходы", tableIncome, "Расходы", tableExpenses);
     private final String dbPath = "jdbc:sqlite:";
-    private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui WHERE ui.UserId = ";
-    private final String sqlSelectSearchUsers  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName FROM UserInfo ui";
+    private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName, ui.Notification FROM UserInfo ui WHERE ui.UserId = ";
+    private final String sqlSelectSearchUsers  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName, ui.Notification FROM UserInfo ui";
     private final String sqlSelectBudget = "SELECT b.Budget FROM Budget b WHERE b.UserId = ";
     private final String sqlIncertUserInfo = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
     private final String sqlIncertFinance = "INSERT INTO %s (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
@@ -43,6 +43,20 @@ public class ReportDatabase {
             UserId,
             Category
     """;
+
+    private final String sqlUpdateUser = """
+        UPDATE
+            UserInfo
+        SET
+            UserName = ?,
+            UserFirstName = ?,
+            UserLastName = ?,
+            Notification = ?
+        WHERE
+            UserId = ?    
+    """;
+
+    private final String sqlSelectUserLastMessage = "SELECT u.UserId, u.LastDateMessage FROM UserLastMessage u";
 
     private Connection connect() {
         
@@ -77,6 +91,45 @@ public class ReportDatabase {
 
     }
 
+    public UserInfo searchUserInfo(UserInfo userInfo) {
+
+        String sql = sqlSelectSearchUser.concat(Long.toString(userInfo.getId()));
+        
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+                    while (rs.next()) {
+                        userInfo.setName(rs.getString("UserName"));
+                        userInfo.setFirstName(rs.getString("UserFirstName"));
+                        userInfo.setLastName(rs.getString("UserLastName"));
+                        userInfo.setNotification(rs.getString("Notification"));
+                    }
+                    conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return userInfo;
+
+    }
+
+    public void updateUser(UserInfo userInfo) {
+
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sqlUpdateUser)) {
+                pstmt.setString(1, userInfo.getName());
+                pstmt.setString(2, userInfo.getFirstName());
+                pstmt.setString(3, userInfo.getLastName());
+                pstmt.setString(4, userInfo.getNotification());
+                pstmt.setLong(5, userInfo.getId());
+                pstmt.executeUpdate();
+                conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
     public List<UserInfo> searchUsers() {
 
         List<UserInfo> users = new ArrayList<UserInfo>();
@@ -90,6 +143,29 @@ public class ReportDatabase {
                         user.setName(rs.getString("UserName"));
                         user.setFirstName(rs.getString("UserFirstName"));
                         user.setLastName(rs.getString("UserLastName"));
+                        user.setNotification(rs.getString("Notification"));
+                        users.add(user);
+                    }
+                    conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return users;
+
+    }
+
+    public List<UserInfo> searchUsersLastDataMessage() {
+
+        List<UserInfo> users = new ArrayList<UserInfo>();
+
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlSelectUserLastMessage)) {
+                    while (rs.next()) {
+                        UserInfo user = new UserInfo();
+                        user.setId(rs.getLong("UserId"));
+                        user.setDateMessage(rs.getInt("LastDateMessage"));
                         users.add(user);
                     }
                     conn.close();
