@@ -19,4 +19,4 @@ ENV sessionTimeToLive="${sessionTimeToLive}"
 ARG schedulerTime=Время запуска задачи (В формате "Часы Минуты Секунды". Перемер: "14 5 0" будет выполнена в 14:05:00)
 ENV schedulerTime="${schedulerTime}"
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","app.jar"] 
+ENTRYPOINT ["java","-javaagent:./JavaAgent/jmx_prometheus_javaagent-0.19.0.jar=9900:./JavaAgent/config.yaml", "-jar", "app.jar"] 
