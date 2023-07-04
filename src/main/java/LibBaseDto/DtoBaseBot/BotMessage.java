@@ -92,6 +92,10 @@ public final class BotMessage {
             Таким образом я умею только складывать, даже если ты напишешь -100.
             """;
 
+    public final String settingQuestion = "Какие настройки тебя интересуют?";
+    public final String settingNotificationQuestion = "%s, сейчас %s";
+    public final String settingNotificationSave = "Записал: ";
+
     public final String adminQuestion = "Босс, что нужно сделать?";
     public final String adminNotification = "Напиши, какое сообщение необходимо разослать пользователям";
     public final String adminNotificationStart = "Приступаю к рассылке";

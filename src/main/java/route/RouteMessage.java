@@ -11,6 +11,7 @@ import Processors.ExpensesProcessor;
 import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
+import Processors.SettingProcessor;
 import BotFSM.BotState;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,6 +29,7 @@ public class RouteMessage {
         ReportProcessor report = new ReportProcessor();
         AdminProcessor admin = new AdminProcessor();
         HelpProcessor help = new HelpProcessor();
+        SettingProcessor setting = new SettingProcessor();
         List<SendMessage> messages = new ArrayList<>();
 
         if (botMessage.getUserMessageText().equals(UserMassage.start) || botMessage.getUserMessageText().equals(UserCommand.start)) {
@@ -69,6 +71,10 @@ public class RouteMessage {
                 }
                 case (UserCommand.help) -> {
                     botMessage = help.getHelp(botMessage);
+                    messages = botMessage.getMessages();
+                }
+                case (UserCommand.setting) -> {
+                    botMessage = setting.getSetting(botMessage);
                     messages = botMessage.getMessages();
                 }
             }
