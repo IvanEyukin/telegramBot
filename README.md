@@ -24,6 +24,8 @@
 3. Запустить TelegramBot в докер сети:
    `docker run --name telegramBot --network telegram -d telegram`
 
+Деплой Телеграм бота с системой мониторинга https://github.com/IvanEyukin/telegramBotDeploy/blob/master/README.md
+
 <h3 align="center">Минимальные системные требования</h3>
 
 1. Процессор: 1 ядро.
