@@ -23,3 +23,9 @@
    `docker run --name redis--network telegram -d redis`
 3. Запустить TelegramBot в докер сети:
    `docker run --name telegramBot --network telegram -d telegram`
+
+<h3 align="center">Минимальные системные требования</h3>
+
+1. Процессор: 1 ядро.
+2. Оперативная память: 512 MiB
+3. Размер диска: 3 GiB
