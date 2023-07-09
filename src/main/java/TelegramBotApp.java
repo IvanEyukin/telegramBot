@@ -7,7 +7,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class TelegramBotApp {
     public static void main(String[] args) throws Exception {
-
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new FinanceBot());
@@ -15,7 +14,5 @@ public class TelegramBotApp {
             e.printStackTrace();
 
         }
-
     }
-
 }

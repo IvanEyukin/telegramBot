@@ -6,11 +6,11 @@ import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import Route.RouteCallback;
 import Route.RouteMessage;
-import BotFSM.BotState;
 import BotFSM.BotStateCash;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
+import bot.state.State;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -78,7 +78,6 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
                     System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
                 }
-                botMessage.updateBotState(BotState.Start);
                 responceMessage.sendMessage((long) BotSetting.creatorId, botMessage.adminNotificationStop);
             }
 

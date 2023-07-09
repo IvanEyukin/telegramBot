@@ -4,6 +4,7 @@ import Database.SessionDatabase;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseRedis.RedisTable;
 import LibBaseDto.DtoBaseUser.UserInfo;
+import bot.state.State;
 
 import java.math.BigDecimal;
 
@@ -111,11 +112,11 @@ public class BotStateCash {
             }
 
             if (table.getState() != null && !table.getState().equals(NULL_POINT)) {
-                botMessage.setBotState(BotState.valueOf(table.getState()));
+                botMessage.setBotState(State.valueOf(table.getState()));
             }
 
             if (table.getPreviousState() != null && !table.getPreviousState().equals(NULL_POINT)) {
-                botMessage.setPreviousBotState(BotState.valueOf(table.getPreviousState()));
+                botMessage.setPreviousBotState(State.valueOf(table.getPreviousState()));
             }
 
             if (table.getMessageHasKeyboard() != null && !table.getMessageHasKeyboard().equals(NULL_POINT)) {

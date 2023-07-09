@@ -1,10 +1,10 @@
 package Processors;
 
-import BotFSM.BotState;
 import Database.ReportDatabase;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -37,18 +37,15 @@ public class SettingProcessor {
                 }
                 messages.add(sendMessage.sendMessageAndInline(String.format(botMessage.settingNotificationQuestion, botMessage.getUserInfo().getUser(), notification), keyboardMessage.getNotificationButtons()));
                 botMessage.setMessageHasInLineKeyboaard(true);
-                botMessage.updateBotState(BotState.WaitCallbacSetting);
+                botMessage.updateBotState(State.InformationRetentionQuestionsSelection);
             }
             default -> {
                 messages.add(sendMessage.sendMessageAndKeyboard(botMessage.settingQuestion, keyboardMessage.getSettingMenuButton()));
-                botMessage.updateBotState(BotState.SettingMenu);
+                botMessage.updateBotState(State.SettingMenu);
             }
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-
 }

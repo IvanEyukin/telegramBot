@@ -1,7 +1,7 @@
 package LibBaseDto.DtoBaseBot;
 
-import BotFSM.BotState;
 import LibBaseDto.DtoBaseUser.UserInfo;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
@@ -102,8 +102,8 @@ public final class BotMessage {
     public final String adminNotificationStop = "Рассылка завершена";
 
     UserInfo userInfo;
-    BotState botState;
-    BotState previousBotState;
+    State botState;
+    State previousBotState;
     String userMessageText;
     String callbackData;
     BigDecimal financeSum;
@@ -123,19 +123,19 @@ public final class BotMessage {
         this.userInfo = userInfo;
     }
 
-    public BotState getBotState() {
+    public State getBotState() {
         return botState;
     }
 
-    public void setBotState(BotState botState) {
+    public void setBotState(State botState) {
         this.botState = botState;
     }
 
-    public BotState getPreviousBotState() {
+    public State getPreviousBotState() {
         return previousBotState;
     }
 
-    public void setPreviousBotState(BotState previousBotState) {
+    public void setPreviousBotState(State previousBotState) {
         this.previousBotState = previousBotState;
     }
 
@@ -211,7 +211,7 @@ public final class BotMessage {
         this.messageHasInLineKeyboaard = messageHasInLineKeyboaard;
     }
 
-    public void updateBotState(BotState botState) {
+    public void updateBotState(State botState) {
         this.previousBotState = getBotState();
         this.botState = botState;
     }

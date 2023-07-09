@@ -1,9 +1,9 @@
 package Processors;
 
-import BotFSM.BotState;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class HelpProcessor {
                     } else if (botMessage.getUserMessageText().contains("Как бот работает с информацией")) {
                         messages.add(sendMessage.sendMessageAndInline(botMessage.helpInfoQuestion, keyboardMessage.getHelpButtons()));
                         botMessage.setMessageHasInLineKeyboaard(true);
-                        botMessage.updateBotState(BotState.WaitCallbackHelp);
+                        botMessage.updateBotState(State.InformationRetentionQuestionsSelection);
                     }
                 } else {
                     messages.add(sendMessage.sendMessageAndKeyboard(botMessage.helpError, keyboardMessage.getHelpMenuButton()));
@@ -34,14 +34,11 @@ public class HelpProcessor {
             }
             default -> {
                 messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.helpStart, botMessage.getUserInfo().getUser()), keyboardMessage.getHelpMenuButton()));
-                botMessage.updateBotState(BotState.HelpMenu);
+                botMessage.updateBotState(State.HelpMenu);
             }
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-    
 }

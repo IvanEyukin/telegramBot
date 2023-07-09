@@ -4,7 +4,7 @@ import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
-import BotFSM.BotState;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -23,45 +23,41 @@ public class ExpensesProcessor {
         switch (botMessage.getBotState()) {
             case ExpensesMenu -> {
                 if (keyboardMessage.getExpensesMenuButton().contains(botMessage.getUserMessageText())) {
-                    
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
 
                     if (botMessage.getFinanceSubCategory().equals("Прочее")) {
-                        botMessage.updateBotState(BotState.EnterComment);
+                        botMessage.updateBotState(State.WaitingComment);
                         messages.add(sendMessage.sendMessage(botMessage.saveOther));
                     } else {
-                        botMessage.updateBotState(BotState.EnterSum);
+                        botMessage.updateBotState(State.WaitingSum);
                         messages.add(sendMessage.sendMessage(botMessage.finance.concat(botMessage.getUserMessageText())));
                     }
                 } else {
                     messages.add(sendMessage.sendMessageAndKeyboard(botMessage.categoryError, keyboardMessage.getExpensesMenuButton()));
                 }
             }
-            case EnterSum -> {
+            case WaitingSum -> {
                 if (botMessage.getUserMessageText().matches(Parser.regNumberValid) || botMessage.getUserMessageText().matches(Parser.regNumberNoValid)) {
                     botMessage = finance.getFinance(botMessage);
-                    botMessage.updateBotState(BotState.WaitCallbackFinance);
+                    botMessage.updateBotState(State.WaitCallbackSaveOrDelete);
 
                     messages = botMessage.getMessages();
                 } else {
                     messages.add(sendMessage.sendMessage(botMessage.financeError));
                 }
             }
-            case EnterComment -> {
-                botMessage.updateBotState(BotState.EnterSum);
+            case WaitingComment -> {
+                botMessage.updateBotState(State.WaitingSum);
                 botMessage.setComment(botMessage.getUserMessageText());
                 messages.add(sendMessage.sendMessage(botMessage.finance.concat(botMessage.getFinanceSubCategory())));
             }
             default -> {
-                botMessage.updateBotState(BotState.ExpensesMenu);
+                botMessage.updateBotState(State.ExpensesMenu);
                 messages.add(sendMessage.sendMessageAndKeyboard(botMessage.expensesCategoryQuestion, keyboardMessage.getExpensesMenuButton()));
             }
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
-    }
-    
+    } 
 }

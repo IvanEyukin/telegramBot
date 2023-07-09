@@ -12,7 +12,7 @@ import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
 import Processors.SettingProcessor;
-import BotFSM.BotState;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -37,22 +37,22 @@ public class RouteMessage {
             botMessage.setFinanceSum(null);
             botMessage.setFinanceCategory(null);
             botMessage.setFinanceSubCategory(null);
-            botMessage.updateBotState(BotState.mainMenu);
+            botMessage.updateBotState(State.Start);
 
             messages.add(sendMessage.sendMessage(String.format(botMessage.greeting, botMessage.getUserInfo().getUser())));
             messages.add(sendMessage.sendMessage(botMessage.mainMenuQuestion));
-        } else if (botMessage.getUserInfo().getId() == BotSetting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getBotState() == BotState.AdminMenu || botMessage.getPreviousBotState() == BotState.AdminMenu) {
+        } else if (botMessage.getUserInfo().getId() == BotSetting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getBotState() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
             botMessage = admin.adminMenu(botMessage);
             messages = botMessage.getMessages();
         } else if (UserCommand.UserComand.containsKey(botMessage.getUserMessageText()) || botMessage.getFinanceCategory() != null) {
 
             if (botMessage.getFinanceCategory() == null || UserCommand.UserComand.containsKey(botMessage.getUserMessageText())) { 
                 botMessage.setFinanceCategory(UserCommand.UserComand.get(botMessage.getUserMessageText()));
-                botMessage.setBotState(BotState.mainMenu);
+                botMessage.setBotState(State.Start);
             }
 
             // fix ситуации, когда бот ждет от пользователя нажатие ктопок в меню сохранения суммы, а пользователь вводит еще цифры.
-            if (botMessage.getBotState() == BotState.WaitCallbackFinance) {
+            if (botMessage.getBotState() == State.WaitCallbackSaveOrDelete) {
                 botMessage.updateBotState(botMessage.getPreviousBotState());
             }
             

@@ -4,7 +4,7 @@ import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
-import BotFSM.BotState;
+import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ public class FinancialCalculationProcessor {
                 messages.add(sendMessage.sendMessage(botMessage.zeroNumber));
             }
             case (1) -> {
-                if (botMessage.getFinanceSum() == null || botMessage.getPreviousBotState() != BotState.WaitCallbackFinance) {
+                if (botMessage.getFinanceSum() == null || botMessage.getPreviousBotState() != State.WaitCallbackSaveOrDelete) {
                     botMessage.setFinanceSum(number);
                 } else {
                     botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));

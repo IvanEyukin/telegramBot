@@ -7,8 +7,8 @@ import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
 import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
+import bot.state.State;
 import Database.ReportDatabase;
-import BotFSM.BotState;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class RouteCallback {
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
         switch (botMessage.getBotState()) {
-            case WaitCallbackFinance -> {
+            case WaitCallbackSaveOrDelete -> {
                 if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteButton().getCallBack())) {
                     messages.add(sendMessage.sendMessage(String.format(botMessage.delete, botMessage.getFinanceSum().toEngineeringString())));
                     botMessage.setFinanceSum(null);
@@ -41,11 +41,11 @@ public class RouteCallback {
                     }
 
                     if (botMessage.getFinanceCategory().equals(UserCommand.expenses)) {
-                        botMessage.updateBotState(BotState.ExpensesMenu);
+                        botMessage.updateBotState(State.ExpensesMenu);
                         keyboard = keyboardMessage.getExpensesMenuButton();
                         database.insertFinance(botMessage, database.tableExpenses);
                     } else {
-                        botMessage.updateBotState(BotState.IncomeMenu);
+                        botMessage.updateBotState(State.IncomeMenu);
                         keyboard = keyboardMessage.getIncomeMenuButton();
                         database.insertFinance(botMessage, database.tableIncome);
                     }
@@ -55,20 +55,20 @@ public class RouteCallback {
                 }
                 botMessage.setMessageHasInLineKeyboaard(false);
             }
-            case WaitCallbackReport -> {
+            case PeriodSelection -> {
                 botMessage = requestReport.getReportRequest(botMessage);
                 messages = botMessage.getMessages();
                 botMessage.setMessageHasInLineKeyboaard(false);
             }
-            case WaitCallbackHelp -> {
+            case InformationRetentionQuestionsSelection -> {
                 botMessage = requestHelp.getHelpInfo(botMessage);
                 messages = botMessage.getMessages();
             }
-            case WaitCallbacSetting -> {
+            case ReminderOptionsSelection -> {
                 botMessage = requestSetting.setSettingRequest(botMessage);
                 messages = botMessage.getMessages();
                 botMessage.setMessageHasInLineKeyboaard(false);
-                botMessage.updateBotState(BotState.Start);
+                botMessage.updateBotState(State.Start);
             }
             default -> {
             }
@@ -79,7 +79,5 @@ public class RouteCallback {
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-
 }
