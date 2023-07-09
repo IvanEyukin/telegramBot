@@ -26,8 +26,8 @@ public class KeyboardMessage {
     KeyboardInLineButton deleteInfoButton = KeyboardInLineButton.setInLineButton("Можно ли удалить сохраненные данные?", "HelpDelete");
     KeyboardInLineButton writInfoButton = KeyboardInLineButton.setInLineButton("Как записывать расходы/доходы?", "HelpWrit");
 
-    KeyboardInLineButton notificationAllButton = KeyboardInLineButton.setInLineButton("Напоминать всегда", "NotificationAll");
-    KeyboardInLineButton notificationActiveButton = KeyboardInLineButton.setInLineButton("Напоминать, если сегодня не было общения с ботом", "NotificationActive");
+    KeyboardInLineButton notificationAllButton = KeyboardInLineButton.setInLineButton("Напоминать всегда ", "NotificationAll");
+    KeyboardInLineButton notificationActiveButton = KeyboardInLineButton.setInLineButton("Если сегодня не было общения с ботом", "NotificationActive");
     KeyboardInLineButton notificationFalseButton = KeyboardInLineButton.setInLineButton("Не напоминать", "NotificationDisabled");
 
     List<KeyboardInLineButton> resulButtons = List.of(deleteButton, saveButton);
