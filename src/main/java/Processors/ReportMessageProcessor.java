@@ -6,6 +6,7 @@ import TelegramBot.BotSendMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ReportMessageProcessor {
                 categoryMessage = categoryMessage.concat(String.format(botMessage.reportResultMessageCategory, result.getCategory(), result.getSum()));
             }
 
-            String message = String.format(botMessage.reportResultMessage, botMessage.getFinanceSubCategory(), report.getDateFrom(), report.getDateTo(), sum); 
+            String message = String.format(botMessage.reportResultMessage, botMessage.getFinanceSubCategory(), report.getDateFrom(), report.getDateTo(), sum.setScale(2, RoundingMode.HALF_DOWN)); 
             messages.add(sendMessage.sendMessage(message));
             if (sum.compareTo(new BigDecimal("0")) == 1) {
                 messages.add(sendMessage.sendMessage(botMessage.reportResultMessageDetail.concat(categoryMessage)));

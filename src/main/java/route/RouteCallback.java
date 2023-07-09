@@ -3,14 +3,14 @@ package Route;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
+import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
+import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
 import Database.ReportDatabase;
-
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 import BotFSM.BotState;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +23,8 @@ public class RouteCallback {
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase database = new ReportDatabase();
         ReportProcessorRequest requestReport = new ReportProcessorRequest();
+        HelpProcessorRequest requestHelp = new HelpProcessorRequest();
+        SettingProcessorRequest requestSetting = new SettingProcessorRequest();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
         switch (botMessage.getBotState()) {
@@ -51,10 +53,22 @@ public class RouteCallback {
                     messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.save, botMessage.getFinanceSum()), keyboard));
                     botMessage.setFinanceSubCategory(null);
                 }
+                botMessage.setMessageHasInLineKeyboaard(false);
             }
             case WaitCallbackReport -> {
                 botMessage = requestReport.getReportRequest(botMessage);
                 messages = botMessage.getMessages();
+                botMessage.setMessageHasInLineKeyboaard(false);
+            }
+            case WaitCallbackHelp -> {
+                botMessage = requestHelp.getHelpInfo(botMessage);
+                messages = botMessage.getMessages();
+            }
+            case WaitCallbacSetting -> {
+                botMessage = requestSetting.setSettingRequest(botMessage);
+                messages = botMessage.getMessages();
+                botMessage.setMessageHasInLineKeyboaard(false);
+                botMessage.updateBotState(BotState.Start);
             }
             default -> {
             }

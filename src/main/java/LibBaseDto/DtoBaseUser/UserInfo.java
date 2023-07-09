@@ -7,6 +7,7 @@ public class UserInfo {
     String firstName;
     String lastName;
     Integer dateMessage;
+    String notification;
 
     public Long getId() {
         return id;
@@ -46,6 +47,14 @@ public class UserInfo {
 
     public void setDateMessage(Integer dateMessage) {
         this.dateMessage = dateMessage;
+    }
+
+    public String getNotification() {
+        return notification;
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
     }
 
     public String getUser() {

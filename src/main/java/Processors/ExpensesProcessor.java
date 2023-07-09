@@ -23,6 +23,7 @@ public class ExpensesProcessor {
         switch (botMessage.getBotState()) {
             case ExpensesMenu -> {
                 if (keyboardMessage.getExpensesMenuButton().contains(botMessage.getUserMessageText())) {
+                    
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
 
                     if (botMessage.getFinanceSubCategory().equals("Прочее")) {
@@ -32,7 +33,6 @@ public class ExpensesProcessor {
                         botMessage.updateBotState(BotState.EnterSum);
                         messages.add(sendMessage.sendMessage(botMessage.finance.concat(botMessage.getUserMessageText())));
                     }
-
                 } else {
                     messages.add(sendMessage.sendMessageAndKeyboard(botMessage.categoryError, keyboardMessage.getExpensesMenuButton()));
                 }

@@ -1,30 +1,38 @@
 package TelegramBot;
 
 import LibBaseDto.DtoBaseBot.BotSetting;
+import LibBaseDto.DtoBaseBot.BotSystemMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import Route.RouteCallback;
 import Route.RouteMessage;
+import BotFSM.BotState;
 import BotFSM.BotStateCash;
+import Scheduler.BotReminderTask;
+import Scheduler.ScheduledTask;
+import Scheduler.SchedulerMessage;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 
-public class FinanceBot extends AbilityBot {
+public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
 
-    BotStateCash botStateCash = new BotStateCash();
-
+    private final ResponceMessage responceMessage;
+    private final ScheduledTask scheduledTask;
+    
     private FinanceBot(String botToken, String botUsername) {
         super(botToken, botUsername);
+        responceMessage = new ResponceMessage(sender);
+        scheduledTask = new ScheduledTask(new BotReminderTask(this));
+        scheduledTask.startExecutionAt(BotSetting.schedulerTimeStart.hour, BotSetting.schedulerTimeStart.minut, BotSetting.schedulerTimeStart.second);
     }
 
     public FinanceBot() {
-        this(BotSetting.token, BotSetting.name);
+        this(BotSetting.token, BotSetting.name) ;
     }
 
     @Override
@@ -32,48 +40,10 @@ public class FinanceBot extends AbilityBot {
         return BotSetting.creatorId;
     }
 
-    private void sendMessage(BotMessage botMessage, SendMessage message) {
-
-        message.setChatId(botMessage.getUserInfo().getId());
-
-        try {
-            botMessage.setPreviousBotMessageId(execute(message).getMessageId());
-            botStateCash.setBotState(botMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void sendMessage(BotMessage botMessage, EditMessageReplyMarkup message) {
-
-        message.setChatId(botMessage.getUserInfo().getId());
-
-        try {
-            execute(message);
-            botStateCash.setBotState(botMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void answerCallback(String callbackId) {
-
-        AnswerCallbackQuery answerCallback = new AnswerCallbackQuery();
-        answerCallback.setCallbackQueryId(callbackId);
-
-        try {
-            execute(answerCallback);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public void onUpdateReceived(Update update) {
 
+        BotStateCash botStateCash = new BotStateCash();
         BotSendMessage sendMessage = new BotSendMessage();
         RouteMessage routeMessage = new RouteMessage();
         RouteCallback routeCallback = new RouteCallback();
@@ -94,35 +64,55 @@ public class FinanceBot extends AbilityBot {
             botMessage = botStateCash.getBotState(botMessage);
 
             if (botMessage.getMessageHasInLineKeyboaard() == true) {
-                sendMessage(botMessage, sendMessage.updateMessage(botMessage.getUserInfo().getId(), botMessage.getPreviousBotMessageId()));
+                responceMessage.sendMessage(botMessage, sendMessage.updateMessage(botMessage.getUserInfo().getId(), botMessage.getPreviousBotMessageId()));
                 botMessage.setMessageHasInLineKeyboaard(false);
             }
 
             botMessage = routeMessage.routeMessageProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {
-                sendMessage(botMessage, message);
+                responceMessage.sendMessage(botMessage, message);
+            }
+
+            if (botMessage.getAdminNotificationMessages() != null && !botMessage.getAdminNotificationMessages().isEmpty()) {
+                for (Map.Entry<Long, String> adminMessage : botMessage.getAdminNotificationMessages().entrySet()) {
+                    responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
+                    System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
+                }
+                botMessage.updateBotState(BotState.Start);
+                responceMessage.sendMessage((long) BotSetting.creatorId, botMessage.adminNotificationStop);
             }
 
         }
 
         if (update.hasCallbackQuery()) {
 
-            answerCallback(update.getCallbackQuery().getId());
+            responceMessage.answerCallback(update.getCallbackQuery().getId());
 
             user.setId(update.getCallbackQuery().getFrom().getId());
             botMessage.setUserInfo(user);
             botMessage.setCallbackData(update.getCallbackQuery().getData());
 
             botMessage = botStateCash.getBotState(botMessage);
-            
             botMessage = routeCallback.routeCallbacProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {
-                sendMessage(botMessage, message);
+                responceMessage.sendMessage(botMessage, message);
             }
 
-            botMessage.setMessageHasInLineKeyboaard(false);
-            sendMessage(botMessage, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
+            responceMessage.sendMessage(botMessage, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
             
+        }
+
+    }
+
+    @Override
+    public void onTimeForBotReminderTask() {
+
+        SchedulerMessage message = new SchedulerMessage();
+        Map<Long, String> userMessage = message.botReminder();
+
+        for (Map.Entry<Long, String> user : userMessage.entrySet()) {
+            responceMessage.sendMessage(user.getKey(), user.getValue());
+            System.out.print(String.format(BotSystemMessage.messageScheduler, LocalDateTime.now().format(BotSystemMessage.formatter), user.getKey()));
         }
 
     }
