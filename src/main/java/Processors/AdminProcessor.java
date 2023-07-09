@@ -19,7 +19,7 @@ public class AdminProcessor {
         KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
 
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case AdminMenu -> {
                 messages.add(sendMessage.sendMessage(botMessage.adminNotification));
                 botMessage.updateBotState(State.WaitingMessageMailings);

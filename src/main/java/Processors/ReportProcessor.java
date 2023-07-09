@@ -18,7 +18,7 @@ public class ReportProcessor {
         KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
 
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case ReportMenu -> {
                 if (keyboardMessage.getReportMenuButton().contains(botMessage.getUserMessageText()) && !botMessage.getUserMessageText().equals("Бюджет")) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());

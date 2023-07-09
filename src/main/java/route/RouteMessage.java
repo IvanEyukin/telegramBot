@@ -41,18 +41,18 @@ public class RouteMessage {
 
             messages.add(sendMessage.sendMessage(String.format(botMessage.greeting, botMessage.getUserInfo().getUser())));
             messages.add(sendMessage.sendMessage(botMessage.mainMenuQuestion));
-        } else if (botMessage.getUserInfo().getId() == BotSetting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getBotState() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
+        } else if (botMessage.getUserInfo().getId() == BotSetting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getSession() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
             botMessage = admin.adminMenu(botMessage);
             messages = botMessage.getMessages();
         } else if (UserCommand.UserComand.containsKey(botMessage.getUserMessageText()) || botMessage.getFinanceCategory() != null) {
 
             if (botMessage.getFinanceCategory() == null || UserCommand.UserComand.containsKey(botMessage.getUserMessageText())) { 
                 botMessage.setFinanceCategory(UserCommand.UserComand.get(botMessage.getUserMessageText()));
-                botMessage.setBotState(State.Start);
+                botMessage.setSession(State.Start);
             }
 
             // fix ситуации, когда бот ждет от пользователя нажатие ктопок в меню сохранения суммы, а пользователь вводит еще цифры.
-            if (botMessage.getBotState() == State.WaitCallbackSaveOrDelete) {
+            if (botMessage.getSession() == State.WaitCallbackSaveOrDelete) {
                 botMessage.updateBotState(botMessage.getPreviousBotState());
             }
             

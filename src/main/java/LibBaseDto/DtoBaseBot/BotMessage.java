@@ -123,11 +123,11 @@ public final class BotMessage {
         this.userInfo = userInfo;
     }
 
-    public State getBotState() {
+    public State getSession() {
         return botState;
     }
 
-    public void setBotState(State botState) {
+    public void setSession(State botState) {
         this.botState = botState;
     }
 
@@ -212,7 +212,7 @@ public final class BotMessage {
     }
 
     public void updateBotState(State botState) {
-        this.previousBotState = getBotState();
+        this.previousBotState = getSession();
         this.botState = botState;
     }
 

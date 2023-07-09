@@ -20,7 +20,7 @@ public class SettingProcessor {
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase report = new ReportDatabase();
         
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case SettingMenu -> {
                 String notification = "";
                 botMessage.setUserInfo(report.searchUserInfo(botMessage.getUserInfo()));

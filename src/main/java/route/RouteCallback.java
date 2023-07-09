@@ -27,7 +27,7 @@ public class RouteCallback {
         SettingProcessorRequest requestSetting = new SettingProcessorRequest();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case WaitCallbackSaveOrDelete -> {
                 if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteButton().getCallBack())) {
                     messages.add(sendMessage.sendMessage(String.format(botMessage.delete, botMessage.getFinanceSum().toEngineeringString())));

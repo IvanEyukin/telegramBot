@@ -18,7 +18,7 @@ public class HelpProcessor {
         KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
 
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case HelpMenu -> {
                 if (keyboardMessage.getHelpMenuButton().contains(botMessage.getUserMessageText())) {
                     if (botMessage.getUserMessageText().contains("О боте")) {

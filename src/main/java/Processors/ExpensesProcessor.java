@@ -20,7 +20,7 @@ public class ExpensesProcessor {
         BotSendMessage sendMessage = new BotSendMessage();
         FinancialCalculationProcessor finance = new FinancialCalculationProcessor();
 
-        switch (botMessage.getBotState()) {
+        switch (botMessage.getSession()) {
             case ExpensesMenu -> {
                 if (keyboardMessage.getExpensesMenuButton().contains(botMessage.getUserMessageText())) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());

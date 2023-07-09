@@ -6,11 +6,10 @@ import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import Route.RouteCallback;
 import Route.RouteMessage;
-import BotFSM.BotStateCash;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
-import bot.state.State;
+import bot.session.Session;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -43,7 +42,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
     @Override
     public void onUpdateReceived(Update update) {
 
-        BotStateCash botStateCash = new BotStateCash();
+        Session Sessions = new Session();
         BotSendMessage sendMessage = new BotSendMessage();
         RouteMessage routeMessage = new RouteMessage();
         RouteCallback routeCallback = new RouteCallback();
@@ -61,7 +60,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             botMessage.setUserInfo(user);
             botMessage.setUserMessageText(update.getMessage().getText());
 
-            botMessage = botStateCash.getBotState(botMessage);
+            botMessage = Sessions.getSession(botMessage);
 
             if (botMessage.getMessageHasInLineKeyboaard() == true) {
                 responceMessage.sendMessage(botMessage, sendMessage.updateMessage(botMessage.getUserInfo().getId(), botMessage.getPreviousBotMessageId()));
@@ -91,7 +90,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             botMessage.setUserInfo(user);
             botMessage.setCallbackData(update.getCallbackQuery().getData());
 
-            botMessage = botStateCash.getBotState(botMessage);
+            botMessage = Sessions.getSession(botMessage);
             botMessage = routeCallback.routeCallbacProcessor(botMessage);
             for (SendMessage message : botMessage.getMessages()) {
                 responceMessage.sendMessage(botMessage, message);

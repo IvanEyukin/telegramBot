@@ -6,14 +6,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import BotFSM.BotStateCash;
 import LibBaseDto.DtoBaseBot.BotMessage;
+import bot.session.Session;
 
 
 public class ResponceMessage {
 
     private final MessageSender sender;
-    BotStateCash botStateCash = new BotStateCash();
+    Session Sessions = new Session();
 
     public ResponceMessage(MessageSender sender) {
         this.sender = sender;
@@ -39,7 +39,7 @@ public class ResponceMessage {
 
         try {
             botMessage.setPreviousBotMessageId(sender.execute(message).getMessageId());
-            botStateCash.setBotState(botMessage);
+            Sessions.setSession(botMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -52,7 +52,7 @@ public class ResponceMessage {
 
         try {
             sender.execute(message);
-            botStateCash.setBotState(botMessage);
+            Sessions.setSession(botMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
