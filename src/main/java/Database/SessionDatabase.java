@@ -12,18 +12,13 @@ import java.util.Map;
 public class SessionDatabase {
 
     private Jedis redisConnection () {
-
         Jedis jedis = new Jedis(BotSetting.dbSessionHost, BotSetting.dbSessionPort);
         jedis.connect();
-
         return jedis;
-
     }
 
     public void setSessions (RedisTable table) {
-
         Jedis conn = redisConnection();
-
         Map<String, String> request = new HashMap<String, String>();
 
         request.put(RedisFieldName.UserName.toString(), table.getUserName());
@@ -42,17 +37,13 @@ public class SessionDatabase {
         conn.hmset(table.getKey(), request);
         conn.expire(table.getKey(), BotSetting.sessionTimeToLive);
         conn.close();
-
     }
 
     public RedisTable getSessions (RedisTable table) {
-
         Jedis conn = redisConnection();
-
         Map<String, String> responce = conn.hgetAll(table.getKey());
 
         if (responce.size() != 0) {
-
             table.setUserName(responce.get(RedisFieldName.UserName.toString()));
             table.setUserFirstName(responce.get(RedisFieldName.UserFirstName.toString()));
             table.setUserLastName(responce.get(RedisFieldName.UserLastName.toString()));
@@ -66,15 +57,11 @@ public class SessionDatabase {
             table.setPreviousState(responce.get(RedisFieldName.PreviousState.toString()));
             table.setPreviousBotMessageId(responce.get(RedisFieldName.PreviousBotMessageId.toString()));
             table.setSessionHasRedis(true);
-
         } else {
             table.setSessionHasRedis(false);
         }
-
         conn.close();
 
         return table;
-        
     }
-
 }
