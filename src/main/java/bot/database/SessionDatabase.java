@@ -1,4 +1,4 @@
-package Database;
+package bot.database;
 
 import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseRedis.RedisFieldName;

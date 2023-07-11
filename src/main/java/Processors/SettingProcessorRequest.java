@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import Database.ReportDatabase;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import TelegramBot.BotSendMessage;
+import bot.database.ReportDatabase;
 
 public class SettingProcessorRequest {
 

@@ -1,8 +1,8 @@
 package Scheduler;
 
-import Database.ReportDatabase;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
+import bot.database.ReportDatabase;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -17,8 +17,8 @@ public class SchedulerMessage {
 
         ReportDatabase report = new ReportDatabase(); 
         Map<Long, String> usersMessage = new HashMap<Long, String>();
-        List<UserInfo> users = report.searchUsers();
-        List<UserInfo> userMessage = report.searchUsersLastDataMessage();
+        List<UserInfo> users = report.selectUsers();
+        List<UserInfo> userMessage = report.selectUsersLastDataMessage();
 
         int dayNow = LocalDate.now().getDayOfMonth();
 

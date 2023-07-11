@@ -1,4 +1,4 @@
-package Database;
+package bot.database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
@@ -18,86 +18,54 @@ import java.math.RoundingMode;
 
 
 public class ReportDatabase {
-
     public final String tableIncome = "Income";
     public final String tableExpenses = "Expenses";
     public final Map<String, String> tableMap = Map.of("Доходы", tableIncome, "Расходы", tableExpenses);
     private final String dbPath = "jdbc:sqlite:";
-    private final String sqlSelectSearchUser  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName, ui.Notification FROM UserInfo ui WHERE ui.UserId = ";
-    private final String sqlSelectSearchUsers  = "SELECT ui.UserId, ui.UserName, ui.UserFirstName, ui.UserLastName, ui.Notification FROM UserInfo ui";
-    private final String sqlSelectBudget = "SELECT b.Budget FROM Budget b WHERE b.UserId = ";
-    private final String sqlIncertUserInfo = "INSERT INTO UserInfo (UserId, UserName, UserFirstName, UserLastName) VALUES (?,?,?,?)";
-    private final String sqlIncertFinance = "INSERT INTO %s (Date, UserId, Category, Sum, Comment) VALUES (?,?,?,?,?)";
-    private final String sqlSelectReport = """
-        SELECT 
-            UserId   AS UserId,
-            Category AS Category,
-            SUM(Sum) AS Sum
-        FROM 
-            %s
-        WHERE
-            UserId = %s
-            AND Date >= strftime('%%s','%s')
-            AND Date < strftime('%%s','%s')
-        GROUP BY 
-            UserId,
-            Category
-    """;
-
-    private final String sqlUpdateUser = """
-        UPDATE
-            UserInfo
-        SET
-            UserName = ?,
-            UserFirstName = ?,
-            UserLastName = ?,
-            Notification = ?
-        WHERE
-            UserId = ?    
-    """;
-
-    private final String sqlSelectUserLastMessage = "SELECT u.UserId, u.LastDateMessage FROM UserLastMessage u";
 
     private Connection connect() {
-        
-        String url = dbPath.concat(BotSetting.dbReportPath);
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(dbPath.concat(BotSetting.dbReportPath));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
         return conn;
-
     }
 
     public boolean searchUser(UserInfo userInfo) {
-
-        String sql = sqlSelectSearchUser.concat(Long.toString(userInfo.getId()));
         boolean result = false;
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                ResultSet rs = stmt.executeQuery(SQLRequests.User.selectAddConditionsId(userInfo.getId()))) {
                     result = rs.next();
                     conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return result;
-
     }
 
-    public UserInfo searchUserInfo(UserInfo userInfo) {
+    public void insertUser(UserInfo userInfo) {
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(SQLRequests.User.INSERT)) {
+                pstmt.setLong(1, userInfo.getId());
+                pstmt.setString(2, userInfo.getName());
+                pstmt.setString(3, userInfo.getFirstName());
+                pstmt.setString(4, userInfo.getLastName());
+                pstmt.executeUpdate();
+                conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
-        String sql = sqlSelectSearchUser.concat(Long.toString(userInfo.getId()));
-        
+    public UserInfo selectUser(UserInfo userInfo) {        
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                ResultSet rs = stmt.executeQuery(SQLRequests.User.selectAddConditionsId(userInfo.getId()))) {
                     while (rs.next()) {
                         userInfo.setName(rs.getString("UserName"));
                         userInfo.setFirstName(rs.getString("UserFirstName"));
@@ -108,15 +76,12 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return userInfo;
-
     }
 
     public void updateUser(UserInfo userInfo) {
-
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sqlUpdateUser)) {
+            PreparedStatement pstmt = conn.prepareStatement(SQLRequests.User.UPDATE)) {
                 pstmt.setString(1, userInfo.getName());
                 pstmt.setString(2, userInfo.getFirstName());
                 pstmt.setString(3, userInfo.getLastName());
@@ -127,16 +92,14 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
-    public List<UserInfo> searchUsers() {
-
+    public List<UserInfo> selectUsers() {
         List<UserInfo> users = new ArrayList<UserInfo>();
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sqlSelectSearchUsers)) {
+                ResultSet rs = stmt.executeQuery(SQLRequests.User.SELECT)) {
                     while (rs.next()) {
                         UserInfo user = new UserInfo();
                         user.setId(rs.getLong("UserId"));
@@ -150,18 +113,15 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return users;
-
     }
 
-    public List<UserInfo> searchUsersLastDataMessage() {
-
+    public List<UserInfo> selectUsersLastDataMessage() {
         List<UserInfo> users = new ArrayList<UserInfo>();
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sqlSelectUserLastMessage)) {
+                ResultSet rs = stmt.executeQuery(SQLRequests.Views.UserLastMessage)) {
                     while (rs.next()) {
                         UserInfo user = new UserInfo();
                         user.setId(rs.getLong("UserId"));
@@ -172,33 +132,12 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return users;
-
-    }
-
-    public void insertUser(UserInfo userInfo) {
-
-        try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sqlIncertUserInfo)) {
-                pstmt.setLong(1, userInfo.getId());
-                pstmt.setString(2, userInfo.getName());
-                pstmt.setString(3, userInfo.getFirstName());
-                pstmt.setString(4, userInfo.getLastName());
-                pstmt.executeUpdate();
-                conn.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
     }
 
     public void insertFinance(BotMessage botMessage, String tableName) {
-
-        String sql = String.format(sqlIncertFinance, tableName);
-
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(String.format(SQLRequests.Finance.INSERT, tableName))) {
                 pstmt.setLong(1, botMessage.getUserInfo().getDateMessage());
                 pstmt.setLong(2, botMessage.getUserInfo().getId());
                 pstmt.setString(3, botMessage.getFinanceSubCategory());
@@ -209,17 +148,14 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     public BaseReport selectFinance(BaseReport report) {
-
         List<BaseReport> result = new ArrayList<BaseReport>();
-        String sql = String.format(sqlSelectReport, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo());
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                ResultSet rs = stmt.executeQuery(String.format(SQLRequests.Finance.SELECT, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo()))) {
                     while (rs.next()) {
                         BaseReport reportResult = new BaseReport();
                         reportResult.setUserId(rs.getLong("UserId"));
@@ -231,30 +167,27 @@ public class ReportDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         report.setBaseReportsList(result);
 
         return report;
-
     }
 
-    public BaseReport selectBudget(BaseReport report) {
+    // public BaseReport selectBudget(BaseReport report) {
 
-        String sql = sqlSelectBudget.concat(report.getUserId().toString());
+    //     String sql = sqlSelectBudget.concat(report.getUserId().toString());
 
-        try (Connection conn = connect();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
-                    while (rs.next()) {
-                        report.setSum(rs.getBigDecimal("Budget").setScale(2, RoundingMode.HALF_DOWN));
-                    }
-                    conn.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+    //     try (Connection conn = connect();
+    //             Statement stmt = conn.createStatement();
+    //             ResultSet rs = stmt.executeQuery(sql)) {
+    //                 while (rs.next()) {
+    //                     report.setSum(rs.getBigDecimal("Budget").setScale(2, RoundingMode.HALF_DOWN));
+    //                 }
+    //                 conn.close();
+    //     } catch (SQLException e) {
+    //         System.out.println(e.getMessage());
+    //     }
 
-        return report;
+    //     return report;
 
-    }
-   
+    // }
 }

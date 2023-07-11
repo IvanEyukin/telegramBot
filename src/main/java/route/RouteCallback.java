@@ -7,8 +7,8 @@ import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
 import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
+import bot.database.ReportDatabase;
 import bot.state.State;
-import Database.ReportDatabase;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;

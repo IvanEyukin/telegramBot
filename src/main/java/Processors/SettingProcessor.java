@@ -1,9 +1,9 @@
 package Processors;
 
-import Database.ReportDatabase;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.database.ReportDatabase;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,7 +23,7 @@ public class SettingProcessor {
         switch (botMessage.getSession()) {
             case SettingMenu -> {
                 String notification = "";
-                botMessage.setUserInfo(report.searchUserInfo(botMessage.getUserInfo()));
+                botMessage.setUserInfo(report.selectUser(botMessage.getUserInfo()));
                 switch (botMessage.getUserInfo().getNotification()) {
                     case "all" -> {
                         notification = "включены регулярные напоминания";
