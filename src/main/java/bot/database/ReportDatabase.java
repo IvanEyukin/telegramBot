@@ -55,6 +55,7 @@ public class ReportDatabase {
                 pstmt.setString(2, userInfo.getName());
                 pstmt.setString(3, userInfo.getFirstName());
                 pstmt.setString(4, userInfo.getLastName());
+                pstmt.setString(5, userInfo.getNotification());
                 pstmt.executeUpdate();
                 conn.close();
         } catch (SQLException e) {

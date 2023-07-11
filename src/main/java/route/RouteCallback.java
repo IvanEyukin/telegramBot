@@ -16,9 +16,7 @@ import java.util.List;
 
 
 public class RouteCallback {
-
     public BotMessage routeCallbacProcessor(BotMessage botMessage) {
-
         KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase database = new ReportDatabase();
@@ -58,6 +56,7 @@ public class RouteCallback {
             case PeriodSelection -> {
                 botMessage = requestReport.getReportRequest(botMessage);
                 messages = botMessage.getMessages();
+                botMessage.updateBotState(botMessage.getPreviousBotState());
                 botMessage.setMessageHasInLineKeyboaard(false);
             }
             case InformationRetentionQuestionsSelection -> {
@@ -73,7 +72,6 @@ public class RouteCallback {
             default -> {
             }
         }
-
         botMessage.setFinanceSum(null);
         botMessage.setComment(null);
         botMessage.setMessages(messages);

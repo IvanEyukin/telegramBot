@@ -1,6 +1,10 @@
 package LibBaseDto.DtoBaseUser;
 
+
 public class UserInfo {
+
+    private final String NOTIFICATION_DEFAULT = "all";
+    private final String USER = "Друг";
 
     Long id;
     String name;
@@ -50,7 +54,11 @@ public class UserInfo {
     }
 
     public String getNotification() {
-        return notification;
+        if (notification == null) {
+            return NOTIFICATION_DEFAULT;
+        } else {
+            return notification;
+        }
     }
 
     public void setNotification(String notification) {
@@ -58,15 +66,12 @@ public class UserInfo {
     }
 
     public String getUser() {
-
         if (getFirstName() != null) {
             return getFirstName();
         } else if (getFirstName() == null && getName() != null) {
             return getName();
         } else {
-            return "Друг";
+            return USER;
         }
-
     }
-
 }
