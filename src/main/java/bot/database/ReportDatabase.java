@@ -2,8 +2,8 @@ package bot.database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoReport.BaseReport;
+import bot.setting.Setting;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +27,7 @@ public class ReportDatabase {
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection(dbPath.concat(BotSetting.dbReportPath));
+            conn = DriverManager.getConnection(dbPath.concat(Setting.dbReportPath));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

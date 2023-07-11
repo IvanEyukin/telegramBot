@@ -1,9 +1,8 @@
 package bot.database;
 
-import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseRedis.RedisFieldName;
 import LibBaseDto.DtoBaseRedis.RedisTable;
-
+import bot.setting.Setting;
 import redis.clients.jedis.Jedis;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
 public class SessionDatabase {
 
     private Jedis redisConnection () {
-        Jedis jedis = new Jedis(BotSetting.dbSessionHost, BotSetting.dbSessionPort);
+        Jedis jedis = new Jedis(Setting.dbSessionHost, Setting.dbSessionPort);
         jedis.connect();
         return jedis;
     }
@@ -35,7 +34,7 @@ public class SessionDatabase {
         request.put(RedisFieldName.PreviousState.toString(), table.getPreviousState());
 
         conn.hmset(table.getKey(), request);
-        conn.expire(table.getKey(), BotSetting.sessionTimeToLive);
+        conn.expire(table.getKey(), Setting.sessionTimeToLive);
         conn.close();
     }
 

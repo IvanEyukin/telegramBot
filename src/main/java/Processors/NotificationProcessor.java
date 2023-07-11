@@ -1,9 +1,9 @@
 package Processors;
 
 import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.ReportDatabase;
+import bot.setting.Setting;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ public class NotificationProcessor {
         List<UserInfo> users = report.selectUsers();
 
         for (UserInfo user : users) {
-            if (user.getId() != BotSetting.creatorId) {
+            if (user.getId() != Setting.creatorId) {
                 usersMessage.put(user.getId(), String.format(BotMessage.notificationGreeting, user.getUser()).concat(message));
             }
         }

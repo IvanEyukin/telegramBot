@@ -1,6 +1,5 @@
 package TelegramBot;
 
-import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseBot.BotSystemMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
@@ -10,6 +9,7 @@ import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
 import bot.session.Session;
+import bot.setting.Setting;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,16 +27,16 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
         super(botToken, botUsername);
         responceMessage = new ResponceMessage(sender);
         scheduledTask = new ScheduledTask(new BotReminderTask(this));
-        scheduledTask.startExecutionAt(BotSetting.schedulerTimeStart.hour, BotSetting.schedulerTimeStart.minut, BotSetting.schedulerTimeStart.second);
+        scheduledTask.startExecutionAt(Setting.schedulerTimeStart.hour, Setting.schedulerTimeStart.minut, Setting.schedulerTimeStart.second);
     }
 
     public FinanceBot() {
-        this(BotSetting.token, BotSetting.name) ;
+        this(Setting.token, Setting.name) ;
     }
 
     @Override
     public long creatorId() {
-        return BotSetting.creatorId;
+        return Setting.creatorId;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
                     System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
                 }
-                responceMessage.sendMessage((long) BotSetting.creatorId, botMessage.adminNotificationStop);
+                responceMessage.sendMessage((long) Setting.creatorId, botMessage.adminNotificationStop);
             }
 
         }
