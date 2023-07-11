@@ -1,4 +1,4 @@
-package LibBaseDto.DtoBaseRedis;
+package bot.database.redis;
 
 public enum RedisFieldName {
 

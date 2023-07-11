@@ -1,4 +1,4 @@
-package LibBaseDto.DtoBaseRedis;
+package bot.database.redis;
 
 
 public class RedisTable {
@@ -129,5 +129,4 @@ public class RedisTable {
     public void setSessionHasRedis(Boolean sessionHasRedis) {
         this.sessionHasRedis = sessionHasRedis;
     }
-
 }

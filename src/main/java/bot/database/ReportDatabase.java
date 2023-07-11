@@ -1,9 +1,12 @@
 package bot.database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
-import LibBaseDto.DtoReport.BaseReport;
 import bot.message.BotMessage;
 import bot.setting.Setting;
+import bot.database.sqlite.dto.BaseReport;
+import bot.database.sqlite.request.Finance;
+import bot.database.sqlite.request.User;
+import bot.database.sqlite.request.Views;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -39,7 +42,7 @@ public class ReportDatabase {
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQLRequests.User.selectAddConditionsId(userInfo.getId()))) {
+                ResultSet rs = stmt.executeQuery(User.selectAddConditionsId(userInfo.getId()))) {
                     result = rs.next();
                     conn.close();
         } catch (SQLException e) {
@@ -50,7 +53,7 @@ public class ReportDatabase {
 
     public void insertUser(UserInfo userInfo) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(SQLRequests.User.INSERT)) {
+            PreparedStatement pstmt = conn.prepareStatement(Finance.INSERT)) {
                 pstmt.setLong(1, userInfo.getId());
                 pstmt.setString(2, userInfo.getName());
                 pstmt.setString(3, userInfo.getFirstName());
@@ -66,7 +69,7 @@ public class ReportDatabase {
     public UserInfo selectUser(UserInfo userInfo) {        
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQLRequests.User.selectAddConditionsId(userInfo.getId()))) {
+                ResultSet rs = stmt.executeQuery(User.selectAddConditionsId(userInfo.getId()))) {
                     while (rs.next()) {
                         userInfo.setName(rs.getString("UserName"));
                         userInfo.setFirstName(rs.getString("UserFirstName"));
@@ -82,7 +85,7 @@ public class ReportDatabase {
 
     public void updateUser(UserInfo userInfo) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(SQLRequests.User.UPDATE)) {
+            PreparedStatement pstmt = conn.prepareStatement(User.UPDATE)) {
                 pstmt.setString(1, userInfo.getName());
                 pstmt.setString(2, userInfo.getFirstName());
                 pstmt.setString(3, userInfo.getLastName());
@@ -100,7 +103,7 @@ public class ReportDatabase {
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQLRequests.User.SELECT)) {
+                ResultSet rs = stmt.executeQuery(Finance.SELECT)) {
                     while (rs.next()) {
                         UserInfo user = new UserInfo();
                         user.setId(rs.getLong("UserId"));
@@ -122,7 +125,7 @@ public class ReportDatabase {
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(SQLRequests.Views.UserLastMessage)) {
+                ResultSet rs = stmt.executeQuery(Views.UserLastMessage)) {
                     while (rs.next()) {
                         UserInfo user = new UserInfo();
                         user.setId(rs.getLong("UserId"));
@@ -138,7 +141,7 @@ public class ReportDatabase {
 
     public void insertFinance(BotMessage botMessage, String tableName) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(String.format(SQLRequests.Finance.INSERT, tableName))) {
+            PreparedStatement pstmt = conn.prepareStatement(String.format(bot.database.sqlite.request.Finance.INSERT, tableName))) {
                 pstmt.setLong(1, botMessage.getUserInfo().getDateMessage());
                 pstmt.setLong(2, botMessage.getUserInfo().getId());
                 pstmt.setString(3, botMessage.getFinanceSubCategory());
@@ -156,7 +159,7 @@ public class ReportDatabase {
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(String.format(SQLRequests.Finance.SELECT, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo()))) {
+                ResultSet rs = stmt.executeQuery(String.format(Finance.SELECT, report.getTableName(), report.getUserId(), report.getDateFrom(), report.getDateTo()))) {
                     while (rs.next()) {
                         BaseReport reportResult = new BaseReport();
                         reportResult.setUserId(rs.getLong("UserId"));

@@ -1,7 +1,7 @@
 package Processors;
 
-import LibBaseDto.DtoReport.BaseReport;
 import TelegramBot.BotSendMessage;
+import bot.database.sqlite.dto.BaseReport;
 import bot.message.BotMessage;
 import bot.message.Report;
 

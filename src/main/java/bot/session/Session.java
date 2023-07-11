@@ -1,8 +1,8 @@
 package bot.session;
 
-import LibBaseDto.DtoBaseRedis.RedisTable;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.SessionDatabase;
+import bot.database.redis.RedisTable;
 import bot.message.BotMessage;
 import bot.state.State;
 

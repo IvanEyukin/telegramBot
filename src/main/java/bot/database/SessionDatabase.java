@@ -1,7 +1,7 @@
 package bot.database;
 
-import LibBaseDto.DtoBaseRedis.RedisFieldName;
-import LibBaseDto.DtoBaseRedis.RedisTable;
+import bot.database.redis.RedisFieldName;
+import bot.database.redis.RedisTable;
 import bot.setting.Setting;
 import redis.clients.jedis.Jedis;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package LibBaseDto.DtoReport;
+package bot.database.sqlite.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -69,5 +69,4 @@ public class BaseReport {
     public void setBaseReportsList(List<BaseReport> baseReportsList) {
         this.baseReportsList = baseReportsList;
     }
-    
 }
