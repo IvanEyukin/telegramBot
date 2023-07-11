@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.message.BotMessage;
+import bot.message.Setting;
 
 public class SettingProcessorRequest {
 
@@ -29,22 +30,18 @@ public class SettingProcessorRequest {
 
         if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationAllButton().getCallBack())) {
             user.setNotification("all");
-            messages.add(sendMessage.sendMessage(botMessage.settingNotificationSave.concat("напоминать регулярно")));
+            messages.add(sendMessage.sendMessage(Setting.SAVE.concat("напоминать регулярно")));
         } else if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationActiveButton().getCallBack())) {
             user.setNotification("active");
-            messages.add(sendMessage.sendMessage(botMessage.settingNotificationSave.concat("напоминать, если сегодня не было диалога с ботом")));
+            messages.add(sendMessage.sendMessage(Setting.SAVE.concat("напоминать, если сегодня не было диалога с ботом")));
         } else if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationFalseButton().getCallBack())) {
             user.setNotification("disabled");
-            messages.add(sendMessage.sendMessage(botMessage.settingNotificationSave.concat("не напоминать")));
+            messages.add(sendMessage.sendMessage(Setting.SAVE.concat("не напоминать")));
         }
-
         botMessage.setUserInfo(user);
         report.updateUser(botMessage.getUserInfo());
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-    
 }

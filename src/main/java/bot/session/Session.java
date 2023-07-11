@@ -1,9 +1,9 @@
 package bot.session;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseRedis.RedisTable;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.SessionDatabase;
+import bot.message.BotMessage;
 import bot.state.State;
 
 import java.math.BigDecimal;

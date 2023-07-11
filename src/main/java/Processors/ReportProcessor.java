@@ -1,8 +1,10 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.message.BotMessage;
+import bot.message.Global;
+import bot.message.Report;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -25,20 +27,20 @@ public class ReportProcessor {
                     botMessage.setMessageHasInLineKeyboaard(true);
                     botMessage.updateBotState(State.PeriodSelection);
 
-                    messages.add(sendMessage.sendMessageAndInline(botMessage.reportPeriodQuestion, keyboardMessage.getReportButtons()));
+                    messages.add(sendMessage.sendMessageAndInline(Report.PERIOD, keyboardMessage.getReportButtons()));
                 } else if (keyboardMessage.getReportMenuButton().contains(botMessage.getUserMessageText()) && botMessage.getUserMessageText().equals("Бюджет")) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
                     botMessage.updateBotState(State.ReportMenu);
                     botMessage.setFinanceSubCategory(null);
                     
-                    messages.add(sendMessage.sendMessageAndKeyboard(botMessage.develop, keyboardMessage.getReportMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, keyboardMessage.getReportMenuButton()));
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(botMessage.reportCategoryError, keyboardMessage.getReportMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY_ERROR, keyboardMessage.getReportMenuButton()));
                 }
             }
             default -> {
                 botMessage.updateBotState(State.ReportMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.reportCategoryQuestion, keyboardMessage.getReportMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, keyboardMessage.getReportMenuButton()));
             }
         }
         botMessage.setMessages(messages);

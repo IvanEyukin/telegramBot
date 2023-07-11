@@ -1,9 +1,10 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.message.BotMessage;
+import bot.message.Setting;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -35,12 +36,12 @@ public class SettingProcessor {
                         notification = "напоминания выключены";
                     }
                 }
-                messages.add(sendMessage.sendMessageAndInline(String.format(botMessage.settingNotificationQuestion, botMessage.getUserInfo().getUser(), notification), keyboardMessage.getNotificationButtons()));
+                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, botMessage.getUserInfo().getUser(), notification), keyboardMessage.getNotificationButtons()));
                 botMessage.setMessageHasInLineKeyboaard(true);
                 botMessage.updateBotState(State.InformationRetentionQuestionsSelection);
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.settingQuestion, keyboardMessage.getSettingMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, keyboardMessage.getSettingMenuButton()));
                 botMessage.updateBotState(State.SettingMenu);
             }
         }

@@ -1,6 +1,5 @@
 package Route;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import Processors.HelpProcessorRequest;
@@ -8,6 +7,8 @@ import Processors.ReportProcessorRequest;
 import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.message.BotMessage;
+import bot.message.Finance;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,7 +29,7 @@ public class RouteCallback {
         switch (botMessage.getSession()) {
             case WaitCallbackSaveOrDelete -> {
                 if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteButton().getCallBack())) {
-                    messages.add(sendMessage.sendMessage(String.format(botMessage.delete, botMessage.getFinanceSum().toEngineeringString())));
+                    messages.add(sendMessage.sendMessage(String.format(Finance.DELETE, botMessage.getFinanceSum().toEngineeringString())));
                     botMessage.setFinanceSum(null);
                     botMessage.updateBotState(botMessage.getPreviousBotState());
                 } else if (botMessage.getCallbackData().equals(keyboardMessage.getSaveButton().getCallBack())) {
@@ -48,7 +49,7 @@ public class RouteCallback {
                         database.insertFinance(botMessage, database.tableIncome);
                     }
 
-                    messages.add(sendMessage.sendMessageAndKeyboard(String.format(botMessage.save, botMessage.getFinanceSum()), keyboard));
+                    messages.add(sendMessage.sendMessageAndKeyboard(String.format(Finance.SAVE, botMessage.getFinanceSum()), keyboard));
                     botMessage.setFinanceSubCategory(null);
                 }
                 botMessage.setMessageHasInLineKeyboaard(false);

@@ -1,6 +1,5 @@
 package Route;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseUser.UserMassage;
 import LibBaseDto.DtoBaseUser.AdminCommand;
 import LibBaseDto.DtoBaseUser.UserCommand;
@@ -11,6 +10,8 @@ import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
 import Processors.SettingProcessor;
+import bot.message.BotMessage;
+import bot.message.Global;
 import bot.setting.Setting;
 import bot.state.State;
 
@@ -39,8 +40,8 @@ public class RouteMessage {
             botMessage.setFinanceSubCategory(null);
             botMessage.updateBotState(State.Start);
 
-            messages.add(sendMessage.sendMessage(String.format(botMessage.greeting, botMessage.getUserInfo().getUser())));
-            messages.add(sendMessage.sendMessage(botMessage.mainMenuQuestion));
+            messages.add(sendMessage.sendMessage(String.format(Global.GREETING, botMessage.getUserInfo().getUser())));
+            messages.add(sendMessage.sendMessage(Global.MENU));
         } else if (botMessage.getUserInfo().getId() == Setting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getSession() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
             botMessage = admin.adminMenu(botMessage);
             messages = botMessage.getMessages();
@@ -79,13 +80,10 @@ public class RouteMessage {
                 }
             }
         } else {
-            messages.add(sendMessage.sendMessage(botMessage.error));
+            messages.add(sendMessage.sendMessage(Global.ERROR));
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-
 }

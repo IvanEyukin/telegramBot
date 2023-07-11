@@ -1,8 +1,8 @@
 package bot.database;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoReport.BaseReport;
+import bot.message.BotMessage;
 import bot.setting.Setting;
 
 import java.sql.Connection;

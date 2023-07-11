@@ -1,13 +1,14 @@
 package TelegramBot;
 
 import LibBaseDto.DtoBaseUser.UserInfo;
-import LibBaseDto.DtoBaseBot.BotMessage;
 import Route.RouteCallback;
 import Route.RouteMessage;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
 import bot.log.LogMessage;
+import bot.message.Admin;
+import bot.message.BotMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
@@ -76,7 +77,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
                     LogMessage.outLogMessage(LogMessage.Service.NOTIFICATION, LogMessage.Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
                 }
-                responceMessage.sendMessage((long) Setting.creatorId, botMessage.adminNotificationStop);
+                responceMessage.sendMessage((long) Setting.creatorId, Admin.NOTIFICATION_STOP);
             }
 
         }

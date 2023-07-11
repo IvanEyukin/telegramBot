@@ -1,9 +1,10 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.message.BotMessage;
+import bot.message.Finance;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,10 +24,10 @@ public class FinancialCalculationProcessor {
 
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {
-                messages.add(sendMessage.sendMessage(botMessage.negativeNumber));
+                messages.add(sendMessage.sendMessage(Finance.NUMBER_NEGATIVE));
             }
             case (0) -> {
-                messages.add(sendMessage.sendMessage(botMessage.zeroNumber));
+                messages.add(sendMessage.sendMessage(Finance.NUMBER_ZERO));
             }
             case (1) -> {
                 if (botMessage.getFinanceSum() == null || botMessage.getPreviousBotState() != State.WaitCallbackSaveOrDelete) {
@@ -35,15 +36,12 @@ public class FinancialCalculationProcessor {
                     botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));
                 }
 
-                messages.add(sendMessage.sendMessageAndInline(String.format(botMessage.saveQuestion, botMessage.getFinanceSum()),keyboardMessage.getResulButtons()));
+                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, botMessage.getFinanceSum()),keyboardMessage.getResulButtons()));
                 botMessage.setMessageHasInLineKeyboaard(true);
             }
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-
 }

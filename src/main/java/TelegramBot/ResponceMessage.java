@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
+import bot.message.BotMessage;
 import bot.session.Session;
 
 

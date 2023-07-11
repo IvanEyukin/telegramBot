@@ -1,9 +1,10 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.message.BotMessage;
+import bot.message.Finance;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,13 +28,13 @@ public class IncomeProcessor {
 
                     if (botMessage.getFinanceSubCategory().equals("Прочее")) {
                         botMessage.updateBotState(State.WaitingComment);
-                        messages.add(sendMessage.sendMessage(botMessage.saveOther));
+                        messages.add(sendMessage.sendMessage(Finance.SAVE_OTHER));
                     } else {
                         botMessage.updateBotState(State.WaitingSum);
-                        messages.add(sendMessage.sendMessage(botMessage.finance.concat(botMessage.getUserMessageText())));
+                        messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getUserMessageText())));
                     }
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(botMessage.categoryError, keyboardMessage.getIncomeMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, keyboardMessage.getIncomeMenuButton()));
                 }
             }
             case WaitingSum -> {
@@ -43,17 +44,17 @@ public class IncomeProcessor {
                     
                     messages = botMessage.getMessages();
                 } else {
-                    messages.add(sendMessage.sendMessage(botMessage.financeError));
+                    messages.add(sendMessage.sendMessage(Finance.NUMBER_ERROR));
                 }
             }
             case WaitingComment -> {
                 botMessage.updateBotState(State.WaitingSum);
                 botMessage.setComment(botMessage.getUserMessageText());
-                messages.add(sendMessage.sendMessage(botMessage.finance.concat(botMessage.getFinanceSubCategory()))); 
+                messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getFinanceSubCategory()))); 
             }
             default -> {
                 botMessage.updateBotState(State.IncomeMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.incomeCategoryQuestion, keyboardMessage.getIncomeMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Finance.INCOME, keyboardMessage.getIncomeMenuButton()));
             }
         }
         botMessage.setMessages(messages);

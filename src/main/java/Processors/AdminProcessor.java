@@ -1,8 +1,9 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.message.Admin;
+import bot.message.BotMessage;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,16 +22,16 @@ public class AdminProcessor {
 
         switch (botMessage.getSession()) {
             case AdminMenu -> {
-                messages.add(sendMessage.sendMessage(botMessage.adminNotification));
+                messages.add(sendMessage.sendMessage(Admin.NOTIFICATION));
                 botMessage.updateBotState(State.WaitingMessageMailings);
             }
             case WaitingMessageMailings -> {
-                messages.add(sendMessage.sendMessage(botMessage.adminNotificationStart));
+                messages.add(sendMessage.sendMessage(Admin.NOTIFICATION_START));
                 botMessage.setAdminNotificationMessages(notification.startNotification(botMessage.getUserMessageText()));
                 botMessage.updateBotState(State.Start);
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(botMessage.adminQuestion, keyboardMessage.getAdminMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Admin.MENU, keyboardMessage.getAdminMenuButton()));
                 botMessage.updateBotState(State.AdminMenu);
             }
         }

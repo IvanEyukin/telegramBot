@@ -1,9 +1,9 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoReport.BaseReport;
 import bot.database.ReportDatabase;
+import bot.message.BotMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.time.LocalDate;

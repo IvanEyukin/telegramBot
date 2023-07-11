@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.ReportDatabase;
+import bot.message.Scheduler;
 import bot.setting.Setting;
 
 import java.util.HashMap;
@@ -20,12 +20,9 @@ public class NotificationProcessor {
 
         for (UserInfo user : users) {
             if (user.getId() != Setting.creatorId) {
-                usersMessage.put(user.getId(), String.format(BotMessage.notificationGreeting, user.getUser()).concat(message));
+                usersMessage.put(user.getId(), String.format(Scheduler.GREETING, user.getUser()).concat(message));
             }
         }
-
         return usersMessage;
-
     }
-    
 }

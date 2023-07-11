@@ -1,8 +1,8 @@
 package Scheduler;
 
-import LibBaseDto.DtoBaseBot.BotMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.ReportDatabase;
+import bot.message.Scheduler;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -32,18 +32,15 @@ public class SchedulerMessage {
                             int dayMessage = dateMessage.get(Calendar.DAY_OF_MONTH);
 
                             if ((dayNow - dayMessage) != 0) {
-                                usersMessage.put(user.getId(), String.format(BotMessage.schedulerBotReminder, user.getUser()));
+                                usersMessage.put(user.getId(), String.format(Scheduler.REMINDER, user.getUser()));
                             }
                         }
                     }
                 } else {
-                    usersMessage.put(user.getId(), String.format(BotMessage.schedulerBotReminder, user.getUser()));
+                    usersMessage.put(user.getId(), String.format(Scheduler.REMINDER, user.getUser()));
                 }
             }
         }
-
         return usersMessage;
-
     }
-    
 }
