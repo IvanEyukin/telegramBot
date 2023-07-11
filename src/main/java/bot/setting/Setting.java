@@ -1,9 +1,9 @@
-package LibBaseDto.DtoBaseBot;
+package bot.setting;
 
 import Utils.Parser;
 
 
-public class BotSetting {
+public class Setting {
     public final static String name = System.getenv("name");
     public final static int creatorId = Integer.parseInt(System.getenv("creatorId"));
     public final static String token = System.getenv("token");

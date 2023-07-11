@@ -1,7 +1,6 @@
 package Route;
 
 import LibBaseDto.DtoBaseBot.BotMessage;
-import LibBaseDto.DtoBaseBot.BotSetting;
 import LibBaseDto.DtoBaseUser.UserMassage;
 import LibBaseDto.DtoBaseUser.AdminCommand;
 import LibBaseDto.DtoBaseUser.UserCommand;
@@ -12,6 +11,7 @@ import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
 import Processors.SettingProcessor;
+import bot.setting.Setting;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -41,7 +41,7 @@ public class RouteMessage {
 
             messages.add(sendMessage.sendMessage(String.format(botMessage.greeting, botMessage.getUserInfo().getUser())));
             messages.add(sendMessage.sendMessage(botMessage.mainMenuQuestion));
-        } else if (botMessage.getUserInfo().getId() == BotSetting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getSession() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
+        } else if (botMessage.getUserInfo().getId() == Setting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getSession() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
             botMessage = admin.adminMenu(botMessage);
             messages = botMessage.getMessages();
         } else if (UserCommand.UserComand.containsKey(botMessage.getUserMessageText()) || botMessage.getFinanceCategory() != null) {
