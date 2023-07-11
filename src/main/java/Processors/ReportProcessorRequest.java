@@ -1,8 +1,8 @@
 package Processors;
 
 import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
-import LibBaseDto.DtoReport.BaseReport;
 import bot.database.ReportDatabase;
+import bot.database.sqlite.dto.BaseReport;
 import bot.message.BotMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
