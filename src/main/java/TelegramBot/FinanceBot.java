@@ -1,6 +1,5 @@
 package TelegramBot;
 
-import LibBaseDto.DtoBaseBot.BotSystemMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import LibBaseDto.DtoBaseBot.BotMessage;
 import Route.RouteCallback;
@@ -8,13 +7,13 @@ import Route.RouteMessage;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
+import bot.log.LogMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -75,7 +74,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             if (botMessage.getAdminNotificationMessages() != null && !botMessage.getAdminNotificationMessages().isEmpty()) {
                 for (Map.Entry<Long, String> adminMessage : botMessage.getAdminNotificationMessages().entrySet()) {
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
-                    System.out.print(String.format(BotSystemMessage.messageNotification, LocalDateTime.now().format(BotSystemMessage.formatter), adminMessage.getKey()));
+                    LogMessage.outLogMessage(LogMessage.Service.NOTIFICATION, LogMessage.Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
                 }
                 responceMessage.sendMessage((long) Setting.creatorId, botMessage.adminNotificationStop);
             }
@@ -110,7 +109,7 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
 
         for (Map.Entry<Long, String> user : userMessage.entrySet()) {
             responceMessage.sendMessage(user.getKey(), user.getValue());
-            System.out.print(String.format(BotSystemMessage.messageScheduler, LocalDateTime.now().format(BotSystemMessage.formatter), user.getKey()));
+            LogMessage.outLogMessage(LogMessage.Service.SCHEDULER, LogMessage.Message.DISTRIBUTION.concat(Long.toString(user.getKey())));
         }
 
     }
