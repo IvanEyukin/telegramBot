@@ -7,6 +7,8 @@ import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
 import bot.log.LogMessage;
+import bot.log.Message;
+import bot.log.Service;
 import bot.message.Admin;
 import bot.message.BotMessage;
 import bot.session.Session;
@@ -75,15 +77,13 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             if (botMessage.getAdminNotificationMessages() != null && !botMessage.getAdminNotificationMessages().isEmpty()) {
                 for (Map.Entry<Long, String> adminMessage : botMessage.getAdminNotificationMessages().entrySet()) {
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
-                    LogMessage.outLogMessage(LogMessage.Service.NOTIFICATION, LogMessage.Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
+                    LogMessage.outLogMessage(Service.NOTIFICATION, Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
                 }
                 responceMessage.sendMessage((long) Setting.creatorId, Admin.NOTIFICATION_STOP);
             }
-
         }
 
         if (update.hasCallbackQuery()) {
-
             responceMessage.answerCallback(update.getCallbackQuery().getId());
 
             user.setId(update.getCallbackQuery().getFrom().getId());
@@ -95,24 +95,18 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             for (SendMessage message : botMessage.getMessages()) {
                 responceMessage.sendMessage(botMessage, message);
             }
-
             responceMessage.sendMessage(botMessage, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
-            
         }
-
     }
 
     @Override
     public void onTimeForBotReminderTask() {
-
         SchedulerMessage message = new SchedulerMessage();
         Map<Long, String> userMessage = message.botReminder();
 
         for (Map.Entry<Long, String> user : userMessage.entrySet()) {
             responceMessage.sendMessage(user.getKey(), user.getValue());
-            LogMessage.outLogMessage(LogMessage.Service.SCHEDULER, LogMessage.Message.DISTRIBUTION.concat(Long.toString(user.getKey())));
+            LogMessage.outLogMessage(Service.SCHEDULER, Message.DISTRIBUTION.concat(Long.toString(user.getKey())));
         }
-
     }
-
 }
