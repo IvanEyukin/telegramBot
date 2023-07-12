@@ -1,8 +1,5 @@
 package Route;
 
-import LibBaseDto.DtoBaseUser.UserMassage;
-import LibBaseDto.DtoBaseUser.AdminCommand;
-import LibBaseDto.DtoBaseUser.UserCommand;
 import TelegramBot.BotSendMessage;
 import Processors.AdminProcessor;
 import Processors.ExpensesProcessor;
@@ -10,6 +7,8 @@ import Processors.HelpProcessor;
 import Processors.IncomeProcessor;
 import Processors.ReportProcessor;
 import Processors.SettingProcessor;
+import bot.command.AdminCommand;
+import bot.command.UserCommand;
 import bot.message.BotMessage;
 import bot.message.Global;
 import bot.setting.Setting;
@@ -33,7 +32,7 @@ public class RouteMessage {
         SettingProcessor setting = new SettingProcessor();
         List<SendMessage> messages = new ArrayList<>();
 
-        if (botMessage.getUserMessageText().equals(UserMassage.start) || botMessage.getUserMessageText().equals(UserCommand.start)) {
+        if (botMessage.getUserMessageText().equals(UserCommand.commandStart) || botMessage.getUserMessageText().equals(UserCommand.start)) {
 
             botMessage.setFinanceSum(null);
             botMessage.setFinanceCategory(null);

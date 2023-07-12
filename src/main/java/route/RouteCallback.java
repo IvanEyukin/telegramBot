@@ -1,10 +1,10 @@
 package Route;
 
-import LibBaseDto.DtoBaseUser.UserCommand;
 import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
 import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
+import bot.command.UserCommand;
 import bot.database.ReportDatabase;
 import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
