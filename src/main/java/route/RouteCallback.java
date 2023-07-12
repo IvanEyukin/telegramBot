@@ -1,12 +1,12 @@
 package Route;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserCommand;
 import Processors.HelpProcessorRequest;
 import Processors.ReportProcessorRequest;
 import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
@@ -18,7 +18,6 @@ import java.util.List;
 
 public class RouteCallback {
     public BotMessage routeCallbacProcessor(BotMessage botMessage) {
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase database = new ReportDatabase();
         ReportProcessorRequest requestReport = new ReportProcessorRequest();
@@ -28,11 +27,11 @@ public class RouteCallback {
 
         switch (botMessage.getSession()) {
             case WaitCallbackSaveOrDelete -> {
-                if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteButton().getCallBack())) {
+                if (botMessage.getCallbackData().equals(Keyboard.finance.get(0).getCallbackData())) {
                     messages.add(sendMessage.sendMessage(String.format(Finance.DELETE, botMessage.getFinanceSum().toEngineeringString())));
                     botMessage.setFinanceSum(null);
                     botMessage.updateBotState(botMessage.getPreviousBotState());
-                } else if (botMessage.getCallbackData().equals(keyboardMessage.getSaveButton().getCallBack())) {
+                } else if (botMessage.getCallbackData().equals(Keyboard.finance.get(1).getCallbackData())) {
                     List<String> keyboard;
 
                     if (database.searchUser(botMessage.getUserInfo()) == false) {
@@ -41,11 +40,11 @@ public class RouteCallback {
 
                     if (botMessage.getFinanceCategory().equals(UserCommand.expenses)) {
                         botMessage.updateBotState(State.ExpensesMenu);
-                        keyboard = keyboardMessage.getExpensesMenuButton();
+                        keyboard = Keyboard.replyKeyboar.EXPENSES;
                         database.insertFinance(botMessage, database.tableExpenses);
                     } else {
                         botMessage.updateBotState(State.IncomeMenu);
-                        keyboard = keyboardMessage.getIncomeMenuButton();
+                        keyboard = Keyboard.replyKeyboar.INCOME;
                         database.insertFinance(botMessage, database.tableIncome);
                     }
 

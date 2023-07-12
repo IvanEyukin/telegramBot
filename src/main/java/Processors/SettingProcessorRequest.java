@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import LibBaseDto.DtoBaseUser.UserInfo;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Setting;
 
@@ -17,7 +17,6 @@ public class SettingProcessorRequest {
     public BotMessage setSettingRequest (BotMessage botMessage) {
 
         BotSendMessage sendMessage = new BotSendMessage();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         List<SendMessage> messages = new ArrayList<SendMessage>();
         ReportDatabase report = new ReportDatabase();
         UserInfo user = new UserInfo();
@@ -28,13 +27,13 @@ public class SettingProcessorRequest {
         user.setLastName(botMessage.getUserInfo().getLastName());
         user.setDateMessage(botMessage.getUserInfo().getDateMessage());
 
-        if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationAllButton().getCallBack())) {
+        if (botMessage.getCallbackData().equals(Keyboard.help.get(0).getCallbackData())) {
             user.setNotification("all");
             messages.add(sendMessage.sendMessage(Setting.SAVE.concat("напоминать регулярно")));
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationActiveButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(1).getCallbackData())) {
             user.setNotification("active");
             messages.add(sendMessage.sendMessage(Setting.SAVE.concat("напоминать, если сегодня не было диалога с ботом")));
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getNotificationFalseButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(2).getCallbackData())) {
             user.setNotification("disabled");
             messages.add(sendMessage.sendMessage(Setting.SAVE.concat("не напоминать")));
         }

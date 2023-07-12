@@ -1,7 +1,7 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Global;
 import bot.message.Report;
@@ -17,30 +17,29 @@ public class ReportProcessor {
     public BotMessage getReport(BotMessage botMessage) {
 
         List<SendMessage> messages = new ArrayList<>();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
 
         switch (botMessage.getSession()) {
             case ReportMenu -> {
-                if (keyboardMessage.getReportMenuButton().contains(botMessage.getUserMessageText()) && !botMessage.getUserMessageText().equals("Бюджет")) {
+                if (Keyboard.replyKeyboar.REPORT.contains(botMessage.getUserMessageText()) && !botMessage.getUserMessageText().equals("Бюджет")) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
                     botMessage.setMessageHasInLineKeyboaard(true);
                     botMessage.updateBotState(State.PeriodSelection);
 
-                    messages.add(sendMessage.sendMessageAndInline(Report.PERIOD, keyboardMessage.getReportButtons()));
-                } else if (keyboardMessage.getReportMenuButton().contains(botMessage.getUserMessageText()) && botMessage.getUserMessageText().equals("Бюджет")) {
+                    messages.add(sendMessage.sendMessageAndInline(Report.PERIOD, Keyboard.report));
+                } else if (Keyboard.replyKeyboar.REPORT.contains(botMessage.getUserMessageText()) && botMessage.getUserMessageText().equals("Бюджет")) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
                     botMessage.updateBotState(State.ReportMenu);
                     botMessage.setFinanceSubCategory(null);
                     
-                    messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, keyboardMessage.getReportMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, Keyboard.replyKeyboar.REPORT));
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY_ERROR, keyboardMessage.getReportMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY_ERROR, Keyboard.replyKeyboar.REPORT));
                 }
             }
             default -> {
                 botMessage.updateBotState(State.ReportMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, keyboardMessage.getReportMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, Keyboard.replyKeyboar.REPORT));
             }
         }
         botMessage.setMessages(messages);

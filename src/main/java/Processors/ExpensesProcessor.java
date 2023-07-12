@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
@@ -17,13 +17,12 @@ public class ExpensesProcessor {
     public BotMessage getExpenses(BotMessage botMessage) {
 
         List<SendMessage> messages = new ArrayList<SendMessage>();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
         FinancialCalculationProcessor finance = new FinancialCalculationProcessor();
 
         switch (botMessage.getSession()) {
             case ExpensesMenu -> {
-                if (keyboardMessage.getExpensesMenuButton().contains(botMessage.getUserMessageText())) {
+                if (Keyboard.replyKeyboar.EXPENSES.contains(botMessage.getUserMessageText())) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
 
                     if (botMessage.getFinanceSubCategory().equals("Прочее")) {
@@ -34,7 +33,7 @@ public class ExpensesProcessor {
                         messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getUserMessageText())));
                     }
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, keyboardMessage.getExpensesMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, Keyboard.replyKeyboar.EXPENSES));
                 }
             }
             case WaitingSum -> {
@@ -54,7 +53,7 @@ public class ExpensesProcessor {
             }
             default -> {
                 botMessage.updateBotState(State.ExpensesMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Finance.EXPENSES, keyboardMessage.getExpensesMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Finance.EXPENSES, Keyboard.replyKeyboar.EXPENSES));
             }
         }
         botMessage.setMessages(messages);

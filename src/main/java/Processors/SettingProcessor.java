@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Setting;
 import bot.state.State;
@@ -17,7 +17,6 @@ public class SettingProcessor {
     public BotMessage getSetting(BotMessage botMessage) {
 
         List<SendMessage> messages = new ArrayList<SendMessage>();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase report = new ReportDatabase();
         
@@ -36,12 +35,12 @@ public class SettingProcessor {
                         notification = "напоминания выключены";
                     }
                 }
-                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, botMessage.getUserInfo().getUser(), notification), keyboardMessage.getNotificationButtons()));
+                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, botMessage.getUserInfo().getUser(), notification), Keyboard.setting)); 
                 botMessage.setMessageHasInLineKeyboaard(true);
                 botMessage.updateBotState(State.InformationRetentionQuestionsSelection);
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, keyboardMessage.getSettingMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, Keyboard.replyKeyboar.SETTING));
                 botMessage.updateBotState(State.SettingMenu);
             }
         }

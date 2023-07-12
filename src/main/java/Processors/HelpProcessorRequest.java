@@ -1,7 +1,7 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Help;
 
@@ -15,20 +15,19 @@ public class HelpProcessorRequest {
     public BotMessage getHelpInfo(BotMessage botMessage) {
 
         BotSendMessage sendMessage = new BotSendMessage();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        if (botMessage.getCallbackData().equals(keyboardMessage.getPrivatInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessageAndInline(Help.INFO_SAVE, keyboardMessage.getHelpButtons()));
+        if (botMessage.getCallbackData().equals(Keyboard.help.get(0).getCallbackData())) {
+            messages.add(sendMessage.sendMessageAndInline(Help.INFO_SAVE, Keyboard.help));
             botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getSaveInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessageAndInline(Help.SAVE, keyboardMessage.getHelpButtons()));
+        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(1).getCallbackData())) {
+            messages.add(sendMessage.sendMessageAndInline(Help.SAVE, Keyboard.help));
             botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getDeleteInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessageAndInline(Help.DELETE, keyboardMessage.getHelpButtons()));
+        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(2).getCallbackData())) {
+            messages.add(sendMessage.sendMessageAndInline(Help.DELETE, Keyboard.help));
             botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getWritInfoButton().getCallBack())) {
-            messages.add(sendMessage.sendMessageAndInline(Help.WRITE, keyboardMessage.getHelpButtons()));
+        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(3).getCallbackData())) {
+            messages.add(sendMessage.sendMessageAndInline(Help.WRITE, Keyboard.help));
             botMessage.setMessageHasInLineKeyboaard(true);
         }
         botMessage.setMessages(messages);

@@ -1,7 +1,7 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
+import bot.keyboard.Keyboard;
 import bot.message.Admin;
 import bot.message.BotMessage;
 import bot.state.State;
@@ -17,7 +17,6 @@ public class AdminProcessor {
 
         NotificationProcessor notification = new NotificationProcessor();
         List<SendMessage> messages = new ArrayList<SendMessage>();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
 
         switch (botMessage.getSession()) {
@@ -31,7 +30,7 @@ public class AdminProcessor {
                 botMessage.updateBotState(State.Start);
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(Admin.MENU, keyboardMessage.getAdminMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Admin.MENU, Keyboard.replyKeyboar.ADMIN));
                 botMessage.updateBotState(State.AdminMenu);
             }
         }

@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
@@ -17,13 +17,12 @@ public class IncomeProcessor {
     public BotMessage getIncome(BotMessage botMessage) {
 
         List<SendMessage> messages = new ArrayList<>();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         BotSendMessage sendMessage = new BotSendMessage();
         FinancialCalculationProcessor finance = new FinancialCalculationProcessor();
 
         switch (botMessage.getSession()) {
             case IncomeMenu -> {
-                if (keyboardMessage.getIncomeMenuButton().contains(botMessage.getUserMessageText())) {
+                if (Keyboard.replyKeyboar.INCOME.contains(botMessage.getUserMessageText())) {
                     botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
 
                     if (botMessage.getFinanceSubCategory().equals("Прочее")) {
@@ -34,7 +33,7 @@ public class IncomeProcessor {
                         messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getUserMessageText())));
                     }
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, keyboardMessage.getIncomeMenuButton()));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, Keyboard.replyKeyboar.INCOME));
                 }
             }
             case WaitingSum -> {
@@ -54,7 +53,7 @@ public class IncomeProcessor {
             }
             default -> {
                 botMessage.updateBotState(State.IncomeMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Finance.INCOME, keyboardMessage.getIncomeMenuButton()));
+                messages.add(sendMessage.sendMessageAndKeyboard(Finance.INCOME, Keyboard.replyKeyboar.INCOME));
             }
         }
         botMessage.setMessages(messages);

@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import bot.database.ReportDatabase;
 import bot.database.sqlite.dto.BaseReport;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,12 +17,11 @@ public class ReportProcessorRequest {
 
         BaseReport report = new BaseReport();
         ReportDatabase database = new ReportDatabase();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         ReportMessageProcessor reportMessage = new ReportMessageProcessor();
         LocalDate date = LocalDate.now();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        if (botMessage.getCallbackData().equals(keyboardMessage.getToDayButton().getCallBack())) {
+        if (botMessage.getCallbackData().equals(Keyboard.report.get(0).getCallbackData())) {
 
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
@@ -33,7 +32,7 @@ public class ReportProcessorRequest {
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getLastDayButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.report.get(1).getCallbackData())) {
 
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
@@ -44,7 +43,7 @@ public class ReportProcessorRequest {
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
             
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getLastWeekButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.report.get(2).getCallbackData())) {
 
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
@@ -55,7 +54,7 @@ public class ReportProcessorRequest {
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getLastTwoWeekButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.report.get(3).getCallbackData())) {
 
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
@@ -66,7 +65,7 @@ public class ReportProcessorRequest {
             messages = botMessage.getMessages();
             botMessage.setFinanceSubCategory(null);
 
-        } else if (botMessage.getCallbackData().equals(keyboardMessage.getLastMonthButton().getCallBack())) {
+        } else if (botMessage.getCallbackData().equals(Keyboard.report.get(4).getCallbackData())) {
 
             report.setUserId(botMessage.getUserInfo().getId());
             report.setTableName(database.tableMap.get(botMessage.getFinanceSubCategory()));
@@ -78,11 +77,8 @@ public class ReportProcessorRequest {
             botMessage.setFinanceSubCategory(null);
 
         }
-
         botMessage.setMessages(messages);
 
         return botMessage;
-
     }
-    
 }

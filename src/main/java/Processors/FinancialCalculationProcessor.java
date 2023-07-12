@@ -1,8 +1,8 @@
 package Processors;
 
-import LibBaseDto.DtoBaseKeyboard.KeyboardMessage;
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.keyboard.Keyboard;
 import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
@@ -18,7 +18,6 @@ public class FinancialCalculationProcessor {
     public BotMessage getFinance(BotMessage botMessage) {
 
         BotSendMessage sendMessage = new BotSendMessage();
-        KeyboardMessage keyboardMessage = new KeyboardMessage();
         List<SendMessage> messages = new ArrayList<>();
         BigDecimal number = Parser.parseIntToString(botMessage.getUserMessageText());
 
@@ -36,7 +35,7 @@ public class FinancialCalculationProcessor {
                     botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));
                 }
 
-                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, botMessage.getFinanceSum()),keyboardMessage.getResulButtons()));
+                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, botMessage.getFinanceSum()), Keyboard.finance));
                 botMessage.setMessageHasInLineKeyboaard(true);
             }
         }
