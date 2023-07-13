@@ -1,8 +1,8 @@
 package Processors;
 
 import TelegramBot.BotSendMessage;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Global;
 import bot.message.Report;
 import bot.state.State;
@@ -14,23 +14,22 @@ import java.util.List;
 
 public class ReportProcessor {
 
-    public BotMessage getReport(BotMessage botMessage) {
+    public Bot getReport(Bot bot) {
 
         List<SendMessage> messages = new ArrayList<>();
         BotSendMessage sendMessage = new BotSendMessage();
 
-        switch (botMessage.getSession()) {
+        switch (bot.getState()) {
             case ReportMenu -> {
-                if (Keyboard.replyKeyboar.REPORT.contains(botMessage.getUserMessageText()) && !botMessage.getUserMessageText().equals("Бюджет")) {
-                    botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
-                    botMessage.setMessageHasInLineKeyboaard(true);
-                    botMessage.updateBotState(State.PeriodSelection);
+                if (Keyboard.replyKeyboar.REPORT.contains(bot.getUserMessageText()) && !bot.getUserMessageText().equals("Бюджет")) {
+                    bot.setSubCategory(bot.getUserMessageText());
+                    bot.setMessageHasInLineKeyboaard(true);
+                    bot.updateBotState(State.PeriodSelection);
 
                     messages.add(sendMessage.sendMessageAndInline(Report.PERIOD, Keyboard.report));
-                } else if (Keyboard.replyKeyboar.REPORT.contains(botMessage.getUserMessageText()) && botMessage.getUserMessageText().equals("Бюджет")) {
-                    botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
-                    botMessage.updateBotState(State.ReportMenu);
-                    botMessage.setFinanceSubCategory(null);
+                } else if (Keyboard.replyKeyboar.REPORT.contains(bot.getUserMessageText()) && bot.getUserMessageText().equals("Бюджет")) {
+                    bot.updateBotState(State.ReportMenu);
+                    bot.setSubCategory(null);
                     
                     messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, Keyboard.replyKeyboar.REPORT));
                 } else {
@@ -38,12 +37,12 @@ public class ReportProcessor {
                 }
             }
             default -> {
-                botMessage.updateBotState(State.ReportMenu);
+                bot.updateBotState(State.ReportMenu);
                 messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, Keyboard.replyKeyboar.REPORT));
             }
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

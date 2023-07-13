@@ -15,13 +15,12 @@ public class RedisTable {
     String messageHasKeyboard;
     String previousState;
     String state;
-    String previousBotMessageId;
+    String botMessageId;
     Boolean sessionHasRedis = false;
 
     public String getKey() {
         return key;
     }
-
     public void setKey(String key) {
         this.key = key;
     }
@@ -29,7 +28,6 @@ public class RedisTable {
     public String getUserName() {
         return userName;
     }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -37,7 +35,6 @@ public class RedisTable {
     public String getUserFirstName() {
         return userFirstName;
     }
-
     public void setUserFirstName(String userFirstName) {
         this.userFirstName = userFirstName;
     }
@@ -45,7 +42,6 @@ public class RedisTable {
     public String getUserLastName() {
         return userLastName;
     }
-
     public void setUserLastName(String userLastName) {
         this.userLastName = userLastName;
     }
@@ -53,7 +49,6 @@ public class RedisTable {
     public String getDataTimeMessage() {
         return dataTimeMessage;
     }
-
     public void setDataTimeMessage(String dataTimeMessage) {
         this.dataTimeMessage = dataTimeMessage;
     }
@@ -61,7 +56,6 @@ public class RedisTable {
     public String getCategory() {
         return category;
     }
-
     public void setCategory(String category) {
         this.category = category;
     }
@@ -69,7 +63,6 @@ public class RedisTable {
     public String getSubCategory() {
         return subCategory;
     }
-
     public void setSubCategory(String subCategory) {
         this.subCategory = subCategory;
     }
@@ -77,7 +70,6 @@ public class RedisTable {
     public String getSum() {
         return sum;
     }
-
     public void setSum(String sum) {
         this.sum = sum;
     }
@@ -85,7 +77,6 @@ public class RedisTable {
     public String getComment() {
         return comment;
     }
-
     public void setComment(String comment) {
         this.comment = comment;
     }
@@ -93,7 +84,6 @@ public class RedisTable {
     public String getMessageHasKeyboard() {
         return messageHasKeyboard;
     }
-
     public void setMessageHasKeyboard(String messageHasKeyboard) {
         this.messageHasKeyboard = messageHasKeyboard;
     }
@@ -101,7 +91,6 @@ public class RedisTable {
     public String getPreviousState() {
         return previousState;
     }
-
     public void setPreviousState(String previousState) {
         this.previousState = previousState;
     }
@@ -109,23 +98,20 @@ public class RedisTable {
     public String getState() {
         return state;
     }
-
     public void setState(String state) {
         this.state = state;
     }
 
-    public String getPreviousBotMessageId() {
-        return previousBotMessageId;
+    public String getBotMessageId() {
+        return botMessageId;
     }
-
-    public void setPreviousBotMessageId(String previousBotMessageId) {
-        this.previousBotMessageId = previousBotMessageId;
+    public void setBotMessageId(String botMessageId) {
+        this.botMessageId = botMessageId;
     }
 
     public Boolean getSessionHasRedis() {
         return sessionHasRedis;
     }
-
     public void setSessionHasRedis(Boolean sessionHasRedis) {
         this.sessionHasRedis = sessionHasRedis;
     }

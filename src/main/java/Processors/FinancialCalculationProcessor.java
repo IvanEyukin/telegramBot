@@ -2,8 +2,8 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
 
@@ -15,11 +15,11 @@ import java.util.List;
 
 public class FinancialCalculationProcessor {
 
-    public BotMessage getFinance(BotMessage botMessage) {
+    public Bot getFinance(Bot bot) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         List<SendMessage> messages = new ArrayList<>();
-        BigDecimal number = Parser.parseIntToString(botMessage.getUserMessageText());
+        BigDecimal number = Parser.parseIntToString(bot.getUserMessageText());
 
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {
@@ -29,18 +29,18 @@ public class FinancialCalculationProcessor {
                 messages.add(sendMessage.sendMessage(Finance.NUMBER_ZERO));
             }
             case (1) -> {
-                if (botMessage.getFinanceSum() == null || botMessage.getPreviousBotState() != State.WaitCallbackSaveOrDelete) {
-                    botMessage.setFinanceSum(number);
+                if (bot.getSum() == null || bot.getPreviousState() != State.WaitCallbackSaveOrDelete) {
+                    bot.setSum(number);
                 } else {
-                    botMessage.setFinanceSum(number.add(botMessage.getFinanceSum()));
+                    bot.setSum(number.add(bot.getSum()));
                 }
 
-                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, botMessage.getFinanceSum()), Keyboard.finance));
-                botMessage.setMessageHasInLineKeyboaard(true);
+                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, bot.getSum()), Keyboard.finance));
+                bot.setMessageHasInLineKeyboaard(true);
             }
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

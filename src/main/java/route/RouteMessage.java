@@ -9,7 +9,7 @@ import Processors.ReportProcessor;
 import Processors.SettingProcessor;
 import bot.command.AdminCommand;
 import bot.command.UserCommand;
-import bot.message.BotMessage;
+import bot.dto.Bot;
 import bot.message.Global;
 import bot.setting.Setting;
 import bot.state.State;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RouteMessage {
 
-    public BotMessage routeMessageProcessor(BotMessage botMessage) {
+    public Bot routeMessageProcessor(Bot bot) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         ExpensesProcessor expenses = new ExpensesProcessor();
@@ -32,57 +32,57 @@ public class RouteMessage {
         SettingProcessor setting = new SettingProcessor();
         List<SendMessage> messages = new ArrayList<>();
 
-        if (botMessage.getUserMessageText().equals(UserCommand.commandStart) || botMessage.getUserMessageText().equals(UserCommand.start)) {
+        if (bot.getUserMessageText().equals(UserCommand.commandStart) || bot.getUserMessageText().equals(UserCommand.start)) {
 
-            botMessage.setFinanceSum(null);
-            botMessage.setFinanceCategory(null);
-            botMessage.setFinanceSubCategory(null);
-            botMessage.updateBotState(State.Start);
+            bot.setSum(null);
+            bot.setCategory(null);
+            bot.setSubCategory(null);
+            bot.updateBotState(State.Start);
 
-            messages.add(sendMessage.sendMessage(String.format(Global.GREETING, botMessage.getUserInfo().getUser())));
+            messages.add(sendMessage.sendMessage(String.format(Global.GREETING, bot.getUser().getUser())));
             messages.add(sendMessage.sendMessage(Global.MENU));
-        } else if (botMessage.getUserInfo().getId() == Setting.creatorId && botMessage.getUserMessageText().equals(AdminCommand.start) || botMessage.getSession() == State.AdminMenu || botMessage.getPreviousBotState() == State.AdminMenu) {
-            botMessage = admin.adminMenu(botMessage);
-            messages = botMessage.getMessages();
-        } else if (UserCommand.UserComand.containsKey(botMessage.getUserMessageText()) || botMessage.getFinanceCategory() != null) {
+        } else if (bot.getUser().getId() == Setting.creatorId && bot.getUserMessageText().equals(AdminCommand.start) || bot.getState() == State.AdminMenu || bot.getPreviousState() == State.AdminMenu) {
+            bot = admin.adminMenu(bot);
+            messages = bot.getMessages();
+        } else if (UserCommand.UserComand.containsKey(bot.getUserMessageText()) || bot.getCategory() != null) {
 
-            if (botMessage.getFinanceCategory() == null || UserCommand.UserComand.containsKey(botMessage.getUserMessageText())) { 
-                botMessage.setFinanceCategory(UserCommand.UserComand.get(botMessage.getUserMessageText()));
-                botMessage.setSession(State.Start);
+            if (bot.getCategory() == null || UserCommand.UserComand.containsKey(bot.getUserMessageText())) { 
+                bot.setCategory(UserCommand.UserComand.get(bot.getUserMessageText()));
+                bot.setState(State.Start);
             }
 
             // fix ситуации, когда бот ждет от пользователя нажатие ктопок в меню сохранения суммы, а пользователь вводит еще цифры.
-            if (botMessage.getSession() == State.WaitCallbackSaveOrDelete) {
-                botMessage.updateBotState(botMessage.getPreviousBotState());
+            if (bot.getState() == State.WaitCallbackSaveOrDelete) {
+                bot.updateBotState(bot.getPreviousState());
             }
             
-            switch (botMessage.getFinanceCategory()) {
+            switch (bot.getCategory()) {
                 case (UserCommand.expenses) -> {
-                    botMessage = expenses.getExpenses(botMessage);
-                    messages = botMessage.getMessages();
+                    bot = expenses.getExpenses(bot);
+                    messages = bot.getMessages();
                 }
                 case (UserCommand.income) -> {
-                    botMessage = income.getIncome(botMessage);
-                    messages = botMessage.getMessages();
+                    bot = income.getIncome(bot);
+                    messages = bot.getMessages();
                 }
                 case (UserCommand.report) -> {
-                    botMessage = report.getReport(botMessage);
-                    messages = botMessage.getMessages();
+                    bot = report.getReport(bot);
+                    messages = bot.getMessages();
                 }
                 case (UserCommand.help) -> {
-                    botMessage = help.getHelp(botMessage);
-                    messages = botMessage.getMessages();
+                    bot = help.getHelp(bot);
+                    messages = bot.getMessages();
                 }
                 case (UserCommand.setting) -> {
-                    botMessage = setting.getSetting(botMessage);
-                    messages = botMessage.getMessages();
+                    bot = setting.getSetting(bot);
+                    messages = bot.getMessages();
                 }
             }
         } else {
             messages.add(sendMessage.sendMessage(Global.ERROR));
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

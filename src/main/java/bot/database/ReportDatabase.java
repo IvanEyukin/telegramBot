@@ -1,12 +1,12 @@
 package bot.database;
 
-import LibBaseDto.DtoBaseUser.UserInfo;
-import bot.message.BotMessage;
 import bot.setting.Setting;
 import bot.database.sqlite.dto.BaseReport;
 import bot.database.sqlite.request.Finance;
-import bot.database.sqlite.request.User;
+import bot.database.sqlite.request.Users;
 import bot.database.sqlite.request.Views;
+import bot.dto.Bot;
+import bot.dto.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,12 +37,12 @@ public class ReportDatabase {
         return conn;
     }
 
-    public boolean searchUser(UserInfo userInfo) {
+    public boolean searchUser(User user) {
         boolean result = false;
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(User.selectAddConditionsId(userInfo.getId()))) {
+                ResultSet rs = stmt.executeQuery(Users.selectAddConditionsId(user.getId()))) {
                     result = rs.next();
                     conn.close();
         } catch (SQLException e) {
@@ -51,14 +51,14 @@ public class ReportDatabase {
         return result;
     }
 
-    public void insertUser(UserInfo userInfo) {
+    public void insertUser(User user) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(Finance.INSERT)) {
-                pstmt.setLong(1, userInfo.getId());
-                pstmt.setString(2, userInfo.getName());
-                pstmt.setString(3, userInfo.getFirstName());
-                pstmt.setString(4, userInfo.getLastName());
-                pstmt.setString(5, userInfo.getNotification());
+            PreparedStatement pstmt = conn.prepareStatement(Users.INSERT)) {
+                pstmt.setLong(1, user.getId());
+                pstmt.setString(2, user.getName());
+                pstmt.setString(3, user.getFirstName());
+                pstmt.setString(4, user.getLastName());
+                pstmt.setString(5, user.getNotification());
                 pstmt.executeUpdate();
                 conn.close();
         } catch (SQLException e) {
@@ -66,31 +66,31 @@ public class ReportDatabase {
         }
     }
 
-    public UserInfo selectUser(UserInfo userInfo) {        
+    public User selectUser(User user) {        
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(User.selectAddConditionsId(userInfo.getId()))) {
+                ResultSet rs = stmt.executeQuery(Users.selectAddConditionsId(user.getId()))) {
                     while (rs.next()) {
-                        userInfo.setName(rs.getString("UserName"));
-                        userInfo.setFirstName(rs.getString("UserFirstName"));
-                        userInfo.setLastName(rs.getString("UserLastName"));
-                        userInfo.setNotification(rs.getString("Notification"));
+                        user.setName(rs.getString("UserName"));
+                        user.setFirstName(rs.getString("UserFirstName"));
+                        user.setLastName(rs.getString("UserLastName"));
+                        user.setNotification(rs.getString("Notification"));
                     }
                     conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return userInfo;
+        return user;
     }
 
-    public void updateUser(UserInfo userInfo) {
+    public void updateUser(User user) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(User.UPDATE)) {
-                pstmt.setString(1, userInfo.getName());
-                pstmt.setString(2, userInfo.getFirstName());
-                pstmt.setString(3, userInfo.getLastName());
-                pstmt.setString(4, userInfo.getNotification());
-                pstmt.setLong(5, userInfo.getId());
+            PreparedStatement pstmt = conn.prepareStatement(Users.UPDATE)) {
+                pstmt.setString(1, user.getName());
+                pstmt.setString(2, user.getFirstName());
+                pstmt.setString(3, user.getLastName());
+                pstmt.setString(4, user.getNotification());
+                pstmt.setLong(5, user.getId());
                 pstmt.executeUpdate();
                 conn.close();
         } catch (SQLException e) {
@@ -98,14 +98,14 @@ public class ReportDatabase {
         }
     }
 
-    public List<UserInfo> selectUsers() {
-        List<UserInfo> users = new ArrayList<UserInfo>();
+    public List<User> selectUsers() {
+        List<User> users = new ArrayList<User>();
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(Finance.SELECT)) {
+                ResultSet rs = stmt.executeQuery(Users.SELECT)) {
                     while (rs.next()) {
-                        UserInfo user = new UserInfo();
+                        User user = new User();
                         user.setId(rs.getLong("UserId"));
                         user.setName(rs.getString("UserName"));
                         user.setFirstName(rs.getString("UserFirstName"));
@@ -120,14 +120,14 @@ public class ReportDatabase {
         return users;
     }
 
-    public List<UserInfo> selectUsersLastDataMessage() {
-        List<UserInfo> users = new ArrayList<UserInfo>();
+    public List<User> selectUsersLastDataMessage() {
+        List<User> users = new ArrayList<User>();
 
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(Views.UserLastMessage)) {
                     while (rs.next()) {
-                        UserInfo user = new UserInfo();
+                        User user = new User();
                         user.setId(rs.getLong("UserId"));
                         user.setDateMessage(rs.getInt("LastDateMessage"));
                         users.add(user);
@@ -139,14 +139,14 @@ public class ReportDatabase {
         return users;
     }
 
-    public void insertFinance(BotMessage botMessage, String tableName) {
+    public void insertFinance(Bot bot, String tableName) {
         try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(String.format(bot.database.sqlite.request.Finance.INSERT, tableName))) {
-                pstmt.setLong(1, botMessage.getUserInfo().getDateMessage());
-                pstmt.setLong(2, botMessage.getUserInfo().getId());
-                pstmt.setString(3, botMessage.getFinanceSubCategory());
-                pstmt.setBigDecimal(4, botMessage.getFinanceSum());
-                pstmt.setString(5, botMessage.getComment());
+            PreparedStatement pstmt = conn.prepareStatement(String.format(Finance.INSERT, tableName))) {
+                pstmt.setLong(1, bot.getUser().getDateMessage());
+                pstmt.setLong(2, bot.getUser().getId());
+                pstmt.setString(3, bot.getSubCategory());
+                pstmt.setBigDecimal(4, bot.getSum());
+                pstmt.setString(5, bot.getComment());
                 pstmt.executeUpdate();
                 conn.close();
         } catch (SQLException e) {

@@ -6,8 +6,8 @@ import Processors.SettingProcessorRequest;
 import TelegramBot.BotSendMessage;
 import bot.command.UserCommand;
 import bot.database.ReportDatabase;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 public class RouteCallback {
-    public BotMessage routeCallbacProcessor(BotMessage botMessage) {
+    public Bot routeCallbacProcessor(Bot bot) {
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase database = new ReportDatabase();
         ReportProcessorRequest requestReport = new ReportProcessorRequest();
@@ -25,57 +25,57 @@ public class RouteCallback {
         SettingProcessorRequest requestSetting = new SettingProcessorRequest();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        switch (botMessage.getSession()) {
+        switch (bot.getState()) {
             case WaitCallbackSaveOrDelete -> {
-                if (botMessage.getCallbackData().equals(Keyboard.finance.get(0).getCallbackData())) {
-                    messages.add(sendMessage.sendMessage(String.format(Finance.DELETE, botMessage.getFinanceSum().toEngineeringString())));
-                    botMessage.setFinanceSum(null);
-                    botMessage.updateBotState(botMessage.getPreviousBotState());
-                } else if (botMessage.getCallbackData().equals(Keyboard.finance.get(1).getCallbackData())) {
+                if (bot.getCallbackData().equals(Keyboard.finance.get(1).getCallbackData())) {
+                    messages.add(sendMessage.sendMessage(String.format(Finance.DELETE, bot.getSum().toEngineeringString())));
+                    bot.setSum(null);
+                    bot.updateBotState(bot.getPreviousState());
+                } else if (bot.getCallbackData().equals(Keyboard.finance.get(0).getCallbackData())) {
                     List<String> keyboard;
 
-                    if (database.searchUser(botMessage.getUserInfo()) == false) {
-                        database.insertUser(botMessage.getUserInfo());
+                    if (database.searchUser(bot.getUser()) == false) {
+                        database.insertUser(bot.getUser());
                     }
 
-                    if (botMessage.getFinanceCategory().equals(UserCommand.expenses)) {
-                        botMessage.updateBotState(State.ExpensesMenu);
+                    if (bot.getCategory().equals(UserCommand.expenses)) {
+                        bot.updateBotState(State.ExpensesMenu);
                         keyboard = Keyboard.replyKeyboar.EXPENSES;
-                        database.insertFinance(botMessage, database.tableExpenses);
+                        database.insertFinance(bot, database.tableExpenses);
                     } else {
-                        botMessage.updateBotState(State.IncomeMenu);
+                        bot.updateBotState(State.IncomeMenu);
                         keyboard = Keyboard.replyKeyboar.INCOME;
-                        database.insertFinance(botMessage, database.tableIncome);
+                        database.insertFinance(bot, database.tableIncome);
                     }
 
-                    messages.add(sendMessage.sendMessageAndKeyboard(String.format(Finance.SAVE, botMessage.getFinanceSum()), keyboard));
-                    botMessage.setFinanceSubCategory(null);
+                    messages.add(sendMessage.sendMessageAndKeyboard(String.format(Finance.SAVE, bot.getSum()), keyboard));
+                    bot.setSubCategory(null);
                 }
-                botMessage.setMessageHasInLineKeyboaard(false);
+                bot.setMessageHasInLineKeyboaard(false);
             }
             case PeriodSelection -> {
-                botMessage = requestReport.getReportRequest(botMessage);
-                messages = botMessage.getMessages();
-                botMessage.updateBotState(botMessage.getPreviousBotState());
-                botMessage.setMessageHasInLineKeyboaard(false);
+                bot = requestReport.getReportRequest(bot);
+                messages = bot.getMessages();
+                bot.updateBotState(bot.getPreviousState());
+                bot.setMessageHasInLineKeyboaard(false);
             }
             case InformationRetentionQuestionsSelection -> {
-                botMessage = requestHelp.getHelpInfo(botMessage);
-                messages = botMessage.getMessages();
+                bot = requestHelp.getHelpInfo(bot);
+                messages = bot.getMessages();
             }
             case ReminderOptionsSelection -> {
-                botMessage = requestSetting.setSettingRequest(botMessage);
-                messages = botMessage.getMessages();
-                botMessage.setMessageHasInLineKeyboaard(false);
-                botMessage.updateBotState(State.Start);
+                bot = requestSetting.setSettingRequest(bot);
+                messages = bot.getMessages();
+                bot.setMessageHasInLineKeyboaard(false);
+                bot.updateBotState(State.Start);
             }
             default -> {
             }
         }
-        botMessage.setFinanceSum(null);
-        botMessage.setComment(null);
-        botMessage.setMessages(messages);
+        bot.setSum(null);
+        bot.setComment(null);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

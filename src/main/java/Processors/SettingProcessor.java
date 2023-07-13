@@ -2,8 +2,8 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Setting;
 import bot.state.State;
 
@@ -14,17 +14,17 @@ import java.util.List;
 
 public class SettingProcessor {
 
-    public BotMessage getSetting(BotMessage botMessage) {
+    public Bot getSetting(Bot bot) {
 
         List<SendMessage> messages = new ArrayList<SendMessage>();
         BotSendMessage sendMessage = new BotSendMessage();
         ReportDatabase report = new ReportDatabase();
         
-        switch (botMessage.getSession()) {
+        switch (bot.getState()) {
             case SettingMenu -> {
                 String notification = "";
-                botMessage.setUserInfo(report.selectUser(botMessage.getUserInfo()));
-                switch (botMessage.getUserInfo().getNotification()) {
+                bot.setUser(report.selectUser(bot.getUser()));
+                switch (bot.getUser().getNotification()) {
                     case "all" -> {
                         notification = "включены регулярные напоминания";
                     }
@@ -35,17 +35,17 @@ public class SettingProcessor {
                         notification = "напоминания выключены";
                     }
                 }
-                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, botMessage.getUserInfo().getUser(), notification), Keyboard.setting)); 
-                botMessage.setMessageHasInLineKeyboaard(true);
-                botMessage.updateBotState(State.InformationRetentionQuestionsSelection);
+                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, bot.getUser().getUser(), notification), Keyboard.setting)); 
+                bot.setMessageHasInLineKeyboaard(true);
+                bot.updateBotState(State.InformationRetentionQuestionsSelection);
             }
             default -> {
                 messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, Keyboard.replyKeyboar.SETTING));
-                botMessage.updateBotState(State.SettingMenu);
+                bot.updateBotState(State.SettingMenu);
             }
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

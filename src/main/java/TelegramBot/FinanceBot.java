@@ -1,16 +1,16 @@
 package TelegramBot;
 
-import LibBaseDto.DtoBaseUser.UserInfo;
 import Route.RouteCallback;
 import Route.RouteMessage;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
+import bot.dto.Bot;
+import bot.dto.User;
 import bot.log.LogMessage;
 import bot.log.Message;
 import bot.log.Service;
 import bot.message.Admin;
-import bot.message.BotMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
@@ -48,8 +48,8 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
         BotSendMessage sendMessage = new BotSendMessage();
         RouteMessage routeMessage = new RouteMessage();
         RouteCallback routeCallback = new RouteCallback();
-        BotMessage botMessage = new BotMessage();
-        UserInfo user = new UserInfo();
+        Bot bot = new Bot();
+        User user = new User();
 
         if (update.hasMessage() && update.getMessage().hasText()) {
 
@@ -59,23 +59,23 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             user.setLastName(update.getMessage().getChat().getLastName());
             user.setDateMessage(update.getMessage().getDate());
 
-            botMessage.setUserInfo(user);
-            botMessage.setUserMessageText(update.getMessage().getText());
+            bot.setUser(user);
+            bot.setUserMessageText(update.getMessage().getText());
 
-            botMessage = Sessions.getSession(botMessage);
+            bot = Sessions.getSession(bot);
 
-            if (botMessage.getMessageHasInLineKeyboaard() == true) {
-                responceMessage.sendMessage(botMessage, sendMessage.updateMessage(botMessage.getUserInfo().getId(), botMessage.getPreviousBotMessageId()));
-                botMessage.setMessageHasInLineKeyboaard(false);
+            if (bot.getMessageHasInLineKeyboaard() == true) {
+                responceMessage.sendMessage(bot, sendMessage.updateMessage(bot.getUser().getId(), bot.getBotMessageId()));
+                bot.setMessageHasInLineKeyboaard(false);
             }
 
-            botMessage = routeMessage.routeMessageProcessor(botMessage);
-            for (SendMessage message : botMessage.getMessages()) {
-                responceMessage.sendMessage(botMessage, message);
+            bot = routeMessage.routeMessageProcessor(bot);
+            for (SendMessage message : bot.getMessages()) {
+                responceMessage.sendMessage(bot, message);
             }
 
-            if (botMessage.getAdminNotificationMessages() != null && !botMessage.getAdminNotificationMessages().isEmpty()) {
-                for (Map.Entry<Long, String> adminMessage : botMessage.getAdminNotificationMessages().entrySet()) {
+            if (bot.getAdminNotificationMessages() != null && !bot.getAdminNotificationMessages().isEmpty()) {
+                for (Map.Entry<Long, String> adminMessage : bot.getAdminNotificationMessages().entrySet()) {
                     responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
                     LogMessage.outLogMessage(Service.NOTIFICATION, Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
                 }
@@ -87,15 +87,15 @@ public class FinanceBot extends AbilityBot implements BotReminderTask.Callback{
             responceMessage.answerCallback(update.getCallbackQuery().getId());
 
             user.setId(update.getCallbackQuery().getFrom().getId());
-            botMessage.setUserInfo(user);
-            botMessage.setCallbackData(update.getCallbackQuery().getData());
+            bot.setUser(user);
+            bot.setCallbackData(update.getCallbackQuery().getData());
 
-            botMessage = Sessions.getSession(botMessage);
-            botMessage = routeCallback.routeCallbacProcessor(botMessage);
-            for (SendMessage message : botMessage.getMessages()) {
-                responceMessage.sendMessage(botMessage, message);
+            bot = Sessions.getSession(bot);
+            bot = routeCallback.routeCallbacProcessor(bot);
+            for (SendMessage message : bot.getMessages()) {
+                responceMessage.sendMessage(bot, message);
             }
-            responceMessage.sendMessage(botMessage, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
+            responceMessage.sendMessage(bot, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
         }
     }
 

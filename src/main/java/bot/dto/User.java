@@ -1,7 +1,7 @@
-package LibBaseDto.DtoBaseUser;
+package bot.dto;
 
 
-public class UserInfo {
+public class User {
 
     private final String NOTIFICATION_DEFAULT = "all";
     private final String USER = "Друг";

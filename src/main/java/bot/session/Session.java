@@ -1,9 +1,9 @@
 package bot.session;
 
-import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.SessionDatabase;
 import bot.database.redis.RedisTable;
-import bot.message.BotMessage;
+import bot.dto.Bot;
+import bot.dto.User;
 import bot.state.State;
 
 import java.math.BigDecimal;
@@ -46,66 +46,74 @@ public class Session {
         }
     }
 
-    public void setSession(BotMessage botMessage) {
+    private String checkValue(String value) {
+        if (value != null && !value.equals(NULL_POINT)) {
+            return value;
+        } else {
+            return null;
+        }
+    }
+
+    public void setSession(Bot bot) {
         RedisTable table = new RedisTable();
         
-        table.setKey(Long.toString(botMessage.getUserInfo().getId()));
-        table.setDataTimeMessage(Integer.toString(botMessage.getUserInfo().getDateMessage()));
-        table.setState(botMessage.getSession().toString());
-        table.setPreviousBotMessageId(Integer.toString(botMessage.getPreviousBotMessageId()));
-        table.setUserName(checkNull(botMessage.getUserInfo().getName()));
-        table.setUserFirstName(checkNull(botMessage.getUserInfo().getFirstName()));
-        table.setUserLastName(checkNull(botMessage.getUserInfo().getLastName()));
-        table.setCategory(checkNull(botMessage.getFinanceCategory()));
-        table.setSubCategory(checkNull(botMessage.getFinanceSubCategory()));
-        table.setSum(checkNull(botMessage.getFinanceSum()));
-        table.setComment(checkNull(botMessage.getComment()));
-        table.setMessageHasKeyboard(checkNull(botMessage.getMessageHasInLineKeyboaard()));
-        table.setPreviousState(checkNull(botMessage.getPreviousBotState()));
+        table.setKey(Long.toString(bot.getUser().getId()));
+        table.setDataTimeMessage(Integer.toString(bot.getUser().getDateMessage()));
+        table.setState(bot.getState().toString());
+        table.setBotMessageId(Integer.toString(bot.getBotMessageId()));
+        table.setUserName(checkNull(bot.getUser().getName()));
+        table.setUserFirstName(checkNull(bot.getUser().getFirstName()));
+        table.setUserLastName(checkNull(bot.getUser().getLastName()));
+        table.setCategory(checkNull(bot.getCategory()));
+        table.setSubCategory(checkNull(bot.getSubCategory()));
+        table.setSum(checkNull(bot.getSum()));
+        table.setComment(checkNull(bot.getComment()));
+        table.setMessageHasKeyboard(checkNull(bot.getMessageHasInLineKeyboaard()));
+        table.setPreviousState(checkNull(bot.getPreviousState()));
 
         sessionDatabase.setSessions(table);
     }
 
-    public BotMessage getSession(BotMessage botMessage) {
+    public Bot getSession(Bot bot) {
 
         RedisTable table = new RedisTable();
         
-        table.setKey(Long.toString(botMessage.getUserInfo().getId()));
+        table.setKey(Long.toString(bot.getUser().getId()));
         table = sessionDatabase.getSessions(table);
 
         if (table.getSessionHasRedis() == true) {
-            UserInfo user = new UserInfo();
+            User user = new User();
 
-            user.setId(botMessage.getUserInfo().getId());
-            user.setName(table.getUserName());
-            user.setFirstName(table.getUserFirstName());
-            user.setLastName(table.getUserLastName());
+            user.setId(bot.getUser().getId());
+            user.setName(checkValue(table.getUserName()));
+            user.setFirstName(checkValue(table.getUserFirstName()));
+            user.setLastName(checkValue(table.getUserLastName()));
 
-            botMessage.setUserInfo(user);
-            botMessage.setFinanceCategory(table.getCategory());
-            botMessage.setFinanceSubCategory(table.getSubCategory());
-            botMessage.setComment(table.getComment());
+            bot.setUser(user);
+            bot.setCategory(checkValue(table.getCategory()));
+            bot.setSubCategory(checkValue(table.getSubCategory()));
+            bot.setComment(checkValue(table.getComment()));
 
-            if (table.getDataTimeMessage() != null && !table.getDataTimeMessage().equals(NULL_POINT)) {
+            if (checkValue(table.getDataTimeMessage()) != null) {
                 user.setDateMessage(Integer.parseInt(table.getDataTimeMessage()));
             }
-            if (table.getSum() != null && !table.getSum().equals(NULL_POINT)) {
-                botMessage.setFinanceSum(new BigDecimal(table.getSum()));
+            if (checkValue(table.getSum()) != null) {
+                bot.setSum(new BigDecimal(table.getSum()));
             }
-            if (table.getState() != null && !table.getState().equals(NULL_POINT)) {
-                botMessage.setSession(State.valueOf(table.getState()));
+            if (checkValue(table.getState()) != null) {
+                bot.setState(State.valueOf(table.getState()));
             }
-            if (table.getPreviousState() != null && !table.getPreviousState().equals(NULL_POINT)) {
-                botMessage.setPreviousBotState(State.valueOf(table.getPreviousState()));
+            if (checkValue(table.getPreviousState()) != null) {
+                bot.setPreviousState(State.valueOf(table.getPreviousState()));
             }
-            if (table.getMessageHasKeyboard() != null && !table.getMessageHasKeyboard().equals(NULL_POINT)) {
-                botMessage.setMessageHasInLineKeyboaard(Boolean.parseBoolean(table.getMessageHasKeyboard()));
+            if (checkValue(table.getMessageHasKeyboard()) != null) {
+                bot.setMessageHasInLineKeyboaard(Boolean.parseBoolean(table.getMessageHasKeyboard()));
             }
-            if (table.getPreviousBotMessageId() != null && !table.getPreviousBotMessageId().equals(NULL_POINT)) {
-                botMessage.setPreviousBotMessageId(Integer.parseInt(table.getPreviousBotMessageId()));
+            if (checkValue(table.getBotMessageId()) != null) {
+                bot.setBotMessageId(Integer.parseInt(table.getBotMessageId()));
             }
         }
 
-        return botMessage;
+        return bot;
     }
 }

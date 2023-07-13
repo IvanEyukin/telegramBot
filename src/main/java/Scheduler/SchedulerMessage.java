@@ -1,7 +1,7 @@
 package Scheduler;
 
-import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.database.ReportDatabase;
+import bot.dto.User;
 import bot.message.Scheduler;
 
 import java.time.LocalDate;
@@ -17,15 +17,15 @@ public class SchedulerMessage {
 
         ReportDatabase report = new ReportDatabase(); 
         Map<Long, String> usersMessage = new HashMap<Long, String>();
-        List<UserInfo> users = report.selectUsers();
-        List<UserInfo> userMessage = report.selectUsersLastDataMessage();
+        List<User> users = report.selectUsers();
+        List<User> userMessage = report.selectUsersLastDataMessage();
 
         int dayNow = LocalDate.now().getDayOfMonth();
 
-        for (UserInfo user : users) {
+        for (User user : users) {
             if (!user.getNotification().equals("disabled")) {
                 if (user.getNotification().equals("active")) {
-                    for (UserInfo userDateMessage : userMessage) {
+                    for (User userDateMessage : userMessage) {
                         if (user.getId().equals(userDateMessage.getId())) {
                             Calendar dateMessage = Calendar.getInstance();
                             dateMessage.setTimeInMillis(userDateMessage.getDateMessage() * 1000L);

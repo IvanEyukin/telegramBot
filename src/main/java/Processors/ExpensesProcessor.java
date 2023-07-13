@@ -2,8 +2,8 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import Utils.Parser;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Finance;
 import bot.state.State;
 
@@ -14,50 +14,50 @@ import java.util.List;
 
 public class ExpensesProcessor {
 
-    public BotMessage getExpenses(BotMessage botMessage) {
+    public Bot getExpenses(Bot bot) {
 
         List<SendMessage> messages = new ArrayList<SendMessage>();
         BotSendMessage sendMessage = new BotSendMessage();
         FinancialCalculationProcessor finance = new FinancialCalculationProcessor();
 
-        switch (botMessage.getSession()) {
+        switch (bot.getState()) {
             case ExpensesMenu -> {
-                if (Keyboard.replyKeyboar.EXPENSES.contains(botMessage.getUserMessageText())) {
-                    botMessage.setFinanceSubCategory(botMessage.getUserMessageText());
+                if (Keyboard.replyKeyboar.EXPENSES.contains(bot.getUserMessageText())) {
+                    bot.setSubCategory(bot.getUserMessageText());
 
-                    if (botMessage.getFinanceSubCategory().equals("Прочее")) {
-                        botMessage.updateBotState(State.WaitingComment);
+                    if (bot.getSubCategory().equals("Прочее")) {
+                        bot.updateBotState(State.WaitingComment);
                         messages.add(sendMessage.sendMessage(Finance.SAVE_OTHER));
                     } else {
-                        botMessage.updateBotState(State.WaitingSum);
-                        messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getUserMessageText())));
+                        bot.updateBotState(State.WaitingSum);
+                        messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(bot.getUserMessageText())));
                     }
                 } else {
                     messages.add(sendMessage.sendMessageAndKeyboard(Finance.CATEGORY_ERROR, Keyboard.replyKeyboar.EXPENSES));
                 }
             }
             case WaitingSum -> {
-                if (botMessage.getUserMessageText().matches(Parser.regNumberValid) || botMessage.getUserMessageText().matches(Parser.regNumberNoValid)) {
-                    botMessage = finance.getFinance(botMessage);
-                    botMessage.updateBotState(State.WaitCallbackSaveOrDelete);
+                if (bot.getUserMessageText().matches(Parser.regNumberValid) || bot.getUserMessageText().matches(Parser.regNumberNoValid)) {
+                    bot = finance.getFinance(bot);
+                    bot.updateBotState(State.WaitCallbackSaveOrDelete);
 
-                    messages = botMessage.getMessages();
+                    messages = bot.getMessages();
                 } else {
                     messages.add(sendMessage.sendMessage(Finance.NUMBER_ERROR));
                 }
             }
             case WaitingComment -> {
-                botMessage.updateBotState(State.WaitingSum);
-                botMessage.setComment(botMessage.getUserMessageText());
-                messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(botMessage.getFinanceSubCategory())));
+                bot.updateBotState(State.WaitingSum);
+                bot.setComment(bot.getUserMessageText());
+                messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(bot.getSubCategory())));
             }
             default -> {
-                botMessage.updateBotState(State.ExpensesMenu);
+                bot.updateBotState(State.ExpensesMenu);
                 messages.add(sendMessage.sendMessageAndKeyboard(Finance.EXPENSES, Keyboard.replyKeyboar.EXPENSES));
             }
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     } 
 }

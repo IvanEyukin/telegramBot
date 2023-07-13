@@ -2,7 +2,7 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import bot.database.sqlite.dto.BaseReport;
-import bot.message.BotMessage;
+import bot.dto.Bot;
 import bot.message.Report;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ReportMessageProcessor {
 
-    public BotMessage getReportMessage(BaseReport report, BotMessage botMessage) {
+    public Bot getReportMessage(BaseReport report, Bot bot) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         BigDecimal sum = new BigDecimal("0");
@@ -27,17 +27,17 @@ public class ReportMessageProcessor {
                 categoryMessage = categoryMessage.concat(String.format(Report.RESULT_CATEGORY, result.getCategory(), result.getSum()));
             }
 
-            String message = String.format(Report.RESULT, botMessage.getFinanceSubCategory(), report.getDateFrom(), report.getDateTo(), sum.setScale(2, RoundingMode.HALF_DOWN)); 
+            String message = String.format(Report.RESULT, bot.getSubCategory(), report.getDateFrom(), report.getDateTo(), sum.setScale(2, RoundingMode.HALF_DOWN)); 
             messages.add(sendMessage.sendMessage(message));
             if (sum.compareTo(new BigDecimal("0")) == 1) {
                 messages.add(sendMessage.sendMessage(Report.RESULT_DETAIL.concat(categoryMessage)));
             }
         } else {
             messages.add(sendMessage.sendMessage(Report.RESULT_ERROR));
-            botMessage.setFinanceSubCategory(null);
+            bot.setSubCategory(null);
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

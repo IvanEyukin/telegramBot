@@ -1,7 +1,7 @@
 package bot.database.sqlite.request;
 
 
-public class User {
+public class Users {
     public final static String SELECT = """
             SELECT
                 u.Id, 

@@ -29,7 +29,7 @@ public class SessionDatabase {
         request.put(RedisFieldName.Sum.toString(), table.getSum());
         request.put(RedisFieldName.Comment.toString(), table.getComment());
         request.put(RedisFieldName.MessageHasKeyboard.toString(), table.getMessageHasKeyboard());
-        request.put(RedisFieldName.PreviousBotMessageId.toString(), table.getPreviousBotMessageId());
+        request.put(RedisFieldName.BotMessageId.toString(), table.getBotMessageId());
         request.put(RedisFieldName.State.toString(), table.getState());
         request.put(RedisFieldName.PreviousState.toString(), table.getPreviousState());
 
@@ -54,7 +54,7 @@ public class SessionDatabase {
             table.setMessageHasKeyboard(responce.get(RedisFieldName.MessageHasKeyboard.toString()));
             table.setState(responce.get(RedisFieldName.State.toString()));
             table.setPreviousState(responce.get(RedisFieldName.PreviousState.toString()));
-            table.setPreviousBotMessageId(responce.get(RedisFieldName.PreviousBotMessageId.toString()));
+            table.setBotMessageId(responce.get(RedisFieldName.BotMessageId.toString()));
             table.setSessionHasRedis(true);
         } else {
             table.setSessionHasRedis(false);

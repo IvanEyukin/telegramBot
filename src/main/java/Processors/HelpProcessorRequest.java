@@ -1,8 +1,8 @@
 package Processors;
 
 import TelegramBot.BotSendMessage;
+import bot.dto.Bot;
 import bot.keyboard.Keyboard;
-import bot.message.BotMessage;
 import bot.message.Help;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,26 +12,26 @@ import java.util.List;
 
 public class HelpProcessorRequest {
 
-    public BotMessage getHelpInfo(BotMessage botMessage) {
+    public Bot getHelpInfo(Bot bot) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        if (botMessage.getCallbackData().equals(Keyboard.help.get(0).getCallbackData())) {
+        if (bot.getCallbackData().equals(Keyboard.help.get(0).getCallbackData())) {
             messages.add(sendMessage.sendMessageAndInline(Help.INFO_SAVE, Keyboard.help));
-            botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(1).getCallbackData())) {
+            bot.setMessageHasInLineKeyboaard(true);
+        } else if (bot.getCallbackData().equals(Keyboard.help.get(1).getCallbackData())) {
             messages.add(sendMessage.sendMessageAndInline(Help.SAVE, Keyboard.help));
-            botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(2).getCallbackData())) {
+            bot.setMessageHasInLineKeyboaard(true);
+        } else if (bot.getCallbackData().equals(Keyboard.help.get(2).getCallbackData())) {
             messages.add(sendMessage.sendMessageAndInline(Help.DELETE, Keyboard.help));
-            botMessage.setMessageHasInLineKeyboaard(true);
-        } else if (botMessage.getCallbackData().equals(Keyboard.help.get(3).getCallbackData())) {
+            bot.setMessageHasInLineKeyboaard(true);
+        } else if (bot.getCallbackData().equals(Keyboard.help.get(3).getCallbackData())) {
             messages.add(sendMessage.sendMessageAndInline(Help.WRITE, Keyboard.help));
-            botMessage.setMessageHasInLineKeyboaard(true);
+            bot.setMessageHasInLineKeyboaard(true);
         }
-        botMessage.setMessages(messages);
+        bot.setMessages(messages);
 
-        return botMessage;
+        return bot;
     }
 }

@@ -1,7 +1,7 @@
 package bot.database.redis;
 
-public enum RedisFieldName {
 
+public enum RedisFieldName {
     UserName,
     UserFirstName,
     UserLastName,
@@ -11,8 +11,7 @@ public enum RedisFieldName {
     Sum,
     Comment,
     MessageHasKeyboard,
-    PreviousBotMessageId,
+    BotMessageId,
     PreviousState,
     State;
-    
 }

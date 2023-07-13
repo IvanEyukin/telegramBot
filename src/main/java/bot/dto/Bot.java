@@ -1,6 +1,5 @@
-package bot.message;
+package bot.dto;
 
-import LibBaseDto.DtoBaseUser.UserInfo;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,49 +8,51 @@ import java.util.List;
 import java.util.Map;
 
 
-public final class BotMessage {
-    UserInfo userInfo;
-    State botState;
-    State previousBotState;
+public class Bot {
+
+    User user;
+    State state;
+    State previousState;
     String userMessageText;
     String callbackData;
-    BigDecimal financeSum;
-    String financeCategory;
-    String financeSubCategory;
+    BigDecimal sum;
+    String category;
+    String subCategory;
     String comment;
-    Integer previousBotMessageId;
+    Integer botMessageId;
     Boolean messageHasInLineKeyboaard = false;
     List<SendMessage> messages;
     Map<Long, String> adminNotificationMessages;
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public State getState() {
+        return state;
+    }
+    public void setState(State state) {
+        this.state = state;
     }
 
-    public State getSession() {
-        return botState;
+    public State getPreviousState() {
+        return previousState;
+    }
+    public void setPreviousState(State previousState) {
+        this.previousState = previousState;
     }
 
-    public void setSession(State botState) {
-        this.botState = botState;
-    }
-
-    public State getPreviousBotState() {
-        return previousBotState;
-    }
-
-    public void setPreviousBotState(State previousBotState) {
-        this.previousBotState = previousBotState;
+    public void updateBotState(State state) {
+        this.previousState = getState();
+        this.state = state;
     }
 
     public String getUserMessageText() {
         return userMessageText;
     }
-
     public void setUserMessageText(String userMessageText) {
         this.userMessageText = userMessageText;
     }
@@ -59,7 +60,6 @@ public final class BotMessage {
     public String getCallbackData() {
         return callbackData;
     }
-
     public void setCallbackData(String callbackData) {
         this.callbackData = callbackData;
     }
@@ -67,68 +67,55 @@ public final class BotMessage {
     public List<SendMessage> getMessages() {
         return messages;
     }
-
     public void setMessages(List<SendMessage> messages) {
         this.messages = messages;
     }
 
-    public BigDecimal getFinanceSum() {
-        return financeSum;
+    public BigDecimal getSum() {
+        return sum;
+    }
+    public void setSum(BigDecimal sum) {
+        this.sum = sum;
     }
 
-    public void setFinanceSum(BigDecimal financeSum) {
-        this.financeSum = financeSum;
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getFinanceCategory() {
-        return financeCategory;
+    public String getSubCategory() {
+        return subCategory;
     }
-
-    public void setFinanceCategory(String financeCategory) {
-        this.financeCategory = financeCategory;
-    }
-
-    public String getFinanceSubCategory() {
-        return financeSubCategory;
-    }
-
-    public void setFinanceSubCategory(String financeSubCategory) {
-        this.financeSubCategory = financeSubCategory;
-    }
-
-    public Integer getPreviousBotMessageId() {
-        return previousBotMessageId;
-    }
-
-    public void setPreviousBotMessageId(Integer previousBotMessageId) {
-        this.previousBotMessageId = previousBotMessageId;
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 
     public String getComment() {
         return comment;
     }
-
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Integer getBotMessageId() {
+        return botMessageId;
+    }
+    public void setBotMessageId(Integer botMessageId) {
+        this.botMessageId = botMessageId;
     }
 
     public Boolean getMessageHasInLineKeyboaard() {
         return messageHasInLineKeyboaard;
     }
-
     public void setMessageHasInLineKeyboaard(Boolean messageHasInLineKeyboaard) {
         this.messageHasInLineKeyboaard = messageHasInLineKeyboaard;
-    }
-
-    public void updateBotState(State botState) {
-        this.previousBotState = getSession();
-        this.botState = botState;
     }
 
     public Map<Long, String> getAdminNotificationMessages() {
         return adminNotificationMessages;
     }
-
     public void setAdminNotificationMessages(Map<Long, String> adminNotificationMessages) {
         this.adminNotificationMessages = adminNotificationMessages;
     }
