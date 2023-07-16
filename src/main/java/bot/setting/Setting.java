@@ -1,6 +1,6 @@
 package bot.setting;
 
-import Utils.Parser;
+import bot.utils.Parser;
 
 
 public class Setting {

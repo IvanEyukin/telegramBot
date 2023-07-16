@@ -1,11 +1,11 @@
 package Processors;
 
 import TelegramBot.BotSendMessage;
-import Utils.Parser;
 import bot.dto.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
 import bot.state.State;
+import bot.utils.Parser;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.math.BigDecimal;
