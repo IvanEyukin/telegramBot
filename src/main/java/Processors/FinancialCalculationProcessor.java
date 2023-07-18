@@ -19,7 +19,7 @@ public class FinancialCalculationProcessor {
 
         BotSendMessage sendMessage = new BotSendMessage();
         List<SendMessage> messages = new ArrayList<>();
-        BigDecimal number = Parser.parseIntToString(bot.getUserMessageText());
+        BigDecimal number = Parser.calculationNumberFromString(bot.getUserMessageText());
 
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {

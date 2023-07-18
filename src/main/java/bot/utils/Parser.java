@@ -1,8 +1,7 @@
 package bot.utils;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Parser {
@@ -25,135 +24,39 @@ public class Parser {
         return number;
     }
 
-    private static List<String> splitString(String number, String mathematicalOperation) {
-        List<String> result = new ArrayList<String>();
-        
-        String[] strings = number.split(mathematicalOperation);
-        for (String string : strings) {
-            result.add(string);
+    private static BigDecimal calculation(String numbers) {
+        BigDecimal result = new BigDecimal("0"); 
+        BigDecimal numberFirst = new BigDecimal("0"); 
+        BigDecimal numberSecond = new BigDecimal("0"); 
+
+        if (numbers.contains("+")) {
+            String[] number = numbers.split("\\+", 2);
+            numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
+            numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
+            result = numberFirst.add(numberSecond);
+        } else if (numbers.contains("-")) {
+            String[] number = numbers.split("\\-", 2);
+            numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
+            numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
+            result = numberFirst.subtract(numberSecond);
+        } else if (numbers.contains("*")) {
+            String[] number = numbers.split("\\*", 2);
+            numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
+            numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
+            result = numberFirst.multiply(numberSecond);
+        } else if (numbers.contains("/")) {
+            String[] number = numbers.split("\\/", 2);
+            numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
+            numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
+            result = numberFirst.divide(numberSecond);
         }
         return result;
     }
 
-    private static BigDecimal addition(List<String> numbers) {
-        BigDecimal result = new BigDecimal("0");
-
-        for (String number : numbers) {
-            result = result.add(new BigDecimal(number));
-        }
-        return result;
-    }
-
-    private static BigDecimal subtraction(List<String> numbers) {
-        BigDecimal result = new BigDecimal("0");
-
-        for (String number : numbers) {
-            if (result.compareTo(new BigDecimal("0")) == 0) {
-                result = result.subtract(new BigDecimal(number)).abs();
-            } else {
-                result = result.subtract(new BigDecimal(number));
-            }
-        }
-        return result;
-    }
-
-    private static BigDecimal multiplication(List<String> numbers) {
-        BigDecimal result = new BigDecimal("0");
-
-        for (String number : numbers) {
-            if (result.compareTo(new BigDecimal("0")) == 0) {
-                result = result.add(new BigDecimal(number));
-            } else {
-                result = result.multiply(new BigDecimal(number));
-            }
-        }
-        return result;
-    }
-
-    private static BigDecimal division(List<String> numbers) {
-        BigDecimal result = new BigDecimal("0");
-
-        for (String number : numbers) {
-            if (result.compareTo(new BigDecimal("0")) == 0) {
-                result = result.add(new BigDecimal(number));
-            } else {
-                result = result.divide(new BigDecimal(number));
-            }
-        }
-        return result;
-    }
-
-    public static BigDecimal parseIntToString(String number) {
-        BigDecimal result = new BigDecimal("0");
+    public static BigDecimal calculationNumberFromString(String number) {
         number = replaceComma(number);
         number = deleteFirstChar(number);
-
-        if (number.contains("+")) {
-            List<String> numbersPlus = splitString(number, "\\+");
-            for (String plus : numbersPlus) {
-
-                if (plus.contains("-")) {
-                    List<String> numbersMinus = splitString(plus, "\\-");
-                    for (String minus : numbersMinus) {
-
-                        if (minus.contains("*")) {
-                            List<String> numbersMultiplication = splitString(minus, "\\*");
-                            for (String multiply : numbersMultiplication) {
-
-                                if (multiply.contains("/")) {
-                                    numbersMultiplication.set(numbersMultiplication.indexOf(multiply), division(splitString(multiply, "\\/")).toEngineeringString());
-                                }
-                            }
-                            numbersMinus.set(numbersMinus.indexOf(minus), multiplication(numbersMultiplication).toEngineeringString());
-                        }
-                    }
-                    numbersPlus.set(numbersPlus.indexOf(plus), subtraction(numbersMinus).toEngineeringString());
-                } else if (plus.contains("*")) {
-                    List<String> numbersMultiplication = splitString(plus, "\\*");
-                    for (String multiply : numbersMultiplication) {
-
-                        if (multiply.contains("/")) {
-                            numbersMultiplication.set(numbersMultiplication.indexOf(multiply), division(splitString(multiply, "\\/")).toEngineeringString());
-                        }
-                    }
-                    numbersPlus.set(numbersPlus.indexOf(plus), multiplication(numbersMultiplication).toEngineeringString());
-                } else if (plus.contains("/")) {
-                    numbersPlus.set(numbersPlus.indexOf(plus), division(splitString(plus, "\\/")).toEngineeringString());
-                }
-            }
-            result = addition(numbersPlus);
-        } else if (number.contains("-")) {
-            List<String> numbersMinus = splitString(number, "\\-");
-            for (String minus : numbersMinus) {
-
-                if (minus.contains("*")) {
-                    List<String> numbersMultiplication = splitString(minus, "\\*");
-                    for (String multiply : numbersMultiplication) {
-
-                        if (multiply.contains("/")) {
-                            numbersMultiplication.set(numbersMultiplication.indexOf(multiply), division(splitString(multiply, "\\/")).toEngineeringString());
-                        }
-                    }
-                    numbersMinus.set(numbersMinus.indexOf(minus), multiplication(numbersMultiplication).toEngineeringString());
-                } else if (minus.contains("/")) {
-                    numbersMinus.set(numbersMinus.indexOf(minus), division(splitString(minus, "\\/")).toEngineeringString());
-                }
-            }
-            result = subtraction(numbersMinus);
-        } else if (number.contains("*")) {
-            List<String> numbersMultiplication = splitString(number, "\\*");
-            for (String multiply : numbersMultiplication) {
-
-                if (multiply.contains("/")) {
-                    numbersMultiplication.set(numbersMultiplication.indexOf(multiply), division(splitString(multiply, "\\/")).toEngineeringString());
-                }
-            }
-            result = multiplication(numbersMultiplication);
-        } else if (number.contains("/")) {
-            result = division(splitString(number, "\\/"));
-        } else {
-            result = result.add(new BigDecimal(number));
-        }
+        BigDecimal result = NumberUtils.isCreatable(number) == true ? new BigDecimal(number) : calculation(number);
         return result;
     }
 
