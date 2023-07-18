@@ -12,7 +12,6 @@ public class TelegramBotApp {
             botsApi.registerBot(new FinanceBot());
         } catch (TelegramApiException e) {
             e.printStackTrace();
-
         }
     }
 }

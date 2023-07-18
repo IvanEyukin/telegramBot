@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 
 public class Parser {
+    
     public static final String regNumber = "((-|\\+|\\*|/)?[0-9]+(\\.|\\,[0-9]+)?)+";
 
     private static String replaceComma(String number) {
@@ -13,15 +14,6 @@ public class Parser {
         } else {
             return number;
         }
-    }
-
-    private static String deleteFirstChar(String number) {
-        String firstChar = number.substring(0, 1);
-
-        if (firstChar.equals("-") || firstChar.equals("+") || firstChar.equals("*") || firstChar.equals("/")) {
-            number = number.substring(1);
-        }
-        return number;
     }
 
     private static BigDecimal calculation(String numbers) {
@@ -55,7 +47,6 @@ public class Parser {
 
     public static BigDecimal calculationNumberFromString(String number) {
         number = replaceComma(number);
-        number = deleteFirstChar(number);
         BigDecimal result = NumberUtils.isCreatable(number) == true ? new BigDecimal(number) : calculation(number);
         return result;
     }
