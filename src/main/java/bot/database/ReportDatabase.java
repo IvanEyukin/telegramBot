@@ -5,8 +5,8 @@ import bot.database.sqlite.dto.BaseReport;
 import bot.database.sqlite.request.Finance;
 import bot.database.sqlite.request.Users;
 import bot.database.sqlite.request.Views;
-import bot.dto.Bot;
-import bot.dto.User;
+import bot.entitie.Bot;
+import bot.entitie.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

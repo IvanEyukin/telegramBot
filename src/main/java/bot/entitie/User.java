@@ -1,4 +1,4 @@
-package bot.dto;
+package bot.entitie;
 
 
 public class User {

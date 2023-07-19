@@ -1,7 +1,7 @@
 package Scheduler;
 
 import bot.database.ReportDatabase;
-import bot.dto.User;
+import bot.entitie.User;
 import bot.message.Scheduler;
 
 import java.time.LocalDate;

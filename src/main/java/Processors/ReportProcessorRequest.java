@@ -2,7 +2,7 @@ package Processors;
 
 import bot.database.ReportDatabase;
 import bot.database.sqlite.dto.BaseReport;
-import bot.dto.Bot;
+import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -2,7 +2,7 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import bot.database.sqlite.dto.BaseReport;
-import bot.dto.Bot;
+import bot.entitie.Bot;
 import bot.message.Report;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

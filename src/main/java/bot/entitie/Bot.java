@@ -1,4 +1,4 @@
-package bot.dto;
+package bot.entitie;
 
 import bot.state.State;
 

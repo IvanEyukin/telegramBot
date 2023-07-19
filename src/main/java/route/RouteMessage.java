@@ -9,7 +9,7 @@ import Processors.ReportProcessor;
 import Processors.SettingProcessor;
 import bot.command.AdminCommand;
 import bot.command.UserCommand;
-import bot.dto.Bot;
+import bot.entitie.Bot;
 import bot.message.Global;
 import bot.setting.Setting;
 import bot.state.State;

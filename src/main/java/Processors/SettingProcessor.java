@@ -2,7 +2,7 @@ package Processors;
 
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
-import bot.dto.Bot;
+import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Setting;
 import bot.state.State;

@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
-import bot.dto.Bot;
-import bot.dto.User;
+import bot.entitie.Bot;
+import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Setting;
 

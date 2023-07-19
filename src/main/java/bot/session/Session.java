@@ -2,8 +2,8 @@ package bot.session;
 
 import bot.database.SessionDatabase;
 import bot.database.redis.RedisTable;
-import bot.dto.Bot;
-import bot.dto.User;
+import bot.entitie.Bot;
+import bot.entitie.User;
 import bot.state.State;
 
 import java.math.BigDecimal;
