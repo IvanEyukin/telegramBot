@@ -2,6 +2,7 @@ package bot.utils;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 public class Parser {
@@ -40,7 +41,7 @@ public class Parser {
             String[] number = numbers.split("\\/", 2);
             numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
             numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
-            result = numberFirst.divide(numberSecond);
+            result = numberFirst.divide(numberSecond, RoundingMode.HALF_DOWN);
         }
         return result;
     }
