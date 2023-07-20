@@ -1,4 +1,4 @@
-package Route;
+package bot.route;
 
 import TelegramBot.BotSendMessage;
 import Processors.AdminProcessor;

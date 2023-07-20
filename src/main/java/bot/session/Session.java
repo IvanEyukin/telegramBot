@@ -59,7 +59,7 @@ public class Session {
         
         table.setKey(Long.toString(bot.getUser().getId()));
         table.setDataTimeMessage(Integer.toString(bot.getUser().getDateMessage()));
-        table.setState(bot.getState().toString());
+        table.setState(checkNull(bot.getState()));
         table.setBotMessageId(Integer.toString(bot.getBotMessageId()));
         table.setUserName(checkNull(bot.getUser().getName()));
         table.setUserFirstName(checkNull(bot.getUser().getFirstName()));

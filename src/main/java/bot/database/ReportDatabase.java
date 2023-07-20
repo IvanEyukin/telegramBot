@@ -37,20 +37,6 @@ public class ReportDatabase {
         return conn;
     }
 
-    public boolean searchUser(User user) {
-        boolean result = false;
-
-        try (Connection conn = connect();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(Users.selectAddConditionsId(user.getId()))) {
-                    result = rs.next();
-                    conn.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return result;
-    }
-
     public void insertUser(User user) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(Users.INSERT)) {
@@ -66,21 +52,24 @@ public class ReportDatabase {
         }
     }
 
-    public User selectUser(User user) {        
+    public User selectUser(User user) {  
+        User userDb = new User();      
         try (Connection conn = connect();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(Users.selectAddConditionsId(user.getId()))) {
                     while (rs.next()) {
-                        user.setName(rs.getString("UserName"));
-                        user.setFirstName(rs.getString("UserFirstName"));
-                        user.setLastName(rs.getString("UserLastName"));
-                        user.setNotification(rs.getString("Notification"));
+                        userDb.setId(rs.getLong("Id"));
+                        userDb.setName(rs.getString("Name"));
+                        userDb.setFirstName(rs.getString("FirstName"));
+                        userDb.setLastName(rs.getString("LastName"));
+                        userDb.setNotification(rs.getString("Notification"));
+                        userDb.setIsInDatabase(true);
                     }
                     conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return user;
+        return userDb;
     }
 
     public void updateUser(User user) {
@@ -106,10 +95,10 @@ public class ReportDatabase {
                 ResultSet rs = stmt.executeQuery(Users.SELECT)) {
                     while (rs.next()) {
                         User user = new User();
-                        user.setId(rs.getLong("UserId"));
-                        user.setName(rs.getString("UserName"));
-                        user.setFirstName(rs.getString("UserFirstName"));
-                        user.setLastName(rs.getString("UserLastName"));
+                        user.setId(rs.getLong("Id"));
+                        user.setName(rs.getString("Name"));
+                        user.setFirstName(rs.getString("FirstName"));
+                        user.setLastName(rs.getString("LastName"));
                         user.setNotification(rs.getString("Notification"));
                         users.add(user);
                     }

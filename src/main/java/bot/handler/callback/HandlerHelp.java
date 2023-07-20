@@ -1,4 +1,4 @@
-package Processors;
+package bot.handler.callback;
 
 import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HelpProcessorRequest {
+public class HandlerHelp {
 
-    public Bot getHelpInfo(Bot bot) {
+    Bot bot;
+    BotSendMessage sendMessage = new BotSendMessage();
+    List<SendMessage> messages = new ArrayList<SendMessage>();
 
-        BotSendMessage sendMessage = new BotSendMessage();
-        List<SendMessage> messages = new ArrayList<SendMessage>();
+    public HandlerHelp(Bot bot) {
+        this.bot = bot;
+    }
 
+    public Bot getAnswer() {
         if (bot.getCallbackData().equals(Keyboard.help.get(0).getCallbackData())) {
             messages.add(sendMessage.sendMessageAndInline(Help.INFO_SAVE, Keyboard.help));
             bot.setMessageHasInLineKeyboaard(true);

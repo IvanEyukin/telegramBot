@@ -37,7 +37,7 @@ public class SettingProcessor {
                 }
                 messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, bot.getUser().getUser(), notification), Keyboard.setting)); 
                 bot.setMessageHasInLineKeyboaard(true);
-                bot.updateBotState(State.InformationRetentionQuestionsSelection);
+                bot.updateBotState(State.ReminderOptionsSelection);
             }
             default -> {
                 messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, Keyboard.replyKeyboar.SETTING));

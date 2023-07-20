@@ -1,7 +1,5 @@
 package TelegramBot;
 
-import Route.RouteCallback;
-import Route.RouteMessage;
 import Scheduler.BotReminderTask;
 import Scheduler.ScheduledTask;
 import Scheduler.SchedulerMessage;
@@ -11,6 +9,8 @@ import bot.log.LogMessage;
 import bot.log.Message;
 import bot.log.Service;
 import bot.message.Admin;
+import bot.route.RouteCallback;
+import bot.route.RouteMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
