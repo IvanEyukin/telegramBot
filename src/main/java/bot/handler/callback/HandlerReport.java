@@ -4,7 +4,6 @@ import bot.database.ReportDatabase;
 import bot.database.sqlite.dto.BaseReport;
 import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
-import Processors.ReportMessageProcessor;
 
 import java.time.LocalDate;
 
@@ -14,7 +13,7 @@ public class HandlerReport {
     Bot bot;
     BaseReport report = new BaseReport();
     ReportDatabase database = new ReportDatabase();
-    ReportMessageProcessor reportMessage = new ReportMessageProcessor();
+    HandlerReportMessage handler = new HandlerReportMessage();
 
     public HandlerReport(Bot bot) {
         this.bot = bot;
@@ -31,15 +30,15 @@ public class HandlerReport {
     public Bot getReport() {
         LocalDate date = LocalDate.now();
         if (bot.getCallbackData().equals(Keyboard.report.get(0).getCallbackData())) {
-            bot = reportMessage.getReportMessage(database.selectFinance(setDataReport(date, date.plusDays(1))), bot);
+            bot = handler.getMessage(database.selectFinance(setDataReport(date, date.plusDays(1))), bot);
         } else if (bot.getCallbackData().equals(Keyboard.report.get(1).getCallbackData())) {
-            bot = reportMessage.getReportMessage(database.selectFinance(setDataReport(date.minusDays(1), date.plusDays(1))), bot);
+            bot = handler.getMessage(database.selectFinance(setDataReport(date.minusDays(1), date.plusDays(1))), bot);
         } else if (bot.getCallbackData().equals(Keyboard.report.get(2).getCallbackData())) {
-            bot = reportMessage.getReportMessage(database.selectFinance(setDataReport(date.minusWeeks(1), date.plusDays(1))), bot);
+            bot = handler.getMessage(database.selectFinance(setDataReport(date.minusWeeks(1), date.plusDays(1))), bot);
         } else if (bot.getCallbackData().equals(Keyboard.report.get(3).getCallbackData())) {
-            bot = reportMessage.getReportMessage(database.selectFinance(setDataReport(date.minusWeeks(2), date.plusDays(1))), bot);
+            bot = handler.getMessage(database.selectFinance(setDataReport(date.minusWeeks(2), date.plusDays(1))), bot);
         } else if (bot.getCallbackData().equals(Keyboard.report.get(4).getCallbackData())) {
-            bot = reportMessage.getReportMessage(database.selectFinance(setDataReport(date.minusMonths(1), date.plusDays(1))), bot);
+            bot = handler.getMessage(database.selectFinance(setDataReport(date.minusMonths(1), date.plusDays(1))), bot);
         }
         bot.setSubCategory(null);
         return bot;

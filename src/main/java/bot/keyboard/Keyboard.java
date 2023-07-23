@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class Keyboard {
-    public final static MenuKeyboard replyKeyboar = new MenuKeyboard();
+    public final static MenuKeyboard replyKeyboard = new MenuKeyboard();
     public final static List<InlineKeyboardButton> finance = FinanceKeyboard.FINANCE;
     public final static List<InlineKeyboardButton> report = ReportKeyboard.REPORT;
     public final static List<InlineKeyboardButton> help = HelpKeyboard.HELP;

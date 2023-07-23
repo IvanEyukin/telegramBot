@@ -1,4 +1,4 @@
-package Processors;
+package bot.handler.message;
 
 import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
@@ -12,33 +12,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReportProcessor {
+public class HandlerReport {
 
-    public Bot getReport(Bot bot) {
+    Bot bot;
+    List<SendMessage> messages = new ArrayList<>();
+    BotSendMessage sendMessage = new BotSendMessage();
 
-        List<SendMessage> messages = new ArrayList<>();
-        BotSendMessage sendMessage = new BotSendMessage();
+    public HandlerReport(Bot bot) {
+        this.bot = bot;
+    }
 
+    public Bot getReport() {
         switch (bot.getState()) {
             case ReportMenu -> {
-                if (Keyboard.replyKeyboar.REPORT.contains(bot.getUserMessageText()) && !bot.getUserMessageText().equals("Бюджет")) {
+                if (Keyboard.replyKeyboard.REPORT.contains(bot.getUserMessageText()) && !bot.getUserMessageText().equals(Keyboard.replyKeyboard.REPORT.get(2))) {
                     bot.setSubCategory(bot.getUserMessageText());
                     bot.setMessageHasInLineKeyboaard(true);
                     bot.updateBotState(State.PeriodSelection);
-
                     messages.add(sendMessage.sendMessageAndInline(Report.PERIOD, Keyboard.report));
-                } else if (Keyboard.replyKeyboar.REPORT.contains(bot.getUserMessageText()) && bot.getUserMessageText().equals("Бюджет")) {
+                } else if (Keyboard.replyKeyboard.REPORT.contains(bot.getUserMessageText()) && bot.getUserMessageText().equals(Keyboard.replyKeyboard.REPORT.get(2))) {
                     bot.updateBotState(State.ReportMenu);
                     bot.setSubCategory(null);
-                    
-                    messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, Keyboard.replyKeyboar.REPORT));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Global.DEVELOP, Keyboard.replyKeyboard.REPORT));
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY_ERROR, Keyboard.replyKeyboar.REPORT));
+                    messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY_ERROR, Keyboard.replyKeyboard.REPORT));
                 }
             }
             default -> {
                 bot.updateBotState(State.ReportMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, Keyboard.replyKeyboar.REPORT));
+                messages.add(sendMessage.sendMessageAndKeyboard(Report.CATEGORY, Keyboard.replyKeyboard.REPORT));
             }
         }
         bot.setMessages(messages);

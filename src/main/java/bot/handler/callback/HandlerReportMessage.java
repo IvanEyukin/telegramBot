@@ -1,4 +1,4 @@
-package Processors;
+package bot.handler.callback;
 
 import TelegramBot.BotSendMessage;
 import bot.database.sqlite.dto.BaseReport;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReportMessageProcessor {
+public class HandlerReportMessage {
 
-    public Bot getReportMessage(BaseReport report, Bot bot) {
+    public Bot getMessage(BaseReport report, Bot bot) {
 
         BotSendMessage sendMessage = new BotSendMessage();
         BigDecimal sum = new BigDecimal("0");
@@ -26,7 +26,6 @@ public class ReportMessageProcessor {
                 sum = sum.add(result.getSum());
                 categoryMessage = categoryMessage.concat(String.format(Report.RESULT_CATEGORY, result.getCategory(), result.getSum()));
             }
-
             String message = String.format(Report.RESULT, bot.getSubCategory(), report.getDateFrom(), report.getDateTo(), sum.setScale(2, RoundingMode.HALF_DOWN)); 
             messages.add(sendMessage.sendMessage(message));
             if (sum.compareTo(new BigDecimal("0")) == 1) {

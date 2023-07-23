@@ -62,11 +62,11 @@ public class HandlerFinance {
         checkUser(bot.getUser());
         if (bot.getCategory().equals(UserCommand.expenses)) {
             bot.updateBotState(State.ExpensesMenu);
-            keyboard = Keyboard.replyKeyboar.EXPENSES;
+            keyboard = Keyboard.replyKeyboard.EXPENSES;
             database.insertFinance(bot, database.tableExpenses);
         } else {
             bot.updateBotState(State.IncomeMenu);
-            keyboard = Keyboard.replyKeyboar.INCOME;
+            keyboard = Keyboard.replyKeyboard.INCOME;
             database.insertFinance(bot, database.tableIncome);
         }
         messages.add(sendMessage.sendMessageAndKeyboard(String.format(Finance.SAVE, bot.getSum()), keyboard));

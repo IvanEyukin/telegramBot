@@ -1,4 +1,4 @@
-package Processors;
+package bot.processors;
 
 import bot.database.ReportDatabase;
 import bot.entitie.User;
@@ -13,7 +13,6 @@ import java.util.Map;
 public class NotificationProcessor {
 
     public Map<Long, String> startNotification(String message) {
-
         ReportDatabase report = new ReportDatabase(); 
         Map<Long, String> usersMessage = new HashMap<Long, String>();
         List<User> users = report.selectUsers();

@@ -1,4 +1,4 @@
-package Processors;
+package bot.handler.message.finance;
 
 import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
@@ -14,18 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FinancialCalculationProcessor {
+public class HandlerCalculationSum {
 
-    public Bot getFinance(Bot bot) {
-        BotSendMessage sendMessage = new BotSendMessage();
-        List<SendMessage> messages = new ArrayList<>();
+    Bot bot;
+    BotSendMessage sendMessage = new BotSendMessage();
+    List<SendMessage> messages = new ArrayList<>();
+
+    public HandlerCalculationSum(Bot bot) {
+        this.bot = bot;
+    }
+
+    private BigDecimal parseNumber() {
         BigDecimal number;
-
         if (bot.getSum() == null || bot.getPreviousState() != State.WaitCallbackSaveOrDelete) {
             number = Parser.calculationNumberFromString(bot.getUserMessageText());
         } else {
             String numberSecond;
-
             if (NumberUtils.isCreatable(bot.getUserMessageText())) {
                 numberSecond = "+".concat(bot.getUserMessageText());
             } else {
@@ -33,20 +37,24 @@ public class FinancialCalculationProcessor {
             }
             number = Parser.calculationNumberFromString(bot.getSum().toEngineeringString().concat(numberSecond));
         }
+        return number;
+    }
 
+    public Bot getCalculatio() {
+        BigDecimal number = parseNumber();
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {
-                messages.add(sendMessage.sendMessage(Finance.NUMBER_NEGATIVE));
                 bot.setSum(null);
+                messages.add(sendMessage.sendMessage(Finance.NUMBER_NEGATIVE));
             }
             case (0) -> {
-                messages.add(sendMessage.sendMessage(Finance.NUMBER_ZERO));
                 bot.setSum(null);
+                messages.add(sendMessage.sendMessage(Finance.NUMBER_ZERO));
             }
             case (1) -> {
                 bot.setSum(number);
-                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, bot.getSum()), Keyboard.finance));
                 bot.setMessageHasInLineKeyboaard(true);
+                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, bot.getSum()), Keyboard.finance));
             }
         }
         bot.setMessages(messages);
