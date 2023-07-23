@@ -6,6 +6,7 @@ import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Setting;
+import bot.processors.CheckUserInDatabase;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,6 +28,8 @@ public class HandlerSetting {
     public Bot getSetting() {
         switch (bot.getState()) {
             case SettingMenu -> {
+                CheckUserInDatabase checkUserInDatabase = new CheckUserInDatabase();
+                checkUserInDatabase.checkUser(bot.getUser());
                 User userDb = report.selectUser(bot.getUser());
                 userDb.setDateMessage(bot.getUser().getDateMessage());
                 bot.setUser(userDb);

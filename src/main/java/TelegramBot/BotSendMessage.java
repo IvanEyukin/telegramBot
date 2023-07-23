@@ -15,7 +15,7 @@ public class BotSendMessage {
     public SendMessage sendMessage(String textToSend) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(textToSend);
-
+        
         return sendMessage;
     }
 

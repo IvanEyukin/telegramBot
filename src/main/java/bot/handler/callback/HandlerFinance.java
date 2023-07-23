@@ -7,6 +7,7 @@ import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
+import bot.processors.CheckUserInDatabase;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -39,27 +40,10 @@ public class HandlerFinance {
         return bot;
     }
 
-    private Boolean checkNeedUpdate(String oldData, String newData) {
-        if (oldData != null && !oldData.equals(newData)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void checkUser(User user) {
-        User userDb = database.selectUser(user);
-        if (!userDb.getIsInDatabase()) {
-            database.insertUser(user);
-        } else if (checkNeedUpdate(userDb.getName(), user.getName()) || checkNeedUpdate(userDb.getFirstName(), user.getFirstName()) || checkNeedUpdate(userDb.getLastName(), user.getLastName())) {
-            database.updateUser(user);
-        }
-    }
-
     private Bot processSave(Bot bot) {
         List<String> keyboard;
-        
-        checkUser(bot.getUser());
+        CheckUserInDatabase checkUserInDatabase = new CheckUserInDatabase();
+        checkUserInDatabase.checkUser(bot.getUser());
         if (bot.getCategory().equals(UserCommand.expenses)) {
             bot.updateBotState(State.ExpensesMenu);
             keyboard = Keyboard.replyKeyboard.EXPENSES;
