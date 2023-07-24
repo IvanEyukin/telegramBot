@@ -4,7 +4,6 @@ import TelegramBot.BotSendMessage;
 import bot.command.UserCommand;
 import bot.database.ReportDatabase;
 import bot.entitie.Bot;
-import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
 import bot.processors.CheckUserInDatabase;

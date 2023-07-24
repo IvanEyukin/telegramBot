@@ -1,4 +1,5 @@
-package Scheduler;
+package bot.scheduler;
+
 
 public class BotReminderTask implements Scheduler{
 
@@ -16,5 +17,4 @@ public class BotReminderTask implements Scheduler{
     public void execute() {
         callback.onTimeForBotReminderTask();
     }
-    
 }

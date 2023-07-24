@@ -1,4 +1,4 @@
-package Scheduler;
+package bot.scheduler;
 
 
 public interface Scheduler {

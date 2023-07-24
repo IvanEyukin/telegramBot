@@ -1,10 +1,10 @@
 package bot.processors;
 
-import Scheduler.SchedulerMessage;
 import TelegramBot.ResponceMessage;
 import bot.log.LogMessage;
 import bot.log.Message;
 import bot.log.Service;
+import bot.scheduler.SchedulerMessage;
 
 import org.telegram.abilitybots.api.sender.MessageSender;
 import java.util.Map;

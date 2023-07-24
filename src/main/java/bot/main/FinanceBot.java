@@ -1,9 +1,9 @@
 package bot.main;
 
-import Scheduler.BotReminderTask;
-import Scheduler.ScheduledTask;
 import bot.processors.SchedulerProcessor;
 import bot.route.RouteMain;
+import bot.scheduler.BotReminderTask;
+import bot.scheduler.ScheduledTask;
 import bot.setting.Setting;
 
 import org.telegram.abilitybots.api.bot.AbilityBot;
