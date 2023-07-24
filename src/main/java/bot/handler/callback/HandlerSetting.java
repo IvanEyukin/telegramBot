@@ -1,12 +1,12 @@
 package bot.handler.callback;
 
-import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Setting;
 import bot.message.callback.CallbackSetting;
+import bot.message.send.MessageBuilder;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class HandlerSetting {
 
     Bot bot;
     User user = new User();
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
     List<SendMessage> messages = new ArrayList<SendMessage>();
     ReportDatabase database = new ReportDatabase();
 
@@ -43,13 +43,13 @@ public class HandlerSetting {
 
         if (bot.getCallbackData().equals(notificationAll)) {
             notification = CallbackSetting.notificationKey.get(notificationAll);
-            messages.add(sendMessage.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
+            messages.add(message.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
         } else if (bot.getCallbackData().equals(notificationActive)) {
             notification = CallbackSetting.notificationKey.get(notificationActive);
-            messages.add(sendMessage.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
+            messages.add(message.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
         } else if (bot.getCallbackData().equals(notificationDisabled)) {
             notification = CallbackSetting.notificationKey.get(notificationDisabled);
-            messages.add(sendMessage.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
+            messages.add(message.sendMessage(Setting.SAVE.concat(CallbackSetting.notification.get(notification))));
         }
         setUserNotification(notification);
         database.updateUser(bot.getUser());

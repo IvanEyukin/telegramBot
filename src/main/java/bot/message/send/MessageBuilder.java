@@ -1,4 +1,4 @@
-package TelegramBot;
+package bot.message.send;
 
 import bot.keyboard.inline.InLineKeyboard;
 import bot.keyboard.reply.ReplyKeyboard;
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 
-public class BotSendMessage {
+public class MessageBuilder {
 
     public SendMessage sendMessage(String textToSend) {
         SendMessage sendMessage = new SendMessage();

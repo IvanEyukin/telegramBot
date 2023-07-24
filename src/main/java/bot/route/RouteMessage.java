@@ -1,6 +1,5 @@
 package bot.route;
 
-import TelegramBot.BotSendMessage;
 import bot.command.AdminCommand;
 import bot.command.UserCommand;
 import bot.entitie.Bot;
@@ -12,6 +11,7 @@ import bot.handler.message.finance.HandlerIncome;
 import bot.handler.message.HandlerSetting;
 import bot.handler.message.HandlerHelp;
 import bot.message.Global;
+import bot.message.send.MessageBuilder;
 import bot.setting.Setting;
 import bot.state.State;
 
@@ -69,9 +69,9 @@ public class RouteMessage {
                 }
             }
         } else {
-            BotSendMessage sendMessage = new BotSendMessage();
+            MessageBuilder message = new MessageBuilder();
             List<SendMessage> messages = new ArrayList<>();
-            messages.add(sendMessage.sendMessage(Global.ERROR));
+            messages.add(message.sendMessage(Global.ERROR));
             bot.setMessages(messages);
         }
         return bot;

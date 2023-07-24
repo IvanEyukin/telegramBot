@@ -1,9 +1,9 @@
 package bot.handler.message.finance;
 
-import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
+import bot.message.send.MessageBuilder;
 import bot.state.State;
 import bot.utils.Parser;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class HandlerCalculationSum {
 
     Bot bot;
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
     List<SendMessage> messages = new ArrayList<>();
 
     public HandlerCalculationSum(Bot bot) {
@@ -33,7 +33,7 @@ public class HandlerCalculationSum {
             if (NumberUtils.isCreatable(bot.getUserMessageText())) {
                 numberSecond = "+".concat(bot.getUserMessageText());
             } else {
-                numberSecond = bot.getUserMessageText();
+                numberSecond = Parser.checkAndConcatFirstChar(bot.getUserMessageText());
             }
             number = Parser.calculationNumberFromString(bot.getSum().toEngineeringString().concat(numberSecond));
         }
@@ -45,16 +45,16 @@ public class HandlerCalculationSum {
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {
                 bot.setSum(null);
-                messages.add(sendMessage.sendMessage(Finance.NUMBER_NEGATIVE));
+                messages.add(message.sendMessage(Finance.NUMBER_NEGATIVE));
             }
             case (0) -> {
                 bot.setSum(null);
-                messages.add(sendMessage.sendMessage(Finance.NUMBER_ZERO));
+                messages.add(message.sendMessage(Finance.NUMBER_ZERO));
             }
             case (1) -> {
                 bot.setSum(number);
                 bot.setMessageHasInLineKeyboaard(true);
-                messages.add(sendMessage.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, bot.getSum()), Keyboard.finance));
+                messages.add(message.sendMessageAndInline(String.format(Finance.SAVE_QUESTION, bot.getSum()), Keyboard.finance));
             }
         }
         bot.setMessages(messages);

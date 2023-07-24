@@ -1,9 +1,9 @@
 package bot.handler.message;
 
-import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Help;
+import bot.message.send.MessageBuilder;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,7 +15,7 @@ public class HandlerHelp {
 
     Bot bot;
     List<SendMessage> messages = new ArrayList<SendMessage>();
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
 
     public HandlerHelp(Bot bot) {
         this.bot = bot;
@@ -26,18 +26,18 @@ public class HandlerHelp {
             case HelpMenu -> {
                 if (Keyboard.replyKeyboard.HELP.contains(bot.getUserMessageText())) {
                     if (bot.getUserMessageText().contains(Keyboard.replyKeyboard.HELP.get(0))) {
-                        messages.add(sendMessage.sendMessageAndKeyboard(Help.INFO_BOT, Keyboard.replyKeyboard.HELP));
+                        messages.add(message.sendMessageAndKeyboard(Help.INFO_BOT, Keyboard.replyKeyboard.HELP));
                     } else if (bot.getUserMessageText().contains(Keyboard.replyKeyboard.HELP.get(1))) {
                         bot.setMessageHasInLineKeyboaard(true);
                         bot.updateBotState(State.InformationRetentionQuestionsSelection);
-                        messages.add(sendMessage.sendMessageAndInline(Help.INFO_QUESTION, Keyboard.help));
+                        messages.add(message.sendMessageAndInline(Help.INFO_QUESTION, Keyboard.help));
                     }
                 } else {
-                    messages.add(sendMessage.sendMessageAndKeyboard(Help.ERROR, Keyboard.replyKeyboard.HELP));
+                    messages.add(message.sendMessageAndKeyboard(Help.ERROR, Keyboard.replyKeyboard.HELP));
                 }
             }
             default -> {
-                messages.add(sendMessage.sendMessageAndKeyboard(String.format(Help.START, bot.getUser().getUser()), Keyboard.replyKeyboard.HELP));
+                messages.add(message.sendMessageAndKeyboard(String.format(Help.START, bot.getUser().getUser()), Keyboard.replyKeyboard.HELP));
                 bot.updateBotState(State.HelpMenu);
             }
         }

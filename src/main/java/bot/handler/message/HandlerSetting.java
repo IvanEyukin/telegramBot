@@ -1,11 +1,11 @@
 package bot.handler.message;
 
-import TelegramBot.BotSendMessage;
 import bot.database.ReportDatabase;
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.keyboard.Keyboard;
 import bot.message.Setting;
+import bot.message.send.MessageBuilder;
 import bot.processors.CheckUserInDatabase;
 import bot.state.State;
 
@@ -18,7 +18,7 @@ public class HandlerSetting {
 
     Bot bot;
     List<SendMessage> messages = new ArrayList<SendMessage>();
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
     ReportDatabase report = new ReportDatabase();
 
     public HandlerSetting(Bot bot) {
@@ -36,11 +36,11 @@ public class HandlerSetting {
                 bot.setMessageHasInLineKeyboaard(true);
                 bot.updateBotState(State.ReminderOptionsSelection);
                 String notification = Setting.notification.get(bot.getUser().getNotification());
-                messages.add(sendMessage.sendMessageAndInline(String.format(Setting.NOTIFICATION, bot.getUser().getUser(), notification), Keyboard.setting)); 
+                messages.add(message.sendMessageAndInline(String.format(Setting.NOTIFICATION, bot.getUser().getUser(), notification), Keyboard.setting)); 
             }
             default -> {
                 bot.updateBotState(State.SettingMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Setting.MENU, Keyboard.replyKeyboard.SETTING));
+                messages.add(message.sendMessageAndKeyboard(Setting.MENU, Keyboard.replyKeyboard.SETTING));
             }
         }
         bot.setMessages(messages);

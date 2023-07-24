@@ -1,9 +1,9 @@
 package bot.handler.message.finance;
 
-import TelegramBot.BotSendMessage;
 import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
+import bot.message.send.MessageBuilder;
 import bot.state.State;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,7 +15,7 @@ public class HandlerIncome extends HandlerFinance {
 
     Bot bot;
     List<SendMessage> messages = new ArrayList<SendMessage>();
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
 
     public HandlerIncome(Bot bot) {
         this.bot = bot;
@@ -32,12 +32,12 @@ public class HandlerIncome extends HandlerFinance {
             case WaitingComment -> {
                 bot.updateBotState(State.WaitingSum);
                 bot.setComment(bot.getUserMessageText());
-                messages.add(sendMessage.sendMessage(Finance.NUMBER.concat(bot.getSubCategory())));
+                messages.add(message.sendMessage(Finance.NUMBER.concat(bot.getSubCategory())));
                 bot.setMessages(messages);
             }
             default -> {
                 bot.updateBotState(State.IncomeMenu);
-                messages.add(sendMessage.sendMessageAndKeyboard(Finance.EXPENSES, Keyboard.replyKeyboard.INCOME));
+                messages.add(message.sendMessageAndKeyboard(Finance.EXPENSES, Keyboard.replyKeyboard.INCOME));
                 bot.setMessages(messages);
             }
         }

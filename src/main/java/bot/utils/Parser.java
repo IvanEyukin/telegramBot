@@ -41,7 +41,7 @@ public class Parser {
             String[] number = numbers.split("\\/", 2);
             numberFirst = NumberUtils.isCreatable(number[0]) == true ? new BigDecimal(number[0]) : calculation(number[0]);
             numberSecond = NumberUtils.isCreatable(number[1]) == true ? new BigDecimal(number[1]) : calculation(number[1]);
-            result = numberFirst.divide(numberSecond, RoundingMode.HALF_DOWN);
+            result = numberFirst.divide(numberSecond).setScale(2, RoundingMode.HALF_DOWN);
         }
         return result;
     }
@@ -55,5 +55,13 @@ public class Parser {
     public static Integer parseTimetoInteger (String time, int number) {
         Integer timeElement = Integer.parseInt(time.split(" ")[number]);
         return timeElement;
+    }
+
+    public static String checkAndConcatFirstChar(String number) {
+        String firstChar = number.substring(0, 1);
+        if (!firstChar.equals("-") && !firstChar.equals("+") && !firstChar.equals("*") && !firstChar.equals("/")) {
+            number = "+".concat(number);
+        }
+        return number;
     }
 }

@@ -1,11 +1,11 @@
 package bot.handler.callback;
 
-import TelegramBot.BotSendMessage;
 import bot.command.UserCommand;
 import bot.database.ReportDatabase;
 import bot.entitie.Bot;
 import bot.keyboard.Keyboard;
 import bot.message.Finance;
+import bot.message.send.MessageBuilder;
 import bot.processors.CheckUserInDatabase;
 import bot.state.State;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class HandlerFinance {
 
     Bot bot;
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
     List<SendMessage> messages = new ArrayList<SendMessage>();
     ReportDatabase database = new ReportDatabase();
 
@@ -52,7 +52,7 @@ public class HandlerFinance {
             keyboard = Keyboard.replyKeyboard.INCOME;
             database.insertFinance(bot, database.tableIncome);
         }
-        messages.add(sendMessage.sendMessageAndKeyboard(String.format(Finance.SAVE, bot.getSum()), keyboard));
+        messages.add(message.sendMessageAndKeyboard(String.format(Finance.SAVE, bot.getSum()), keyboard));
         bot.setMessages(messages);
         bot.setSubCategory(null);
 
@@ -60,7 +60,7 @@ public class HandlerFinance {
     }
 
     private Bot processDelete(Bot bot) {
-        messages.add(sendMessage.sendMessage(String.format(Finance.DELETE, bot.getSum().toEngineeringString())));
+        messages.add(message.sendMessage(String.format(Finance.DELETE, bot.getSum().toEngineeringString())));
         bot.setMessages(messages);
         bot.setSum(null);
         bot.updateBotState(bot.getPreviousState());

@@ -1,4 +1,4 @@
-package TelegramBot;
+package bot.message.send;
 
 import bot.entitie.Bot;
 import bot.session.Session;

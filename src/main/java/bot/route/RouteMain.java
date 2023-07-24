@@ -6,14 +6,14 @@ import org.telegram.abilitybots.api.sender.MessageSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import TelegramBot.BotSendMessage;
-import TelegramBot.ResponceMessage;
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.log.LogMessage;
 import bot.log.Message;
 import bot.log.Service;
 import bot.message.Admin;
+import bot.message.send.MessageBuilder;
+import bot.message.send.ResponceMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
@@ -22,7 +22,7 @@ public class RouteMain {
     Bot bot = new Bot();
     User user = new User(); 
     Session Sessions = new Session();
-    BotSendMessage sendMessage = new BotSendMessage();
+    MessageBuilder message = new MessageBuilder();
     private final Update update;
     private final ResponceMessage responceMessage;
 
@@ -50,7 +50,7 @@ public class RouteMain {
 
     private void deleteInLineKeyboard() {
         if (bot.getMessageHasInLineKeyboaard() == true) {
-            responceMessage.sendMessage(bot, sendMessage.updateMessage(bot.getUser().getId(), bot.getBotMessageId()));
+            responceMessage.sendMessage(bot, message.updateMessage(bot.getUser().getId(), bot.getBotMessageId()));
             bot.setMessageHasInLineKeyboaard(false);
         }
     }
@@ -91,6 +91,6 @@ public class RouteMain {
         for (SendMessage message : bot.getMessages()) {
             responceMessage.sendMessage(bot, message);
         }
-        responceMessage.sendMessage(bot, sendMessage.updateMessage(update.getCallbackQuery().getMessage()));
+        responceMessage.sendMessage(bot, message.updateMessage(update.getCallbackQuery().getMessage()));
     }  
 }

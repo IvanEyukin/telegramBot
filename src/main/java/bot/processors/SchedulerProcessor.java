@@ -1,9 +1,9 @@
 package bot.processors;
 
-import TelegramBot.ResponceMessage;
 import bot.log.LogMessage;
 import bot.log.Message;
 import bot.log.Service;
+import bot.message.send.ResponceMessage;
 import bot.scheduler.SchedulerMessage;
 
 import org.telegram.abilitybots.api.sender.MessageSender;
