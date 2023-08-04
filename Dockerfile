@@ -15,6 +15,8 @@ ARG sessionTimeToLive=Время жизни сессий в базе Redis
 ENV sessionTimeToLive="${sessionTimeToLive}"
 ARG schedulerTime=Время запуска задачи (В формате "Часы Минуты Секунды". Перемер: "14 5 0" будет выполнена в 14:05:00)
 ENV schedulerTime="${schedulerTime}"
-COPY . ./project/telegrambot
+COPY ./db ./project/telegrambot/db
+COPY ./JavaAgent ./project/telegrambot/JavaAgent
+COPY ./telegramBot.jar ./project/telegrambot
 WORKDIR /project/telegrambot
 ENTRYPOINT ["java","-javaagent:./JavaAgent/jmx_prometheus_javaagent-0.19.0.jar=9900:./JavaAgent/config.yaml", "-jar", "telegramBot.jar"] 
