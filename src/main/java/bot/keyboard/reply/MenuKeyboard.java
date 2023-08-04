@@ -9,5 +9,5 @@ public class MenuKeyboard {
     public final List<String> REPORT = List.of("Доходы", "Расходы", "Бюджет");
     public final List<String> HELP = List.of("О боте", "Как бот работает с информацией");
     public final List<String> SETTING = List.of("Настройка напоминаний");
-    public final List<String> ADMIN = List.of("Сообщение пользователям");
+    public final List<String> ADMIN = List.of("Сообщение пользователям", "Активность пользователей");
 }

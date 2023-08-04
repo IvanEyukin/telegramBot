@@ -1,11 +1,5 @@
 package bot.route;
 
-import java.util.Map;
-
-import org.telegram.abilitybots.api.sender.MessageSender;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.log.LogMessage;
@@ -16,6 +10,12 @@ import bot.message.send.MessageBuilder;
 import bot.message.send.ResponceMessage;
 import bot.session.Session;
 import bot.setting.Setting;
+
+import org.telegram.abilitybots.api.sender.MessageSender;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import java.util.Map;
+
 
 public class RouteMain {
 
@@ -65,17 +65,19 @@ public class RouteMain {
         }
     }
 
+    private void sendMessage(Bot bot) {
+        for (SendMessage message : bot.getMessages()) {
+            responceMessage.sendMessage(bot, message);
+        }
+    }
+
     private void routeMessage() {
         RouteMessage routeMessage = new RouteMessage();
         bot.setUser(setUser());
         bot.setUserMessageText(update.getMessage().getText());
         bot = Sessions.getSession(bot);
-
         deleteInLineKeyboard();
-        bot = routeMessage.routeMessageProcessor(bot);
-        for (SendMessage message : bot.getMessages()) {
-            responceMessage.sendMessage(bot, message);
-        }
+        sendMessage(routeMessage.routeMessageProcessor(bot));
         Notification();
     }
 
@@ -85,12 +87,8 @@ public class RouteMain {
         user.setId(update.getCallbackQuery().getFrom().getId());
         bot.setUser(user);
         bot.setCallbackData(update.getCallbackQuery().getData());
-
         bot = Sessions.getSession(bot);
-        bot = routeCallback.routeCallbacProcessor(bot);
-        for (SendMessage message : bot.getMessages()) {
-            responceMessage.sendMessage(bot, message);
-        }
+        sendMessage(routeCallback.routeCallbacProcessor(bot));
         responceMessage.sendMessage(bot, message.updateMessage(update.getCallbackQuery().getMessage()));
-    }  
+    }
 }

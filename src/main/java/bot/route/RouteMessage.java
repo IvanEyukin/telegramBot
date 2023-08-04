@@ -35,7 +35,7 @@ public class RouteMessage {
 
     public Bot routeMessageProcessor(Bot bot) {
         Boolean isStartMessage = (bot.getUserMessageText().equals(UserCommand.commandStart) || bot.getUserMessageText().equals(UserCommand.start));
-        Boolean isAdminMessage = (bot.getUser().getId() == Setting.creatorId && bot.getUserMessageText().equals(AdminCommand.start) || bot.getState() == State.AdminMenu || bot.getPreviousState() == State.AdminMenu);
+        Boolean isAdminMessage = (bot.getUser().getId() == Setting.creatorId && bot.getUserMessageText().equals(AdminCommand.start) || bot.getState() == State.AdminMenu || bot.getState() == State.WaitingMessageMailings);
         Boolean isMenuMessage = (UserCommand.UserComand.containsKey(bot.getUserMessageText()) || bot.getCategory() != null);
 
         if (isStartMessage) {

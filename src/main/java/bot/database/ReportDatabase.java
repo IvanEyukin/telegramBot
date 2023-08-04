@@ -128,6 +128,25 @@ public class ReportDatabase {
         return users;
     }
 
+    public List<User> selectUserLastMessageAdminReport() {
+        List<User> users = new ArrayList<User>();
+
+        try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(Views.UserLastMessageAdminReport)) {
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setName(rs.getString("User"));
+                        user.setDateMessage(rs.getInt("Date"));
+                        users.add(user);
+                    }
+                    conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return users;
+    }
+
     public void insertFinance(Bot bot, String tableName) {
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(String.format(Finance.INSERT, tableName))) {

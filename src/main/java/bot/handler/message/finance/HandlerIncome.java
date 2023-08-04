@@ -37,7 +37,7 @@ public class HandlerIncome extends HandlerFinance {
             }
             default -> {
                 bot.updateBotState(State.IncomeMenu);
-                messages.add(message.sendMessageAndKeyboard(Finance.EXPENSES, Keyboard.replyKeyboard.INCOME));
+                messages.add(message.sendMessageAndKeyboard(Finance.INCOME, Keyboard.replyKeyboard.INCOME));
                 bot.setMessages(messages);
             }
         }
