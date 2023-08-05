@@ -16,7 +16,7 @@ public class HandlerStartTest {
     private  User user = new User();
 
     @Test
-    public void getStartTest1() {   
+    public void getStartTest_emptyBot() {   
         String greeting = """
             Здравствуй Test1,
             я твой персональный финансовый ассистент.
@@ -36,7 +36,7 @@ public class HandlerStartTest {
         assertEquals(menu, bot.getMessages().get(1).getText());
     }
     @Test
-    public void getStartTest2() {   
+    public void getStartTest_filledBot() {   
         String greeting = """
             Здравствуй Test2,
             я твой персональный финансовый ассистент.
