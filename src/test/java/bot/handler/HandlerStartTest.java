@@ -16,7 +16,14 @@ public class HandlerStartTest {
     private  User user = new User();
 
     @Test
-    public void getStartTest1() {      
+    public void getStartTest1() {   
+        String greeting = """
+            Здравствуй Test1,
+            я твой персональный финансовый ассистент.
+            Надеюсь, я смогу помочь тебе тратить меньше денег.
+            Не забывай, что ты моя сладкая булочка!
+            """;
+        String menu = "Нажми на кнопку Меню и выбери, что тебя интересует";   
         user.setName("Test1");
         bot.setUser(user);
         HandlerStart handlerStart = new HandlerStart(bot);
@@ -25,9 +32,18 @@ public class HandlerStartTest {
         assertEquals(null, bot.getCategory());
         assertEquals(null, bot.getSubCategory());
         assertEquals(State.Start, bot.getState());
+        assertEquals(greeting, bot.getMessages().get(0).getText());
+        assertEquals(menu, bot.getMessages().get(1).getText());
     }
     @Test
-    public void getStartTest2() {      
+    public void getStartTest2() {   
+        String greeting = """
+            Здравствуй Test2,
+            я твой персональный финансовый ассистент.
+            Надеюсь, я смогу помочь тебе тратить меньше денег.
+            Не забывай, что ты моя сладкая булочка!
+            """;
+        String menu = "Нажми на кнопку Меню и выбери, что тебя интересует";    
         user.setName("Test2");
         bot.setUser(user);
         bot.setSum(new BigDecimal("100"));
@@ -40,5 +56,7 @@ public class HandlerStartTest {
         assertEquals(null, bot.getCategory());
         assertEquals(null, bot.getSubCategory());
         assertEquals(State.Start, bot.getState());
+        assertEquals(greeting, bot.getMessages().get(0).getText());
+        assertEquals(menu, bot.getMessages().get(1).getText());
     }
 }
