@@ -2,6 +2,7 @@ package bot.handler.message;
 
 import bot.entitie.Bot;
 import bot.entitie.User;
+import bot.message.Global;
 import bot.state.State;
 
 import org.junit.Test;
@@ -16,13 +17,6 @@ public class HandlerStartTest {
 
     @Test
     public void getStartTest_emptyBot() {   
-        String greeting = """
-            Здравствуй Test1,
-            я твой персональный финансовый ассистент.
-            Надеюсь, я смогу помочь тебе тратить меньше денег.
-            Не забывай, что ты моя сладкая булочка!
-            """;
-        String menu = "Нажми на кнопку Меню и выбери, что тебя интересует";   
         user.setName("Test1");
         bot.setUser(user);
         HandlerStart handlerStart = new HandlerStart(bot);
@@ -31,18 +25,11 @@ public class HandlerStartTest {
         assertEquals(null, bot.getCategory());
         assertEquals(null, bot.getSubCategory());
         assertEquals(State.Start, bot.getState());
-        assertEquals(greeting, bot.getMessages().get(0).getText());
-        assertEquals(menu, bot.getMessages().get(1).getText());
+        assertEquals(String.format(Global.GREETING, user.getName()), bot.getMessages().get(0).getText());
+        assertEquals(Global.MENU, bot.getMessages().get(1).getText());
     }
     @Test
-    public void getStartTest_filledBot() {   
-        String greeting = """
-            Здравствуй Test2,
-            я твой персональный финансовый ассистент.
-            Надеюсь, я смогу помочь тебе тратить меньше денег.
-            Не забывай, что ты моя сладкая булочка!
-            """;
-        String menu = "Нажми на кнопку Меню и выбери, что тебя интересует";    
+    public void getStartTest_filledBot() {      
         user.setName("Test2");
         bot.setUser(user);
         bot.setSum(new BigDecimal("100"));
@@ -55,7 +42,7 @@ public class HandlerStartTest {
         assertEquals(null, bot.getCategory());
         assertEquals(null, bot.getSubCategory());
         assertEquals(State.Start, bot.getState());
-        assertEquals(greeting, bot.getMessages().get(0).getText());
-        assertEquals(menu, bot.getMessages().get(1).getText());
+        assertEquals(String.format(Global.GREETING, user.getName()), bot.getMessages().get(0).getText());
+        assertEquals(Global.MENU, bot.getMessages().get(1).getText());
     }
 }
