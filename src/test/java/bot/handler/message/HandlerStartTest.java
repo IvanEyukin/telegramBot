@@ -1,8 +1,7 @@
-package bot.handler;
+package bot.handler.message;
 
 import bot.entitie.Bot;
 import bot.entitie.User;
-import bot.handler.message.HandlerStart;
 import bot.state.State;
 
 import org.junit.Test;
