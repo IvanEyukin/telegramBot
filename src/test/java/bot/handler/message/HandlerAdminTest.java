@@ -1,9 +1,5 @@
 package bot.handler.message;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
-
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.keyboard.Keyboard;
@@ -11,11 +7,15 @@ import bot.keyboard.reply.ReplyKeyboard;
 import bot.message.Admin;
 import bot.state.State;
 
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 
 public class HandlerAdminTest {
 
     private Bot bot = new Bot();
-    private  User user = new User();
+    private User user = new User();
 
     @Before
     public void setUser() {

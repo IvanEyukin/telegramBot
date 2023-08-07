@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class HandlerReportTest {
 
     private Bot bot = new Bot();
-    private  User user = new User();
+    private User user = new User();
 
     @Before
     public void setUser() {

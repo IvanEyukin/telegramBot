@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class HandlerStartTest {
 
     private Bot bot = new Bot();
-    private  User user = new User();
+    private User user = new User();
 
     @Before
     public void setUser() {
