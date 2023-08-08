@@ -43,6 +43,6 @@ public class HandlerSettingTest {
         assertEquals(State.ReminderOptionsSelection, bot.getState());
         assertEquals(true, bot.getMessageHasInLineKeyboaard());
         assertEquals(InLineKeyboard.setKeyboard(Keyboard.setting), bot.getMessages().get(0).getReplyMarkup());
-        assertEquals("Test, сейчас включены регулярные напоминания", bot.getMessages().get(0).getText());
+        assertEquals("Test, сейчас напоминания выключены", bot.getMessages().get(0).getText());
     }
 }

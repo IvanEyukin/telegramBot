@@ -50,7 +50,7 @@ public class HandlerAdminTest {
         HandlerAdmin handlerAdmin = new HandlerAdmin(bot);
         bot = handlerAdmin.adminMenu();
         assertEquals(State.Start, bot.getState());
-        assertEquals("", bot.getMessages().get(0).getText());
+        assertEquals("Test\t2023-08-07T03:00\n", bot.getMessages().get(0).getText());
     }
 
     @Test

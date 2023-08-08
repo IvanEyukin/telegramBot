@@ -1,17 +1,16 @@
 package bot.handler.callback;
 
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDate;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import bot.database.ReportDatabase;
 import bot.database.sqlite.dto.BaseReport;
 import bot.entitie.Bot;
 import bot.entitie.User;
 import bot.message.Report;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import java.time.LocalDate;
+
 
 public class HandlerReportMessageTest {
 
@@ -36,7 +35,7 @@ public class HandlerReportMessageTest {
     }
 
     @Test
-    public void getMessage_reportListIncome() {
+    public void getMessageTest_reportListIncome() {
         HandlerReportMessage handlerReportMessage = new HandlerReportMessage();
         report.setTableName(database.tableIncome);
         bot.setSubCategory("Доходы");
@@ -46,7 +45,7 @@ public class HandlerReportMessageTest {
     }
 
     @Test
-    public void getMessage_reportListExpenses() {
+    public void getMessageTest_reportListExpenses() {
         HandlerReportMessage handlerReportMessage = new HandlerReportMessage();
         report.setTableName(database.tableExpenses);
         bot.setSubCategory("Расходы");
@@ -56,7 +55,7 @@ public class HandlerReportMessageTest {
     }
 
     @Test
-    public void getMessage_error() {
+    public void getMessageTest_error() {
         HandlerReportMessage handlerReportMessage = new HandlerReportMessage();
         bot = handlerReportMessage.getMessage(report, bot);
         assertEquals(null, bot.getSubCategory());
