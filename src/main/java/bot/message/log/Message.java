@@ -1,4 +1,4 @@
-package bot.log;
+package bot.message.log;
 
 
 public class Message {

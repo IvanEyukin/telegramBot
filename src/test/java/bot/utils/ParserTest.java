@@ -71,6 +71,13 @@ public class ParserTest {
     }
 
     @Test
+    public void calculationNumberFromStringTest_subtraction_zero_error() {
+        String number = "150-50-50";
+        BigDecimal result = Parser.calculationNumberFromString(number);
+        assertEquals(new BigDecimal("50.00"), result);
+    }
+
+    @Test
     public void parseTimetoIntegerTest_splitFirst() {
         String time = "10 05 00";
         int number = 0;

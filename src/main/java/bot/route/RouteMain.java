@@ -2,15 +2,14 @@ package bot.route;
 
 import bot.entitie.Bot;
 import bot.entitie.User;
-import bot.log.LogMessage;
-import bot.log.Message;
-import bot.log.Service;
 import bot.message.Admin;
+import bot.message.log.Message;
 import bot.message.send.MessageBuilder;
 import bot.message.send.ResponceMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
+import org.apache.log4j.Logger;
 import org.telegram.abilitybots.api.sender.MessageSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -25,6 +24,7 @@ public class RouteMain {
     MessageBuilder message = new MessageBuilder();
     private final Update update;
     private final ResponceMessage responceMessage;
+    final Logger logger = Logger.getLogger(RouteMain.class);
 
     public RouteMain(Update update, MessageSender sender) {
         this.update = update;
@@ -59,7 +59,7 @@ public class RouteMain {
         if (bot.getAdminNotificationMessages() != null && !bot.getAdminNotificationMessages().isEmpty()) {
             for (Map.Entry<Long, String> adminMessage : bot.getAdminNotificationMessages().entrySet()) {
                 responceMessage.sendMessage(adminMessage.getKey(), adminMessage.getValue());
-                LogMessage.outLogMessage(Service.NOTIFICATION, Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
+                logger.info(Message.DISTRIBUTION.concat(Long.toString(adminMessage.getKey())));
             }
             responceMessage.sendMessage((long) Setting.creatorId, Admin.NOTIFICATION_STOP);
         }
