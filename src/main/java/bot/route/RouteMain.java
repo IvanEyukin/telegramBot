@@ -9,7 +9,8 @@ import bot.message.send.ResponceMessage;
 import bot.session.Session;
 import bot.setting.Setting;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.abilitybots.api.sender.MessageSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,7 +25,7 @@ public class RouteMain {
     MessageBuilder message = new MessageBuilder();
     private final Update update;
     private final ResponceMessage responceMessage;
-    final Logger logger = Logger.getLogger(RouteMain.class);
+    final Logger logger = LoggerFactory.getLogger(RouteMain.class);
 
     public RouteMain(Update update, MessageSender sender) {
         this.update = update;
