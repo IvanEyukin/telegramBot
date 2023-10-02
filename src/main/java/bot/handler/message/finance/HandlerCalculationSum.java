@@ -40,7 +40,7 @@ public class HandlerCalculationSum {
         return number;
     }
 
-    public Bot getCalculatio() {
+    public Bot getCalculation() {
         BigDecimal number = parseNumber();
         switch (number.compareTo(new BigDecimal("0"))) {
             case (-1) -> {

@@ -37,7 +37,7 @@ public class HandlerFinance {
     public Bot getSum(Bot bot) {
         HandlerCalculationSum calculation = new HandlerCalculationSum(bot);
         if (bot.getUserMessageText().matches(Parser.regNumber)) {
-            bot = calculation.getCalculatio();
+            bot = calculation.getCalculation();
             bot.updateBotState(State.WaitCallbackSaveOrDelete);
         } else {
             messages.add(message.sendMessage(Finance.NUMBER_ERROR));
